@@ -11,7 +11,7 @@ namespace RedesSociales.Models
 	{
         #region Properties
         [JsonProperty("idUsuario")]
-        public int idusuario { get; set; }
+        public int Idusuario { get; set; }
 
         [JsonProperty("Apodo")]
         public string apodo { get; set; }

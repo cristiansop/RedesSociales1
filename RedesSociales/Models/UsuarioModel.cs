@@ -9,9 +9,9 @@ namespace RedesSociales.Models
 	public class UsuarioModel : NotificationObject
 	{
         #region Properties
-        public int idusuario { get; set; }
+        public int Idusuario { get; set; }
 
-        public string apodo { get; set; }
+        public string Apodo { get; set; }
 
         private List<UsuarioModel> seguidos;
 

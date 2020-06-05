@@ -7,8 +7,8 @@ using System.Text;
 
 namespace RedesSociales.Models
 {
-	public class UsuarioModel : BaseModel
-	{
+    public class UsuarioModel : BaseModel
+    {
         #region Properties
         [JsonProperty("idUsuario")]
         public int Idusuario { get; set; }

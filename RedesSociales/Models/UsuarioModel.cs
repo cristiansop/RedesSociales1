@@ -10,7 +10,6 @@ namespace RedesSociales.Models
 	public class UsuarioModel : BaseModel
 	{
         #region Properties
-        public int Idusuario { get; set; }
         [JsonProperty("idUsuario")]
         public int Idusuario { get; set; }
 

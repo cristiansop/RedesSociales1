@@ -1,4 +1,5 @@
-﻿using RedesSociales.Servicios.Propagacion;
+﻿using Newtonsoft.Json;
+using RedesSociales.Servicios.Propagacion;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,25 +7,33 @@ using System.Text;
 
 namespace RedesSociales.Models
 {
-	public class UsuarioModel : NotificationObject
+	public class UsuarioModel : BaseModel
 	{
         #region Properties
+        [JsonProperty("idUsuario")]
         public int idusuario { get; set; }
 
+        [JsonProperty("Apodo")]
         public string apodo { get; set; }
 
+        [JsonIgnore]
         private List<UsuarioModel> seguidos;
 
+        [JsonIgnore]
         private List<UsuarioModel> seguidores;
 
+        [JsonProperty("Nombre")]
         private string nombre;
 
+        [JsonProperty("Apellidos")]
         private string apellidos;
 
+        [JsonProperty("FotoPerfil")]
         private string fotoperfil;
 
         private string estado;
 
+        [JsonIgnore]
         private List<PublicacionModel> publicaciones;
 
         #endregion Properties

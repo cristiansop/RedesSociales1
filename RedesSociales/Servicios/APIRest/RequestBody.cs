@@ -25,17 +25,20 @@ namespace RedesSociales.Servicios.APIRest
                 Response = ""
             };
             string objetoJson = JsonConvert.SerializeObject(objecto);
-            HttpContent content = new StringContent(objetoJson, Encoding.UTF8);
+            HttpContent content = new StringContent(objetoJson, Encoding.UTF8, "application/json");
 
             try
             {
                 using (var client = new HttpClient())
                 {
                     var verboHttp = (Verbo == "POST") ? HttpMethod.Post : HttpMethod.Put;
-                    HttpRequestMessage requestMessage = new HttpRequestMessage(verboHttp, Url);
-                    requestMessage = ServicioHeaders.AgregarCabecera(requestMessage);
+                    //HttpRequestMessage requestMessage = new HttpRequestMessage(verboHttp, Url);
+                    HttpRequestMessage requestMessage = new HttpRequestMessage(verboHttp, UrlParameters);
+                    //requestMessage = ServicioHeaders.AgregarCabecera(requestMessage);
                     requestMessage.Content = content;
-                    HttpResponseMessage HttpResponse = await client.SendAsync(requestMessage);
+                    client.Timeout = TimeSpan.FromSeconds(50);//changed
+                    //HttpResponseMessage HttpResponse = await client.SendAsync(requestMessage);
+                    HttpResponseMessage HttpResponse = client.SendAsync(requestMessage).Result;
                     respuesta.Code = Convert.ToInt32(HttpResponse.StatusCode);
                     respuesta.isSuccess = HttpResponse.IsSuccessStatusCode;
                     respuesta.Response = await HttpResponse.Content.ReadAsStringAsync();

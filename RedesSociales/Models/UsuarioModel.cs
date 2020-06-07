@@ -31,6 +31,7 @@ namespace RedesSociales.Models
         [JsonProperty("FotoPerfil")]
         private string fotoperfil;
 
+        [JsonProperty("Estado")]
         private string estado;
 
         [JsonIgnore]

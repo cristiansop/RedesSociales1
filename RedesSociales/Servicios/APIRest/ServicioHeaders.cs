@@ -13,6 +13,7 @@ namespace RedesSociales.Servicios.APIRest
         #region Initialize
         public ServicioHeaders()
         {
+            Headers = new Dictionary<string, string>();
             Headers.Add("content-type", "application/json");
         }
         #endregion Initialize

@@ -39,7 +39,7 @@ namespace RedesSociales.Servicios.APIRest
             string newUrl=Url;
             if (Parametros.Parametros.Count > 0)
             {
-                newUrl = (newUrl.Substring(Url.Length - 1) == "/") ? Url.Remove(newUrl.Length - 1) : newUrl;
+                newUrl = (newUrl.Substring(Url.Length - 1) == "/") ? newUrl.Remove(newUrl.Length - 1) : newUrl;
                 Parametros.Parametros.ForEach(p => newUrl += "/" + p);
             }
 

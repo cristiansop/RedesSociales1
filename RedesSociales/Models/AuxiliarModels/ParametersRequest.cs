@@ -12,7 +12,11 @@ namespace RedesSociales.Models.AuxiliarModels
         public Dictionary<string, string> QueryParametros { get; set; }
         #endregion Properties
         #region Initialize
-        public ParametersRequest() { }
+        public ParametersRequest() 
+        {
+            Parametros = new List<string>();
+            QueryParametros = new Dictionary<string, string>();
+        }
         #endregion Initialize
     }
 }

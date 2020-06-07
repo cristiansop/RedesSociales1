@@ -10,7 +10,7 @@ namespace RedesSociales.Models
         #region Properties
         private UsuarioModel creador;
 
-        public int idPublicacion { get; set; }
+        public int IdPublicacion { get; set; }
 
         public string Imagen { get; set; }
 
@@ -22,12 +22,14 @@ namespace RedesSociales.Models
 
         private List<ComentarioModel> comentarios;
         #endregion Properties
+
         #region Inicialize
         public PublicacionModel(UsuarioModel usuario)
         {
             this.creador = usuario;
         }
         #endregion Inicialize
+
         #region Getters/Setters
         public UsuarioModel Creador
         {

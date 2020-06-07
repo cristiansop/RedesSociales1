@@ -4,12 +4,41 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
+             BackgroundColor="{Binding NavigationPrimary}"
              x:Class="RedesSociales.Views.MainView">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Frame" x:Key="publicationFrame">
+                <Setter Property="BackgroundColor" Value="White"/>
+            </Style>
+            <Style TargetType="Label" x:Key="dateLabel"></Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <Label Text="Prueba"/>
+            <!--
+            <ListView ItemsSource="{Binding Publicaciones}" HasUnevenRows="True" SeparatorVisibility="Default">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Frame Style="{StaticResource publicationFrame}">
+                                <StackLayout>
+                                    <Label Text="{Binding creador}"/>
+                                    <Image Source="{components:ImageResource RedesSociales.Images.img_1.jpg}"/>
+                                    <FlexLayout JustifyContent="SpaceEvenly">
+                                        <Label Text="{Binding Likes}"/>
+                                        <Label Text="{Binding Dislikes}"/>
+                                    </FlexLayout>
+                                    <Label Text="{Binding Date}"/>
+                                </StackLayout>
+                            </Frame>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            -->
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

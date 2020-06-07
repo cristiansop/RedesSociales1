@@ -1,6 +1,7 @@
 ﻿using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using RedesSociales.Views;
 
 namespace RedesSociales
 {
@@ -10,7 +11,7 @@ namespace RedesSociales
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new LoginView();
         }
 
         protected override void OnStart()

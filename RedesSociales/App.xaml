@@ -7,10 +7,12 @@
              x:Class="RedesSociales.App">
     <Application.Resources>
         <ResourceDictionary>
-            <!--Global Styles-->
+            <!-- Colores gobales -->
             <!--<Color x:Key="NavigationPrimary">#2196F3</Color>-->
             <Color x:Key="NavigationPrimary">#F1F2F3</Color>
             <Color x:Key="GeneralBackgroundColor">#F1F2F3</Color>
+            
+            <!-- Estilos globales -->
             <Style TargetType="NavigationPage">
                 <Setter Property="BarBackgroundColor" Value="{StaticResource NavigationPrimary}" />
                 <Setter Property="BarTextColor" Value="White" />

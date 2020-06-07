@@ -12,7 +12,15 @@ using Xamarin.Forms;
 
 namespace RedesSociales.ViewModels
 {
-    class PublicacionViewModel
+    public class PublicacionViewModel
     {
+        public List<PublicacionModel> Publicaciones { get; set; }
+
+        #region Initialize
+        public PublicacionViewModel()
+        {
+
+        }
+        #endregion Initialize
     }
 }

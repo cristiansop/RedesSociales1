@@ -5,7 +5,7 @@ using System.Text;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace blickBild.VisualComponents
+namespace RedesSociales.VisualComponents
 {
     [ContentProperty(nameof(Source))]
     public class ImageResourceExtension : IMarkupExtension

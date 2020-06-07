@@ -1,5 +1,4 @@
-﻿using RedesSociales.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,13 +10,11 @@ using Xamarin.Forms.Xaml;
 namespace RedesSociales.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class MainView : ContentPage
+    public partial class LoginView : ContentPage
     {
-        PublicacionViewModel context = new PublicacionViewModel();
-        public MainView()
+        public LoginView()
         {
             InitializeComponent();
-            BindingContext = context;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿/*using RedesSociales.Servicios.Propagacion;
+﻿using RedesSociales.Servicios.Propagacion;
 using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
@@ -39,4 +39,4 @@ namespace RedesSociales.ViewModels
             await PopupNavigation.Instance.PopAsync();
         }
     }
-}*/
+}

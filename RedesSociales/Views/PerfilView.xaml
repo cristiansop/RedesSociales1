@@ -15,18 +15,25 @@
 
     <ContentPage.Content>
         <StackLayout Spacing="0">
-            <StackLayout BackgroundColor="Gray">
+            
+            <StackLayout>
 
-                <BoxView BackgroundColor="Red" />
+                <Image Source="https://instagram.fclo9-1.fna.fbcdn.net/v/t51.2885-15/e35/p1080x1080/92994707_144972250366540_4219576000156587289_n.jpg"/>
+                
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="{Binding Usuario.apodo}" />
+                    <Label Text="{Binding Usuario.Estado}" />
+                </StackLayout>
+                
                 <FlexLayout JustifyContent="SpaceAround">
                     <StackLayout VerticalOptions="Center">
                         <Label Text="Seguidores" />
-                        <Label Text="213" HorizontalOptions="Center" />
+                        <Label Text="{Binding Usuario.Seguidores.Count}" HorizontalOptions="Center" />
                     </StackLayout>
 
                     <StackLayout VerticalOptions="Center">
                         <Label Text="Seguidos" />
-                        <Label Text="12" HorizontalOptions="Center" />
+                        <Label Text="{Binding Usuario.Seguidos.Count}" HorizontalOptions="Center" />
                     </StackLayout>
                 </FlexLayout>
 

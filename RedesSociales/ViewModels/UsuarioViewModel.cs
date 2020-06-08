@@ -17,7 +17,7 @@ using Xamarin.Forms;
 
 namespace RedesSociales.ViewModels
 {
-    public class UsuarioViewModel:NotificationObject
+    public class UsuarioViewModel: ViewModelBase
     {
         #region Properties
 

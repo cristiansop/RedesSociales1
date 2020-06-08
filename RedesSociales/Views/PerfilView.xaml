@@ -6,7 +6,6 @@
              mc:Ignorable="d"
              BackgroundColor="{Binding NavigationPrimary}"
              xmlns:components="clr-namespace:RedesSociales.VisualComponents;assembly=RedesSociales"
-             Icon="{components:ImageResource RedesSociales.Images.social-media.jpg}"
              Title="Perfil"
              x:Class="RedesSociales.Views.PerfilView">
     
@@ -15,17 +14,29 @@
     </ContentPage.Resources>
 
     <ContentPage.Content>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            
-            <!-- Informacion del perfil -->
-            <BoxView BackgroundColor="Aqua" Grid.Row="0" />
-            
+        <StackLayout Spacing="0">
+            <StackLayout BackgroundColor="Gray">
+
+                <BoxView BackgroundColor="Red" />
+                <FlexLayout JustifyContent="SpaceAround">
+                    <StackLayout VerticalOptions="Center">
+                        <Label Text="Seguidores" />
+                        <Label Text="213" HorizontalOptions="Center" />
+                    </StackLayout>
+
+                    <StackLayout VerticalOptions="Center">
+                        <Label Text="Seguidos" />
+                        <Label Text="12" HorizontalOptions="Center" />
+                    </StackLayout>
+                </FlexLayout>
+
+                <Button Text="Editar perfil" />
+
+            </StackLayout>
+
             <!-- publicaciones del usuario -->
-            <BoxView BackgroundColor="Yellow" Grid.Row="1" />
-        </Grid>
+            <BoxView BackgroundColor="Yellow" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+            
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

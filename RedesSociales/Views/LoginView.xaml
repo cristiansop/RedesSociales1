@@ -24,10 +24,8 @@
         <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
             <Image Source="{components:ImageResource RedesSociales.Images.logo_txt.png}"/>
             <Label Text="{Binding NombrePersona}" />
-            <Button 
-                Style="{StaticResource googleButton}" 
-                ImageSource="{components:ImageResource RedesSociales.Images.logo_google.png}"
-                Text="Iniciar Sesión" Command="{Binding InicioSesion}" />
+
+
             <Button Text="Inicio Sesion Google" Command="{Binding InicioSesion}"></Button>
             <!--
             <Grid VerticalOptions="Center" HorizontalOptions="Center">

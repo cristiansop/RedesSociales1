@@ -1,9 +1,10 @@
 ﻿using Plugin.GoogleClient;
 using Plugin.GoogleClient.Shared;
+using RedesSociales.Servicios.Propagacion;
+using Rg.Plugins.Popup.Services;
 using System;
 using System.Windows.Input;
 using Xamarin.Forms;
-using RedesSociales.Servicios.Propagacion;
 namespace RedesSociales.ViewModels
 {
     public class LoginViewModel : NotificationObject
@@ -11,6 +12,8 @@ namespace RedesSociales.ViewModels
         //Atributos
         private string nombre { get; set; }
         private IGoogleClientManager googleClientManager;
+
+        private int contarLogin;
 
         //Commands
         public ICommand InicioSesion { get; set; }
@@ -26,7 +29,15 @@ namespace RedesSociales.ViewModels
                 OnPropertyChanged();
             }
         }
-
+        public int ContarLogin
+        {
+            get { return contarLogin; }
+            set
+            {
+                contarLogin = value;
+                OnPropertyChanged();
+            }
+        }
         public LoginViewModel()
         {
             InicioSesion = new Command(InicioSesionCommand);

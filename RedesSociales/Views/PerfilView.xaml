@@ -5,8 +5,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              BackgroundColor="{Binding NavigationPrimary}"
+             NavigationPage.HasNavigationBar="False"
              xmlns:components="clr-namespace:RedesSociales.VisualComponents;assembly=RedesSociales"
-             Title="Perfil"
+             Icon="social_media.png"
              x:Class="RedesSociales.Views.PerfilView">
     
     <ContentPage.Resources>

@@ -6,8 +6,7 @@
              mc:Ignorable="d"
              BackgroundColor="{Binding NavigationPrimary}"
              xmlns:components="clr-namespace:RedesSociales.VisualComponents;assembly=RedesSociales"
-             Icon="{components:ImageResource RedesSociales.Images.home_icon.jpg}"
-             Title="Publicaciones"
+             Icon="home.jpg"
              x:Class="RedesSociales.Views.MainView">
     
     <ContentPage.Resources>
@@ -21,8 +20,8 @@
 
     <ContentPage.Content>
         <StackLayout>
-            <ListView ItemsSource="{Binding Publicaciones}" HasUnevenRows="True" SeparatorVisibility="Default">
-                <ListView.ItemTemplate>
+            <CollectionView ItemsSource="{Binding Publicaciones}" EmptyView="No tienes publicaciones">
+                <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
                             <Frame Style="{StaticResource publicationFrame}">
@@ -37,8 +36,8 @@
                             </Frame>
                         </ViewCell>
                     </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

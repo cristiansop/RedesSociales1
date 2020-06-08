@@ -4,15 +4,17 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             xmlns:components="clr-namespace:RedesSociales.VisualComponents;assembly=RedesSociales"
-             x:Class="RedesSociales.Views.LoginView"
              BackgroundColor="{Binding NavigationPrimary}"
-             Title="LoginView">
+             NavigationPage.HasNavigationBar="False"
+             xmlns:components="clr-namespace:RedesSociales.VisualComponents;assembly=RedesSociales"
+             Title="LoginView"
+             x:Class="RedesSociales.Views.LoginView">
     
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style TargetType="Button" x:Key="googleButton">
                 <Setter Property="BackgroundColor" Value="#EA4335"/>
+                <Setter Property="ImageSource" Value="logo_google.png" />
                 <Setter Property="Font" Value="Arial"/>
                 <Setter Property="TextColor" Value="White"/>
                 <Setter Property="HorizontalOptions" Value="Center"/>
@@ -21,13 +23,36 @@
     </ContentPage.Resources>
 
     <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <StackLayout Grid.Row="0" VerticalOptions="Center" HorizontalOptions="Center">
+                <Image Source="logotipo.png" Scale="0.8"/>
+                <!--
+                <StackLayout VerticalOptions="End">
+                    <BoxView BackgroundColor="Gray" Margin="10,0,10,0"/>
+                </StackLayout>
+                -->
+            </StackLayout>
+
+            <StackLayout Grid.Row="1" VerticalOptions="Start">
+                <Button x:Name="btn_google" 
+                        Style="{StaticResource googleButton}"
+                        Text="Iniciar Sesión"
+                        Command="{Binding Buttom_IniciarSesion}" />
+            </StackLayout>
+            
+        </Grid>
+        <!--
         <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
-            <Image Source="{components:ImageResource RedesSociales.Images.logo_txt.png}"/>
+            <Image Source="logo_txt.png"/>
             <Label Text="{Binding NombrePersona}" />
 
 
-            <Button Text="Inicio Sesion Google" Command="{Binding InicioSesion}"></Button>
-            <!--
+            <Button x:Name="btn_google" Text="Inicio Sesion" Command="{Binding Buttom_IniciarSesion}"></Button>
             <Grid VerticalOptions="Center" HorizontalOptions="Center">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
@@ -35,7 +60,7 @@
                 </Grid.RowDefinitions>
                 <Image Source="{components:ImageResource RedesSociales.Images.logo_txt.png}" Grid.Row="0"/>
                 <Button Style="{StaticResource googleButton}" Grid.Row="1"/>
-            </Grid>-->
-        </StackLayout>
+            </Grid>
+        </StackLayout>-->
     </ContentPage.Content>
 </ContentPage>

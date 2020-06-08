@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             BackgroundColor="{Binding NavigationPrimary}"
+             xmlns:components="clr-namespace:RedesSociales.VisualComponents;assembly=RedesSociales"
+             Icon="{components:ImageResource RedesSociales.Images.social-media.jpg}"
+             Title="Perfil"
+             x:Class="RedesSociales.Views.PerfilView">
+    
+    <ContentPage.Resources>
+        
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <!-- Informacion del perfil -->
+            <BoxView BackgroundColor="Aqua" Grid.Row="0" />
+            
+            <!-- publicaciones del usuario -->
+            <BoxView BackgroundColor="Yellow" Grid.Row="1" />
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

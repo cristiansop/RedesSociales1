@@ -17,7 +17,7 @@ using Newtonsoft.Json;
 
 namespace RedesSociales.ViewModels
 {
-    public class PublicacionViewModel : NotificationObject
+    public class PublicacionViewModel : ViewModelBase
     {
         #region Properties
         #region Atributes

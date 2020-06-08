@@ -7,17 +7,17 @@ using System.Windows.Input;
 using Xamarin.Forms;
 using System.Threading.Tasks;
 using RedesSociales.Models;
+using RedesSociales.Servicios.Navigation;
 
 namespace RedesSociales.ViewModels
 {
-    public class LoginViewModel : NotificationObject
+    public class LoginViewModel : ViewModelBase
     {
         //Atributos
         private IGoogleClientManager googleClientManager;
 
         //Commands
         public ICommand InicioSesion { get; set; }
-
 
         //Getters y Setters
         public LoginViewModel()
@@ -51,8 +51,7 @@ namespace RedesSociales.ViewModels
                     FotoPerfil = user.Picture.ToString(),
                     Estado = "Activo"
                 };
-                await Navigation.PushAsync(new Page2());
-                await Application.Current.MainPage.Navigation.PushAsync(new Page2());
+                await NavigationService.PushPage(new MainPage());
             }
         }
     }

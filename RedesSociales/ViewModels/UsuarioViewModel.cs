@@ -21,7 +21,7 @@ namespace RedesSociales.ViewModels
     {
         #region Properties
         #region Atributes
-        public MessageViewPop PopUp { get; set; }
+        public MessagePopupView PopUp { get; set; }
         private UsuarioModel usuario;
         private UsuarioModel usuario1;
 
@@ -82,7 +82,7 @@ namespace RedesSociales.ViewModels
         #region Initialize
         public UsuarioViewModel()
         {
-            PopUp = new MessageViewPop();
+            PopUp = new MessagePopupView();
             Usuario = new UsuarioModel();
             Usuario1 = new UsuarioModel();
             InitializeRequest();

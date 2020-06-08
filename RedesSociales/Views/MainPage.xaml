@@ -8,7 +8,8 @@
              xmlns:views="clr-namespace:RedesSociales.Views">
 
     <TabbedPage.Children>
-        <views:MainView Title="Home"/>
+        <views:MainView />
+        <views:PerfilView />
     </TabbedPage.Children>
 
 </TabbedPage>

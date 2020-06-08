@@ -5,7 +5,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              BackgroundColor="{Binding NavigationPrimary}"
+             xmlns:components="clr-namespace:RedesSociales.VisualComponents;assembly=RedesSociales"
+             Icon="{components:ImageResource RedesSociales.Images.home_icon.jpg}"
+             Title="Publicaciones"
              x:Class="RedesSociales.Views.MainView">
+    
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style TargetType="Frame" x:Key="publicationFrame">

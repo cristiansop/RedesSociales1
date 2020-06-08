@@ -1,4 +1,4 @@
-﻿/*using Plugin.GoogleClient;
+﻿using Plugin.GoogleClient;
 using Plugin.GoogleClient.Shared;
 using System;
 using System.Windows.Input;
@@ -56,4 +56,4 @@ namespace RedesSociales.ViewModels
             }
         }
     }
-}*/
+}

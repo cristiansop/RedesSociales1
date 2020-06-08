@@ -6,6 +6,8 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Plugin.GoogleClient;
+using Android.Content;
 
 namespace RedesSociales.Droid
 {
@@ -18,6 +20,7 @@ namespace RedesSociales.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
+            GoogleClientManager.Initialize(this);
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
@@ -28,6 +31,11 @@ namespace RedesSociales.Droid
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+        protected override void OnActivityResult(int requestCode, Result resultCode, Android.Content.Intent data)
+        {
+            base.OnActivityResult(requestCode, resultCode, data);
+            GoogleClientManager.OnAuthCompleted(requestCode, resultCode, data);
         }
     }
 }

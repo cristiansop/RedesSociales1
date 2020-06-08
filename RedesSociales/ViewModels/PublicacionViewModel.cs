@@ -13,6 +13,7 @@ using RedesSociales.Views;
 using System.Collections.ObjectModel;
 using Rg.Plugins.Popup.Services;
 using RedesSociales.Validations.Base;
+using Newtonsoft.Json;
 
 namespace RedesSociales.ViewModels
 {
@@ -23,21 +24,28 @@ namespace RedesSociales.ViewModels
         public MessagePopupView PopUp { get; set; }
         public ObservableCollection<PublicacionModel> Publicaciones { get; set; }
         private PublicacionModel publicacion;
-        private UsuarioModel creador;
+        public UsuarioModel Creador { get; set; }
+        private UsuarioModel usuario;
+
+        
+
         public ValidatableObject<string> FotoPublicacion { get; set; }
+        public ValidatableObject<string> TipoPublicacion { get; set; }
+        public ValidatableObject<string> DescripcionPublicacion { get; set; }
+
 
         #endregion Atributes
         #region Request
         public ElegirRequest<PublicacionModel> CreatePublicacion { get; set; }
         public ElegirRequest<BaseModel> GetPublicacionesSeguidos { get; set; }
         public ElegirRequest<BaseModel> GetPublicacionesUsuario { get; set; }
-        public ElegirRequest<BaseModel> DeletePublicacion { get; set; }
-        public ElegirRequest<BaseModel> CreateLike { get; set; }
+        public ElegirRequest<PublicacionModel> DeletePublicacion { get; set; }
+        public ElegirRequest<PublicacionModel> CreateLike { get; set; }
         public ElegirRequest<BaseModel> GetLikes { get; set; }
-        public ElegirRequest<BaseModel> DeleteLike { get; set; }
-        public ElegirRequest<BaseModel> CreateEtiqueta { get; set; }
+        public ElegirRequest<PublicacionModel> DeleteLike { get; set; }
+        public ElegirRequest<PublicacionModel> CreateEtiqueta { get; set; }
         public ElegirRequest<BaseModel> GetEtiquetas { get; set; }
-        public ElegirRequest<BaseModel> DeleteEtiqueta { get; set; }
+        public ElegirRequest<PublicacionModel> DeleteEtiqueta { get; set; }
         #endregion Request
         #region Commands
         public ICommand GetPublicacionesUsuarioCommand { get; set; }
@@ -58,10 +66,10 @@ namespace RedesSociales.ViewModels
             get { return publicacion; }
             set { publicacion = value; OnPropertyChanged(); }
         }
-        public UsuarioModel Creador
+        public UsuarioModel Usuario
         {
-            get { return creador; }
-            set { creador = value; OnPropertyChanged(); }
+            get { return usuario; }
+            set { usuario = value; }
         }
         #endregion Getters/Setters
 
@@ -90,7 +98,7 @@ namespace RedesSociales.ViewModels
             #endregion Url
             #region API
 
-            DeletePublicacion = new ElegirRequest<BaseModel>();
+            DeletePublicacion = new ElegirRequest<PublicacionModel>();
             DeletePublicacion.ElegirEstrategia("POST", urlDeletePublicacion);
 
             CreatePublicacion = new ElegirRequest<PublicacionModel>();
@@ -102,22 +110,22 @@ namespace RedesSociales.ViewModels
             GetPublicacionesUsuario = new ElegirRequest<BaseModel>();
             GetPublicacionesUsuario.ElegirEstrategia("GET", urlGetPublicacionesUsuario);
 
-            CreateLike = new ElegirRequest<BaseModel>();
+            CreateLike = new ElegirRequest<PublicacionModel>();
             CreateLike.ElegirEstrategia("POST", urlCreateLike);
 
             GetLikes = new ElegirRequest<BaseModel>();
             GetLikes.ElegirEstrategia("GET", urlGetLikes);
 
-            DeleteLike = new ElegirRequest<BaseModel>();
+            DeleteLike = new ElegirRequest<PublicacionModel>();
             DeleteLike.ElegirEstrategia("POST", urlDeleteLike);
 
-            CreateEtiqueta = new ElegirRequest<BaseModel>();
+            CreateEtiqueta = new ElegirRequest<PublicacionModel>();
             CreateEtiqueta.ElegirEstrategia("POST", urlCreateEtiqueta);
 
             GetEtiquetas = new ElegirRequest<BaseModel>();
             GetEtiquetas.ElegirEstrategia("GET", urlGetEtiquetas);
 
-            DeleteEtiqueta = new ElegirRequest<BaseModel>();
+            DeleteEtiqueta = new ElegirRequest<PublicacionModel>();
             DeleteEtiqueta.ElegirEstrategia("POST", urlDeleteEtiqueta);
 
             #endregion API
@@ -140,6 +148,8 @@ namespace RedesSociales.ViewModels
         public void InitializeFields()
         {
             FotoPublicacion = new ValidatableObject<string>();
+            TipoPublicacion = new ValidatableObject<string>();
+            DescripcionPublicacion = new ValidatableObject<string>();
 
         }
         #endregion Initialize
@@ -150,6 +160,8 @@ namespace RedesSociales.ViewModels
                 PublicacionModel publicacion = new PublicacionModel(Creador)
                 {
                     Imagen = FotoPublicacion.Value,
+                    Tipo=TipoPublicacion.Value,
+                    Descripcion=DescripcionPublicacion.Value
                 };
                 APIResponse response = await CreatePublicacion.EjecutarEstrategia(publicacion);
                 if (response.isSuccess)
@@ -171,47 +183,226 @@ namespace RedesSociales.ViewModels
 
         public async Task SeleccionarPublicacionesSeguidos()
         {
-            throw new NotImplementedException();
+            try
+            {
+                ParametersRequest parametros = new ParametersRequest();
+                parametros.Parametros.Add(Creador.Idusuario.ToString());
+                APIResponse response = await GetPublicacionesUsuario.EjecutarEstrategia(null, parametros);
+                if (response.isSuccess)
+                {
+                    List<PublicacionModel> publicaciones = JsonConvert.DeserializeObject<List<PublicacionModel>>(response.Response);
+                    Publicaciones = new ObservableCollection<PublicacionModel>(publicaciones);
+                    foreach (PublicacionModel e in Publicaciones)
+                    {
+                        Publicacion = e;
+                        await SeleccionarLikes();
+                        await SeleccionarEtiquetas();
+                    }
+                }
+                else
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "No se encuentran publicaciones del usuario";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
         }
 
         public async Task SeleccionarPublicacionesUsuario()
         {
-            throw new NotImplementedException();
+            try
+            {
+                ParametersRequest parametros = new ParametersRequest();
+                parametros.Parametros.Add(Usuario.Idusuario.ToString());
+                APIResponse response = await GetPublicacionesUsuario.EjecutarEstrategia(null, parametros);
+                if (response.isSuccess)
+                {
+                    List<PublicacionModel> publicaciones = JsonConvert.DeserializeObject<List<PublicacionModel>>(response.Response);
+                    Publicaciones= new ObservableCollection<PublicacionModel>(publicaciones);
+                    foreach (PublicacionModel e in Publicaciones)
+                    {
+                        Publicacion = e;
+                        await SeleccionarLikes();
+                        await SeleccionarEtiquetas();
+                    }
+                }
+                else
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "No se encuentran publicaciones del usuario";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
         }
 
         public async Task EliminarPublicacion()
         {
-            throw new NotImplementedException();
+            try
+            {
+                PublicacionModel publicacion = new PublicacionModel(Creador)
+                {
+                    IdPublicacion=Publicacion.IdPublicacion
+                };
+                APIResponse response = await DeletePublicacion.EjecutarEstrategia(publicacion);
+                if (response.isSuccess)
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion eliminada exitosamente";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+                else
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al eliminar la publicacion";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
         }
 
         public async Task CrearLike()
         {
-            throw new NotImplementedException();
+            try
+            {
+                PublicacionModel publicacion = new PublicacionModel(Creador)
+                {
+                    IdPublicacion = Publicacion.IdPublicacion
+                };
+                APIResponse response = await CreateLike.EjecutarEstrategia(publicacion);
+                if (response.isSuccess)
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion creada exitosamente";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+                else
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al reaccionar publicacion";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
         }
 
         public async Task SeleccionarLikes()
         {
-            throw new NotImplementedException();
+            ParametersRequest parametros = new ParametersRequest();
+            parametros.Parametros.Add(Publicacion.Idusuario.ToString());
+            APIResponse response = await GetLikes.EjecutarEstrategia(null, parametros);
+            if (response.isSuccess)
+            {
+                List<UsuarioModel> usuarios = JsonConvert.DeserializeObject<List<UsuarioModel>>(response.Response);
+                Publicacion.Reacciones = usuarios;
+            }
+            else
+            {
+                ((MessageViewModel)PopUp.BindingContext).Message = "Error encontrar las reacciones de la publicacion";
+                await PopupNavigation.Instance.PushAsync(PopUp);
+            }
         }
 
         public async Task EliminarLike()
         {
-            throw new NotImplementedException();
+            try
+            {
+                PublicacionModel publicacion = new PublicacionModel(Creador)
+                {
+                    IdPublicacion = Publicacion.IdPublicacion
+                };
+                APIResponse response = await DeleteLike.EjecutarEstrategia(publicacion);
+                if (response.isSuccess)
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion creada exitosamente";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+                else
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al reaccionar publicacion";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
         }
 
         public async Task CrearEtiqueta()
         {
-            throw new NotImplementedException();
+            try
+            {
+                PublicacionModel publicacion = new PublicacionModel(Usuario)
+                {
+                    IdPublicacion = Publicacion.IdPublicacion
+                };
+                APIResponse response = await CreateEtiqueta.EjecutarEstrategia(publicacion);
+                if (response.isSuccess)
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion creada exitosamente";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+                else
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al reaccionar publicacion";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
         }
 
         public async Task SeleccionarEtiquetas()
         {
-            throw new NotImplementedException();
+            ParametersRequest parametros = new ParametersRequest();
+            parametros.Parametros.Add(Publicacion.Idusuario.ToString());
+            APIResponse response = await GetEtiquetas.EjecutarEstrategia(null, parametros);
+            if (response.isSuccess)
+            {
+                List<UsuarioModel> usuarios = JsonConvert.DeserializeObject<List<UsuarioModel>>(response.Response);
+                Publicacion.Etiquetas = usuarios;
+            }
+            else
+            {
+                ((MessageViewModel)PopUp.BindingContext).Message = "Error encontrar las reacciones de la publicacion";
+                await PopupNavigation.Instance.PushAsync(PopUp);
+            }
         }
 
         public async Task EliminarEtiqueta()
         {
-            throw new NotImplementedException();
+            try
+            {
+                PublicacionModel publicacion = new PublicacionModel(Usuario)
+                {
+                    IdPublicacion = Publicacion.IdPublicacion
+                };
+                APIResponse response = await CreateEtiqueta.EjecutarEstrategia(publicacion);
+                if (response.isSuccess)
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion creada exitosamente";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+                else
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al reaccionar publicacion";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
         }
     }
 }

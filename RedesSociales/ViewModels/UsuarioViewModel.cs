@@ -240,7 +240,7 @@ namespace RedesSociales.ViewModels
                 {
                     Idusuario = Usuario.Idusuario
                 };
-                APIResponse response = await UpdateUsuario.EjecutarEstrategia(usuario1);
+                APIResponse response = await DeleteUsuario.EjecutarEstrategia(usuario1);
                 if (response.isSuccess)
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Usuario eliminado exitosamente";
@@ -248,7 +248,7 @@ namespace RedesSociales.ViewModels
                 }
                 else
                 {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al actualizar la categoría";
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al eliminar la categoría";
                     await PopupNavigation.Instance.PushAsync(PopUp);
                 }
             }

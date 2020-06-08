@@ -52,7 +52,7 @@ namespace RedesSociales.ViewModels
             if (e != null)
             {
                 GoogleUser user = e.Data;
-                NombrePersona = user.Email;
+                NombrePersona = user.Name;
             }
         }
     }

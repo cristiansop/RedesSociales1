@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using RedesSociales.ViewModels;
 
 namespace RedesSociales.Views
 {

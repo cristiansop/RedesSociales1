@@ -6,39 +6,20 @@ using System;
 using System.Windows.Input;
 using Xamarin.Forms;
 using System.Threading.Tasks;
+using RedesSociales.Models;
+
 namespace RedesSociales.ViewModels
 {
     public class LoginViewModel : NotificationObject
     {
         //Atributos
-        private string nombre { get; set; }
         private IGoogleClientManager googleClientManager;
-
-        private int contarLogin;
 
         //Commands
         public ICommand InicioSesion { get; set; }
 
 
         //Getters y Setters
-        public string NombrePersona
-        {
-            get { return nombre; }
-            set
-            {
-                nombre = value;
-                OnPropertyChanged();
-            }
-        }
-        public int ContarLogin
-        {
-            get { return contarLogin; }
-            set
-            {
-                contarLogin = value;
-                OnPropertyChanged();
-            }
-        }
         public LoginViewModel()
         {
             InicioSesion = new Command(InicioSesionCommand);
@@ -47,7 +28,7 @@ namespace RedesSociales.ViewModels
 
         private async void InicioSesionCommand()
         {
-            googleClientManager.OnLogin += OnLoginCompleted;
+            googleClientManager.OnLogin += OnLoginCompletedAsync;
             try
             {
                 await googleClientManager.LoginAsync();
@@ -56,15 +37,22 @@ namespace RedesSociales.ViewModels
             {
                 await Application.Current.MainPage.DisplayAlert("Error", e.ToString(), "OK");
             }
-
         }
 
-        private void OnLoginCompleted(object sender, GoogleClientResultEventArgs<GoogleUser> e)
+        private async Task OnLoginCompletedAsync(object sender, GoogleClientResultEventArgs<GoogleUser> e)
         {
             if (e != null)
             {
                 GoogleUser user = e.Data;
-                NombrePersona = user.Name;
+                UsuarioModel usuario=new UsuarioModel() {
+                    apodo = user.Email,
+                    Nombre = user.GivenName,
+                    Apellidos = user.FamilyName,
+                    FotoPerfil = user.Picture.ToString(),
+                    Estado = "Activo"
+                };
+                await Navigation.PushAsync(new Page2());
+                await Application.Current.MainPage.Navigation.PushAsync(new Page2());
             }
         }
     }

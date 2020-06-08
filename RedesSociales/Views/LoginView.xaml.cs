@@ -18,12 +18,6 @@ namespace RedesSociales.Views
         {
             InitializeComponent();
             BindingContext = context;
-            btn_google.Clicked += Buttom_IniciarSesion_Clicked;
-        }
-
-        public void Buttom_IniciarSesion_Clicked(object sender, EventArgs e)
-        {
-            ((NavigationPage)this.Parent).PushAsync(new MainPage());
         }
     }
 }

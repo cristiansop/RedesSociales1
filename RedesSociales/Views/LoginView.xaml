@@ -42,7 +42,7 @@
                 <Button x:Name="btn_google" 
                         Style="{StaticResource googleButton}"
                         Text="Iniciar Sesión"
-                        Command="{Binding Buttom_IniciarSesion}" />
+                        Command="{Binding InicioSesion}" />
             </StackLayout>
             
         </Grid>

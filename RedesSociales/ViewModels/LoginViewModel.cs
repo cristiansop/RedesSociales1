@@ -1,4 +1,4 @@
-﻿/*using Plugin.GoogleClient;
+﻿using Plugin.GoogleClient;
 using Plugin.GoogleClient.Shared;
 using System;
 using System.Windows.Input;
@@ -52,8 +52,8 @@ namespace RedesSociales.ViewModels
             if (e != null)
             {
                 GoogleUser user = e.Data;
-                NombrePersona = user.Name;
+                NombrePersona = user.Email;
             }
         }
     }
-}*/
+}

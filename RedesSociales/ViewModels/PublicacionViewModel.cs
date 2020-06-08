@@ -11,6 +11,8 @@ using System.Windows.Input;
 using Xamarin.Forms;
 using RedesSociales.Views;
 using System.Collections.ObjectModel;
+using Rg.Plugins.Popup.Services;
+using RedesSociales.Validations.Base;
 
 namespace RedesSociales.ViewModels
 {
@@ -21,11 +23,8 @@ namespace RedesSociales.ViewModels
         public MessagePopupView PopUp { get; set; }
         public ObservableCollection<PublicacionModel> Publicaciones { get; set; }
         private PublicacionModel publicacion;
-
-        
-
-
-
+        private UsuarioModel creador;
+        public ValidatableObject<string> FotoPublicacion { get; set; }
 
         #endregion Atributes
         #region Request
@@ -58,6 +57,11 @@ namespace RedesSociales.ViewModels
         {
             get { return publicacion; }
             set { publicacion = value; OnPropertyChanged(); }
+        }
+        public UsuarioModel Creador
+        {
+            get { return creador; }
+            set { creador = value; OnPropertyChanged(); }
         }
         #endregion Getters/Setters
 
@@ -135,12 +139,34 @@ namespace RedesSociales.ViewModels
 
         public void InitializeFields()
         {
-            throw new NotImplementedException();
+            FotoPublicacion = new ValidatableObject<string>();
+
         }
         #endregion Initialize
         public async Task CrearPublicacion()
         {
-            throw new NotImplementedException();
+            try
+            {
+                PublicacionModel publicacion = new PublicacionModel(Creador)
+                {
+                    Imagen = FotoPublicacion.Value,
+                };
+                APIResponse response = await CreatePublicacion.EjecutarEstrategia(publicacion);
+                if (response.isSuccess)
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion creada exitosamente";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+                else
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al crear publicacion";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
         }
 
         public async Task SeleccionarPublicacionesSeguidos()

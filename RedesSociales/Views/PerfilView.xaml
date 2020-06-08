@@ -6,7 +6,6 @@
              mc:Ignorable="d"
              BackgroundColor="{Binding NavigationPrimary}"
              xmlns:components="clr-namespace:RedesSociales.VisualComponents;assembly=RedesSociales"
-             Icon="{components:ImageResource RedesSociales.Images.social-media.jpg}"
              Title="Perfil"
              x:Class="RedesSociales.Views.PerfilView">
     
@@ -15,17 +14,36 @@
     </ContentPage.Resources>
 
     <ContentPage.Content>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <StackLayout Spacing="0">
             
-            <!-- Informacion del perfil -->
-            <BoxView BackgroundColor="Aqua" Grid.Row="0" />
-            
+            <StackLayout>
+
+                <Image Source="https://instagram.fclo9-1.fna.fbcdn.net/v/t51.2885-15/e35/p1080x1080/92994707_144972250366540_4219576000156587289_n.jpg"/>
+                
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="{Binding Usuario.apodo}" />
+                    <Label Text="{Binding Usuario.Estado}" />
+                </StackLayout>
+                
+                <FlexLayout JustifyContent="SpaceAround">
+                    <StackLayout VerticalOptions="Center">
+                        <Label Text="Seguidores" />
+                        <Label Text="{Binding Usuario.Seguidores.Count}" HorizontalOptions="Center" />
+                    </StackLayout>
+
+                    <StackLayout VerticalOptions="Center">
+                        <Label Text="Seguidos" />
+                        <Label Text="{Binding Usuario.Seguidos.Count}" HorizontalOptions="Center" />
+                    </StackLayout>
+                </FlexLayout>
+
+                <Button Text="Editar perfil" />
+
+            </StackLayout>
+
             <!-- publicaciones del usuario -->
-            <BoxView BackgroundColor="Yellow" Grid.Row="1" />
-        </Grid>
+            <BoxView BackgroundColor="Yellow" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+            
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

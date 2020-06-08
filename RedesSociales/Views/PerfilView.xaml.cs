@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RedesSociales.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,9 +13,11 @@ namespace RedesSociales.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PerfilView : ContentPage
     {
+        UsuarioViewModel context = new UsuarioViewModel();
         public PerfilView()
         {
             InitializeComponent();
+            BindingContext = context;
         }
     }
 }

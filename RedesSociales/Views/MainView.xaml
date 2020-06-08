@@ -21,28 +21,24 @@
 
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Prueba"/>
-            <!--
             <ListView ItemsSource="{Binding Publicaciones}" HasUnevenRows="True" SeparatorVisibility="Default">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
                             <Frame Style="{StaticResource publicationFrame}">
                                 <StackLayout>
-                                    <Label Text="{Binding creador}"/>
+                                    <Label Text="{Binding Creador.apodo}"/>
                                     <Image Source="{components:ImageResource RedesSociales.Images.img_1.jpg}"/>
                                     <FlexLayout JustifyContent="SpaceEvenly">
-                                        <Label Text="{Binding Likes}"/>
-                                        <Label Text="{Binding Dislikes}"/>
+                                        <Label Text="{Binding Reacciones.Count}"/>
                                     </FlexLayout>
-                                    <Label Text="{Binding Date}"/>
+                                    <Label Text="{Binding Fecha}"/>
                                 </StackLayout>
                             </Frame>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            -->
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

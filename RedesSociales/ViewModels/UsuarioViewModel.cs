@@ -20,27 +20,26 @@ namespace RedesSociales.ViewModels
     public class UsuarioViewModel:NotificationObject
     {
         #region Properties
+
         #region Atributes
+
         public MessagePopupView PopUp { get; set; }
         private UsuarioModel usuario;
         private UsuarioModel usuario1;
-
-        
-
-
-
-
-        
         public ValidatableObject<string> ApodoUsuario { get; set; }
         public ValidatableObject<string> NombreUsuario { get; set; }
         public ValidatableObject<string> ApellidosUsuario { get; set; }
         public ValidatableObject<string> FotoPerfilUsuario { get; set; }
         public ValidatableObject<string> EstadoUsuario { get; set; }
         public ValidatableObject<string> BusquedaUsuario { get; set; }
+
         #region Enables
         #endregion Enables
+
         #endregion Atributes
+
         #region Request
+
         public ElegirRequest<UsuarioModel> CreateUsuario { get; set; }
         public ElegirRequest<UsuarioModel> GetUsuario { get; set; }
         public ElegirRequest<UsuarioModel> GetUsuario1 { get; set; }
@@ -52,7 +51,9 @@ namespace RedesSociales.ViewModels
         public ElegirRequest<BaseModel> GetSeguidores { get; set; }
         public ElegirRequest<BaseModel> GetSeguidores1 { get; set; }
         public ElegirRequest<BaseModel> DeleteSeguir { get; set; }
+
         #endregion Request
+
         #region Commands
         public ICommand CreateUsuarioCommand { get; set; }
         public ICommand GetUsuarioCommand { get; set; }
@@ -65,9 +66,13 @@ namespace RedesSociales.ViewModels
         public ICommand GetSeguidoresCommand { get; set; }
         public ICommand GetSeguidores1Command { get; set; }
         public ICommand DeleteSeguirCommand { get; set; }
+
         #endregion Commands
+
         #endregion Properties
+
         #region Getters/Setters
+
         public UsuarioModel Usuario
         {
             get { return usuario; }
@@ -78,12 +83,21 @@ namespace RedesSociales.ViewModels
             get { return usuario1; }
             set { usuario1 = value; OnPropertyChanged(); }
         }
+
         #endregion Getters/Setters
+
         #region Initialize
         public UsuarioViewModel()
         {
             PopUp = new MessagePopupView();
             Usuario = new UsuarioModel();
+
+            Usuario.Idusuario = 1; 
+            Usuario.apodo = "el_gusano01"; 
+            Usuario.Nombre = "Nicolas"; 
+            Usuario.Apellidos = "El Golozo"; 
+            Usuario.Estado = "activao";
+
             Usuario1 = new UsuarioModel();
             InitializeRequest();
             InitializeCommands();
@@ -140,6 +154,7 @@ namespace RedesSociales.ViewModels
         public void InitializeCommands()
         {
             #region Comandos
+
             CreateUsuarioCommand = new Command(async () => await CrearUsuario(), () => true);
             GetUsuarioCommand = new Command(async () => await SeleccionarUsuario(), () => true);
             GetUsuario1Command = new Command(async () => await SeleccionarUsuario1(), () => true);
@@ -151,6 +166,7 @@ namespace RedesSociales.ViewModels
             GetSeguidoresCommand = new Command(async () => await SeleccionarSeguidores(), () => true);
             GetSeguidores1Command = new Command(async () => await SeleccionarSeguidores1(), () => true);
             DeleteSeguirCommand = new Command(async () => await EliminarSeguir(), () => true);
+
             #endregion Comandos
         }
 
@@ -171,6 +187,7 @@ namespace RedesSociales.ViewModels
         }
         #endregion Initialize
 
+        #region Methods
 
         public async Task CrearUsuario()
         {
@@ -335,8 +352,6 @@ namespace RedesSociales.ViewModels
             }
         }
 
-        
-
         public async Task EliminarSeguir()
         {
             throw new NotImplementedException();
@@ -401,6 +416,8 @@ namespace RedesSociales.ViewModels
 
             }
         }
+
+        #endregion Methods
 
     }
 }

@@ -11,7 +11,7 @@ namespace RedesSociales
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new LoginView();
         }
 
         protected override void OnStart()

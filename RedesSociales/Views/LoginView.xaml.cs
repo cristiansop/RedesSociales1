@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RedesSociales.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,9 +13,11 @@ namespace RedesSociales.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LoginView : ContentPage
     {
+        LoginViewModel context = new LoginViewModel();
         public LoginView()
         {
             InitializeComponent();
+            BindingContext = context;
         }
     }
 }

@@ -9,15 +9,19 @@
              xmlns:components="clr-namespace:RedesSociales.VisualComponents;assembly=RedesSociales"
              Title="LoginView"
              x:Class="RedesSociales.Views.LoginView">
-    
+
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style TargetType="Button" x:Key="googleButton">
                 <Setter Property="BackgroundColor" Value="#EA4335"/>
-                <Setter Property="ImageSource" Value="small_google.png" />
-                <Setter Property="Font" Value="Arial"/>
+                <Setter Property="ImageSource" Value="logo_g.png" />
+                <Setter Property="WidthRequest" Value="80" />
+                <Setter Property="HeightRequest" Value="80" />
+                <Setter Property="CornerRadius" Value="40" />
+                <Setter Property="Font" Value="Product Sans"/>
                 <Setter Property="TextColor" Value="White"/>
                 <Setter Property="HorizontalOptions" Value="Center"/>
+                <Setter Property="VerticalOptions" Value="Center" />
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -27,9 +31,10 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <StackLayout Grid.Row="0" VerticalOptions="Center" HorizontalOptions="Center">
+            <StackLayout Grid.Row="0" VerticalOptions="End" HorizontalOptions="Center">
                 <Image Source="logotipo.png" Scale="0.8"/>
                 <!--
                 <StackLayout VerticalOptions="End">
@@ -38,10 +43,9 @@
                 -->
             </StackLayout>
 
-            <StackLayout Grid.Row="1" VerticalOptions="Start">
+            <StackLayout Grid.Row="2" VerticalOptions="Start">
                 <Button x:Name="btn_google" 
                         Style="{StaticResource googleButton}"
-                        Text="Iniciar Sesión"
                         Command="{Binding InicioSesion}" />
             </StackLayout>
 

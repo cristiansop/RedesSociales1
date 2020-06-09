@@ -84,6 +84,7 @@ namespace RedesSociales.ViewModels
             InitializeCommands();
             InitializeFields();
             loadDataHandler = new LoadDataHandler();
+            //Creador = new UsuarioModel();
             Creador = (UsuarioModel)Application.Current.Properties["Usuario"];
         }
 

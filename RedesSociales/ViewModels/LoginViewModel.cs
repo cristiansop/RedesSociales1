@@ -122,7 +122,8 @@ namespace RedesSociales.ViewModels
                         FotoPerfil = user.Picture.ToString(),
                         Estado = "Activo"
                     };
-                    await CrearUsuario();
+                    //await CrearUsuario();
+                    await loadDataHandler.PersistenceDataAsync("Usuario", Usuario);
                     await NavigationService.PushPage(new MainPage());
                 }
             };

@@ -28,7 +28,24 @@ namespace RedesSociales.ViewModels
 
         private async void InicioSesionCommand()
         {
-            googleClientManager.OnLogin += OnLoginCompletedAsync;
+            EventHandler<GoogleClientResultEventArgs<GoogleUser>> userLoginDelegate = null;
+            userLoginDelegate = async (object sender, GoogleClientResultEventArgs<GoogleUser> e) =>
+            {
+                if (e != null)
+                {
+                    GoogleUser user = e.Data;
+                    UsuarioModel usuario = new UsuarioModel()
+                    {
+                        apodo = user.Email,
+                        Nombre = user.GivenName,
+                        Apellidos = user.FamilyName,
+                        FotoPerfil = user.Picture.ToString(),
+                        Estado = "Activo"
+                    };
+                    await NavigationService.PushPage(new MainPage());
+                }
+            };
+            googleClientManager.OnLogin += userLoginDelegate;
             try
             {
                 await googleClientManager.LoginAsync();
@@ -36,22 +53,6 @@ namespace RedesSociales.ViewModels
             catch (Exception e)
             {
                 await Application.Current.MainPage.DisplayAlert("Error", e.ToString(), "OK");
-            }
-        }
-
-        private async Task OnLoginCompletedAsync(object sender, GoogleClientResultEventArgs<GoogleUser> e)
-        {
-            if (e != null)
-            {
-                GoogleUser user = e.Data;
-                UsuarioModel usuario=new UsuarioModel() {
-                    apodo = user.Email,
-                    Nombre = user.GivenName,
-                    Apellidos = user.FamilyName,
-                    FotoPerfil = user.Picture.ToString(),
-                    Estado = "Activo"
-                };
-                await NavigationService.PushPage(new MainPage());
             }
         }
     }

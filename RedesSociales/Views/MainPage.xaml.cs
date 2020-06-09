@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RedesSociales.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -13,9 +14,11 @@ namespace RedesSociales
     [DesignTimeVisible(false)]
     public partial class MainPage : TabbedPage
     {
+        PublicacionViewModel context = new PublicacionViewModel();
         public MainPage()
         {
             InitializeComponent();
+            BindingContext = context;
         }
     }
 }

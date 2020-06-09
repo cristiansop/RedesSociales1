@@ -14,7 +14,7 @@
         <ResourceDictionary>
             <Style TargetType="Button" x:Key="googleButton">
                 <Setter Property="BackgroundColor" Value="#EA4335"/>
-                <Setter Property="ImageSource" Value="logo_google.png" />
+                <!-- <Setter Property="ImageSource" Value="logo_google.png" /> -->
                 <Setter Property="Font" Value="Arial"/>
                 <Setter Property="TextColor" Value="White"/>
                 <Setter Property="HorizontalOptions" Value="Center"/>
@@ -29,14 +29,9 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <StackLayout Grid.Row="0" VerticalOptions="Center" HorizontalOptions="Center">
+            <!--<StackLayout Grid.Row="0" VerticalOptions="Center" HorizontalOptions="Center">
                 <Image Source="logotipo.png" Scale="0.8"/>
-                <!--
-                <StackLayout VerticalOptions="End">
-                    <BoxView BackgroundColor="Gray" Margin="10,0,10,0"/>
-                </StackLayout>
-                -->
-            </StackLayout>
+            </StackLayout> -->
 
             <StackLayout Grid.Row="1" VerticalOptions="Start">
                 <Button x:Name="btn_google" 

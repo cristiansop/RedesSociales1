@@ -52,7 +52,7 @@
 
                                 <Label Text="{Binding Reacciones.Count}" Grid.Row="2" Grid.Column="0"/>
 
-                                <Button Text="Comentarios" Grid.Row="2" Grid.Column="1" />
+                                <Button Text="Comentarios" Grid.Row="2" Grid.Column="1" Clicked="Buttton_Comentarios" />
 
                                 <Label Text="{Binding Descripcion}" Grid.Row="3" Grid.ColumnSpan="2"/>
 

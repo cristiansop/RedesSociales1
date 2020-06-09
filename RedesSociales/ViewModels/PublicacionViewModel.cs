@@ -14,6 +14,7 @@ using System.Collections.ObjectModel;
 using Rg.Plugins.Popup.Services;
 using RedesSociales.Validations.Base;
 using Newtonsoft.Json;
+using RedesSociales.Validations.Rules;
 
 namespace RedesSociales.ViewModels
 {
@@ -26,9 +27,7 @@ namespace RedesSociales.ViewModels
         private PublicacionModel publicacion;
         public UsuarioModel Creador { get; set; }
         private UsuarioModel usuario;
-
-        
-
+        public ValidatableObject<string> BusquedaUsuario { get; set; }
         public ValidatableObject<string> FotoPublicacion { get; set; }
         public ValidatableObject<string> TipoPublicacion { get; set; }
         public ValidatableObject<string> DescripcionPublicacion { get; set; }
@@ -36,6 +35,7 @@ namespace RedesSociales.ViewModels
 
         #endregion Atributes
         #region Request
+        public ElegirRequest<UsuarioModel> GetUsuario { get; set; }
         public ElegirRequest<PublicacionModel> CreatePublicacion { get; set; }
         public ElegirRequest<BaseModel> GetPublicacionesSeguidos { get; set; }
         public ElegirRequest<BaseModel> GetPublicacionesUsuario { get; set; }
@@ -48,6 +48,7 @@ namespace RedesSociales.ViewModels
         public ElegirRequest<PublicacionModel> DeleteEtiqueta { get; set; }
         #endregion Request
         #region Commands
+        public ICommand GetUsuarioCommand { get; set; }
         public ICommand GetPublicacionesUsuarioCommand { get; set; }
         public ICommand CreatePublicacionCommand { get; set; }
         public ICommand GetPublicacionesSeguidosCommand { get; set; }
@@ -69,7 +70,7 @@ namespace RedesSociales.ViewModels
         public UsuarioModel Usuario
         {
             get { return usuario; }
-            set { usuario = value; }
+            set { usuario = value; OnPropertyChanged(); }
         }
         #endregion Getters/Setters
 
@@ -85,6 +86,7 @@ namespace RedesSociales.ViewModels
         public void InitializeRequest()
         {
             #region Url
+            string urlGetUsuario = Endpoints.URL_SERVIDOR + Endpoints.GET_USUARIO;
             string urlCreatePublicacion = Endpoints.URL_SERVIDOR + Endpoints.CREATE_PUBLICACION;
             string urlGetPublicacionesSeguidos = Endpoints.URL_SERVIDOR + Endpoints.GET_PUBLICACIONES_SEGUIDOS;
             string urlGetPublicacionesUsuario = Endpoints.URL_SERVIDOR + Endpoints.GET_PUBLICACIONES_USUARIO;
@@ -97,6 +99,9 @@ namespace RedesSociales.ViewModels
             string urlDeleteEtiqueta = Endpoints.URL_SERVIDOR + Endpoints.DELETE_ETIQUETA;
             #endregion Url
             #region API
+
+            GetUsuario = new ElegirRequest<UsuarioModel>();
+            GetUsuario.ElegirEstrategia("GET", urlGetUsuario);
 
             DeletePublicacion = new ElegirRequest<PublicacionModel>();
             DeletePublicacion.ElegirEstrategia("POST", urlDeletePublicacion);
@@ -133,6 +138,7 @@ namespace RedesSociales.ViewModels
 
         public void InitializeCommands()
         {
+            GetUsuarioCommand = new Command(async () => await SeleccionarUsuario(), () => true);
             CreatePublicacionCommand = new Command(async () => await CrearPublicacion(), () => true);
             GetPublicacionesSeguidosCommand = new Command(async () => await SeleccionarPublicacionesSeguidos(), () => true);
             GetPublicacionesUsuarioCommand = new Command(async () => await SeleccionarPublicacionesUsuario(), () => true);
@@ -150,9 +156,35 @@ namespace RedesSociales.ViewModels
             FotoPublicacion = new ValidatableObject<string>();
             TipoPublicacion = new ValidatableObject<string>();
             DescripcionPublicacion = new ValidatableObject<string>();
+            BusquedaUsuario = new ValidatableObject<string>();
+            BusquedaUsuario.Validations.Add(new RequiredRule<string> { ValidationMessage = "El apodo del usuario es obligatorio" });
 
         }
         #endregion Initialize
+        private async Task SeleccionarUsuario()
+        {
+            try
+            {
+                ParametersRequest parametros = new ParametersRequest();
+                parametros.Parametros.Add(BusquedaUsuario.Value);
+                APIResponse response = await GetUsuario.EjecutarEstrategia(null, parametros);
+                if (response.IsSuccess)
+                {
+                    Usuario = JsonConvert.DeserializeObject<UsuarioModel>(response.Response);
+                    
+                }
+                else
+                {
+
+                    ((MessageViewModel)PopUp.BindingContext).Message = "No se encuentra el usuario";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
         public async Task CrearPublicacion()
         {
             try
@@ -164,7 +196,7 @@ namespace RedesSociales.ViewModels
                     Descripcion=DescripcionPublicacion.Value
                 };
                 APIResponse response = await CreatePublicacion.EjecutarEstrategia(publicacion);
-                if (response.isSuccess)
+                if (response.IsSuccess)
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion creada exitosamente";
                     await PopupNavigation.Instance.PushAsync(PopUp);
@@ -188,7 +220,7 @@ namespace RedesSociales.ViewModels
                 ParametersRequest parametros = new ParametersRequest();
                 parametros.Parametros.Add(Creador.Idusuario.ToString());
                 APIResponse response = await GetPublicacionesUsuario.EjecutarEstrategia(null, parametros);
-                if (response.isSuccess)
+                if (response.IsSuccess)
                 {
                     List<PublicacionModel> publicaciones = JsonConvert.DeserializeObject<List<PublicacionModel>>(response.Response);
                     Publicaciones = new ObservableCollection<PublicacionModel>(publicaciones);
@@ -218,7 +250,7 @@ namespace RedesSociales.ViewModels
                 ParametersRequest parametros = new ParametersRequest();
                 parametros.Parametros.Add(Usuario.Idusuario.ToString());
                 APIResponse response = await GetPublicacionesUsuario.EjecutarEstrategia(null, parametros);
-                if (response.isSuccess)
+                if (response.IsSuccess)
                 {
                     List<PublicacionModel> publicaciones = JsonConvert.DeserializeObject<List<PublicacionModel>>(response.Response);
                     Publicaciones= new ObservableCollection<PublicacionModel>(publicaciones);
@@ -250,7 +282,7 @@ namespace RedesSociales.ViewModels
                     IdPublicacion=Publicacion.IdPublicacion
                 };
                 APIResponse response = await DeletePublicacion.EjecutarEstrategia(publicacion);
-                if (response.isSuccess)
+                if (response.IsSuccess)
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion eliminada exitosamente";
                     await PopupNavigation.Instance.PushAsync(PopUp);
@@ -276,7 +308,7 @@ namespace RedesSociales.ViewModels
                     IdPublicacion = Publicacion.IdPublicacion
                 };
                 APIResponse response = await CreateLike.EjecutarEstrategia(publicacion);
-                if (response.isSuccess)
+                if (response.IsSuccess)
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion creada exitosamente";
                     await PopupNavigation.Instance.PushAsync(PopUp);
@@ -298,7 +330,7 @@ namespace RedesSociales.ViewModels
             ParametersRequest parametros = new ParametersRequest();
             parametros.Parametros.Add(Publicacion.Idusuario.ToString());
             APIResponse response = await GetLikes.EjecutarEstrategia(null, parametros);
-            if (response.isSuccess)
+            if (response.IsSuccess)
             {
                 List<UsuarioModel> usuarios = JsonConvert.DeserializeObject<List<UsuarioModel>>(response.Response);
                 Publicacion.Reacciones = usuarios;
@@ -319,7 +351,7 @@ namespace RedesSociales.ViewModels
                     IdPublicacion = Publicacion.IdPublicacion
                 };
                 APIResponse response = await DeleteLike.EjecutarEstrategia(publicacion);
-                if (response.isSuccess)
+                if (response.IsSuccess)
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion creada exitosamente";
                     await PopupNavigation.Instance.PushAsync(PopUp);
@@ -345,7 +377,7 @@ namespace RedesSociales.ViewModels
                     IdPublicacion = Publicacion.IdPublicacion
                 };
                 APIResponse response = await CreateEtiqueta.EjecutarEstrategia(publicacion);
-                if (response.isSuccess)
+                if (response.IsSuccess)
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion creada exitosamente";
                     await PopupNavigation.Instance.PushAsync(PopUp);
@@ -367,7 +399,7 @@ namespace RedesSociales.ViewModels
             ParametersRequest parametros = new ParametersRequest();
             parametros.Parametros.Add(Publicacion.Idusuario.ToString());
             APIResponse response = await GetEtiquetas.EjecutarEstrategia(null, parametros);
-            if (response.isSuccess)
+            if (response.IsSuccess)
             {
                 List<UsuarioModel> usuarios = JsonConvert.DeserializeObject<List<UsuarioModel>>(response.Response);
                 Publicacion.Etiquetas = usuarios;
@@ -388,7 +420,7 @@ namespace RedesSociales.ViewModels
                     IdPublicacion = Publicacion.IdPublicacion
                 };
                 APIResponse response = await CreateEtiqueta.EjecutarEstrategia(publicacion);
-                if (response.isSuccess)
+                if (response.IsSuccess)
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion creada exitosamente";
                     await PopupNavigation.Instance.PushAsync(PopUp);

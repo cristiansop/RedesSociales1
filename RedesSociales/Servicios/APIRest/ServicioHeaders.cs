@@ -7,18 +7,20 @@ namespace RedesSociales.Servicios.APIRest
 {
     public class ServicioHeaders
     {
-        #region Properties
-        public Dictionary<string,string> Headers { get; set; }
-        #endregion Properties
-        #region Initialize
+        #region Atributos
+        public Dictionary<string, string> Headers { get; set; }
+        #endregion Atributos
+
+        #region Inicializador
         public ServicioHeaders()
         {
             Headers = new Dictionary<string, string>();
-            Headers.Add("content-type", "application/json");
+            Headers.Add("ContentType", "application/json");
         }
-        #endregion Initialize
-        #region Metodos
-        public HttpRequestMessage AgregarCabecera(HttpRequestMessage requestMessage)
+        #endregion Inicializador
+
+        #region Métodos
+        public HttpRequestMessage AgregarCabeceras(HttpRequestMessage requestMessage)
         {
             foreach (var h in Headers)
             {
@@ -26,6 +28,6 @@ namespace RedesSociales.Servicios.APIRest
             }
             return requestMessage;
         }
-        #endregion Metodos
+        #endregion Métodos
     }
 }

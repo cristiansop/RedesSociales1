@@ -18,12 +18,15 @@ namespace RedesSociales.Servicios.APIRest
 
         public override async Task<APIResponse> SendRequest(T objecto)
         {
+            /*Verbos POST y PUT*/
+
             APIResponse respuesta = new APIResponse()
             {
                 Code = 400,
-                isSuccess = false,
+                IsSuccess = false,
                 Response = ""
             };
+
             string objetoJson = JsonConvert.SerializeObject(objecto);
             HttpContent content = new StringContent(objetoJson, Encoding.UTF8, "application/json");
 
@@ -32,25 +35,21 @@ namespace RedesSociales.Servicios.APIRest
                 using (var client = new HttpClient())
                 {
                     var verboHttp = (Verbo == "POST") ? HttpMethod.Post : HttpMethod.Put;
-                    //HttpRequestMessage requestMessage = new HttpRequestMessage(verboHttp, Url);
                     HttpRequestMessage requestMessage = new HttpRequestMessage(verboHttp, UrlParameters);
-                    //requestMessage = ServicioHeaders.AgregarCabecera(requestMessage);
+                    //requestMessage = ServicioHeaders.AgregarCabeceras(requestMessage);
                     requestMessage.Content = content;
-                    client.Timeout = TimeSpan.FromSeconds(50);//changed
-                    //HttpResponseMessage HttpResponse = await client.SendAsync(requestMessage);
+                    client.Timeout = TimeSpan.FromSeconds(50);
                     HttpResponseMessage HttpResponse = client.SendAsync(requestMessage).Result;
                     respuesta.Code = Convert.ToInt32(HttpResponse.StatusCode);
-                    respuesta.isSuccess = HttpResponse.IsSuccessStatusCode;
+                    respuesta.IsSuccess = HttpResponse.IsSuccessStatusCode;
                     respuesta.Response = await HttpResponse.Content.ReadAsStringAsync();
-
                 }
-
             }
             catch (Exception)
             {
-
-                respuesta.Response = "error  al momento de llamar servidor";
+                respuesta.Response = "Error al momento de llamar al servidor";
             }
+
             return respuesta;
         }
     }

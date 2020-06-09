@@ -39,6 +39,10 @@ namespace RedesSociales.Models
             this.creador = usuario;
             this.Idusuario = usuario.Idusuario;
         }
+
+        public PublicacionModel()
+        {
+        }
         #endregion Inicialize
 
         #region Getters/Setters

@@ -8,11 +8,12 @@
              xmlns:components="clr-namespace:RedesSociales.VisualComponents;assembly=RedesSociales"
              Icon="home.jpg"
              x:Class="RedesSociales.Views.MainView">
-    
+
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style TargetType="Frame" x:Key="publicationFrame">
-                <Setter Property="BackgroundColor" Value="White"/>
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+                <Setter Property="Padding" Value="0,10,0,10" />
             </Style>
             <Style TargetType="Label" x:Key="dateLabel"></Style>
         </ResourceDictionary>
@@ -20,21 +21,57 @@
 
     <ContentPage.Content>
         <StackLayout>
+            <Frame BackgroundColor="#DDD" HasShadow="False" CornerRadius="20" Padding="0,0,0,-1" Margin="30, 10">
+                <SearchBar Placeholder="Buscar usuario" />
+            </Frame>
+            <BoxView BackgroundColor="#DDD" HeightRequest="1" />
             <CollectionView ItemsSource="{Binding Publicaciones}" EmptyView="No tienes publicaciones">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <ViewCell>
-                            <Frame Style="{StaticResource publicationFrame}">
-                                <StackLayout>
-                                    <Label Text="{Binding Creador.apodo}"/>
-                                    <Image Source="{components:ImageResource RedesSociales.Images.img_1.jpg}"/>
-                                    <FlexLayout JustifyContent="SpaceEvenly">
-                                        <Label Text="{Binding Reacciones.Count}"/>
-                                    </FlexLayout>
-                                    <Label Text="{Binding Fecha}"/>
-                                </StackLayout>
-                            </Frame>
-                        </ViewCell>
+                        <Frame Style="{StaticResource publicationFrame}">
+
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+
+                                <Label Text="{Binding Creador.apodo}" Grid.Row="0" Grid.ColumnSpan="2"
+                                       VerticalOptions="Center"/>
+
+                                <Image Source="img_1.jpg" Grid.Row="1" Grid.ColumnSpan="2" Aspect="AspectFill"/>
+
+                                <Label Text="{Binding Reacciones.Count}" Grid.Row="2" Grid.Column="0"/>
+
+                                <Button Text="Comentarios" Grid.Row="2" Grid.Column="1" />
+
+                                <Label Text="{Binding Descripcion}" Grid.Row="3" Grid.ColumnSpan="2"/>
+
+                                <Label Text="{Binding Fecha}" Grid.Row="4" Grid.Column="0"/>
+
+                                <BoxView BackgroundColor="#DDD" Grid.Row="5" Grid.ColumnSpan="2" HeightRequest="1" />
+
+                            </Grid>
+                            <!--
+                            <StackLayout>
+                                <Label Text="{Binding Creador.apodo}"/>
+                                <Image Source="logo_google.jpg"/>
+                                <FlexLayout JustifyContent="SpaceEvenly">
+                                    <Label Text="{Binding Reacciones.Count}"/>
+                                </FlexLayout>
+                                <Label Text="{Binding Fecha}"/>
+                            </StackLayout>
+                            -->
+                        </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

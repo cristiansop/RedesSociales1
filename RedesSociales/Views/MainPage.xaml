@@ -7,6 +7,9 @@
              xmlns:views="clr-namespace:RedesSociales.Views"
              NavigationPage.HasNavigationBar="False"
              UnselectedTabColor="White"
+             BackgroundColor="{StaticResource SecondaryBackgroundColor}"
+             xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+             android:TabbedPage.ToolbarPlacement ="Bottom"
              x:Class="RedesSociales.MainPage">
 
     <TabbedPage.Children>

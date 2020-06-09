@@ -9,43 +9,80 @@
              xmlns:components="clr-namespace:RedesSociales.VisualComponents;assembly=RedesSociales"
              Icon="social_media.png"
              x:Class="RedesSociales.Views.PerfilView">
-    
+
     <ContentPage.Resources>
-        
+        <ResourceDictionary>
+
+            <Style TargetType="Label" x:Key="LabelTitle">
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="FontSize" Value="Medium" />
+            </Style>
+
+            <Style TargetType="Label" x:Key="LabelInfo">
+                <Setter Property="FontSize" Value="Medium" />
+            </Style>
+
+        </ResourceDictionary>
     </ContentPage.Resources>
 
     <ContentPage.Content>
-        <StackLayout Spacing="0">
-            
-            <StackLayout>
+        <StackLayout>
+            <!--
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-                <Image Source="social_media.png"/>
-                
-                <StackLayout Orientation="Horizontal">
-                    <Label Text="{Binding Usuario.apodo}" />
-                    <Label Text="{Binding Usuario.Estado}" />
+                <BoxView BackgroundColor="{StaticResource SecondaryBackgroundColor}" Grid.Row="0" />
+                <Image Source="social_media.png" Grid.Row="1" HeightRequest="100" 
+                       WidthRequest="50" TranslationY="-60"/>
+            </Grid>-->
+
+            <StackLayout>
+                <Image Source="social_media.png" Grid.Row="1" HeightRequest="100" WidthRequest="50" Margin="20"/>
+                <StackLayout VerticalOptions="Center" Grid.Row="1" HorizontalOptions="Center">
+                    <Label Text="{Binding Usuario.apodo}" FontAttributes="Bold" FontSize="Title" />
+                    <Label Text="{Binding Usuario.Estado}" FontSize="Subtitle" HorizontalOptions="Center"/>
                 </StackLayout>
-                
+
                 <FlexLayout JustifyContent="SpaceAround">
                     <StackLayout VerticalOptions="Center">
-                        <Label Text="Seguidores" />
+                        <Label Style="{StaticResource LabelTitle}" Text="Seguidores" />
                         <Label Text="{Binding Usuario.Seguidores.Count}" HorizontalOptions="Center" />
                     </StackLayout>
 
                     <StackLayout VerticalOptions="Center">
-                        <Label Text="Seguidos" />
+                        <Label Style="{StaticResource LabelTitle}" Text="Seguidos" />
                         <Label Text="{Binding Usuario.Seguidos.Count}" HorizontalOptions="Center" />
                     </StackLayout>
                 </FlexLayout>
 
-                <Button Text="Editar perfil" Clicked="Buttton_EditarPerfil" />
+                <Button Text="Editar perfil" 
+                        CornerRadius="20" BackgroundColor="Transparent" BorderColor="Black" BorderWidth="1"
+                        Clicked="Buttton_EditarPerfil" />
 
             </StackLayout>
 
             <!-- publicaciones del usuario -->
-            <ScrollView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-                <BoxView BackgroundColor="Yellow" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
-            </ScrollView>
+            <CollectionView ItemsSource="{Binding Usuario.Publicaciones}">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="3" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="50" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50" />
+                            </Grid.ColumnDefinitions>
+                            <Image Grid.Row="0" Grid.Column="0" Source="img_1.jpg" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
         </StackLayout>
     </ContentPage.Content>

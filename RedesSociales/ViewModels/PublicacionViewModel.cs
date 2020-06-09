@@ -14,6 +14,7 @@ using System.Collections.ObjectModel;
 using Rg.Plugins.Popup.Services;
 using RedesSociales.Validations.Base;
 using Newtonsoft.Json;
+using RedesSociales.Servicios.Handler;
 
 namespace RedesSociales.ViewModels
 {
@@ -21,13 +22,15 @@ namespace RedesSociales.ViewModels
     {
         #region Properties
         #region Atributes
+
+        private LoadDataHandler loadDataHandler;
+
         public MessagePopupView PopUp { get; set; }
         public ObservableCollection<PublicacionModel> Publicaciones { get; set; }
         private PublicacionModel publicacion;
         public UsuarioModel Creador { get; set; }
         private UsuarioModel usuario;
 
-        
 
         public ValidatableObject<string> FotoPublicacion { get; set; }
         public ValidatableObject<string> TipoPublicacion { get; set; }
@@ -80,6 +83,8 @@ namespace RedesSociales.ViewModels
             InitializeRequest();
             InitializeCommands();
             InitializeFields();
+            loadDataHandler = new LoadDataHandler();
+            Creador = (UsuarioModel)Application.Current.Properties["Usuario"];
         }
 
         public void InitializeRequest()

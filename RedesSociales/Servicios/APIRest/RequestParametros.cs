@@ -30,7 +30,7 @@ namespace RedesSociales.Servicios.APIRest
                 using (var client = new HttpClient())
                 {
                     var verboHttp = (Verbo == "GET") ? HttpMethod.Get : HttpMethod.Delete;
-                    client.Timeout = TimeSpan.FromSeconds(50);
+                    client.Timeout = TimeSpan.FromSeconds(500);
                     //await this.ConstruirURL(objecto);
                     HttpRequestMessage requestMessage = new HttpRequestMessage(verboHttp, UrlParameters);
                     requestMessage = ServicioHeaders.AgregarCabecera(requestMessage);

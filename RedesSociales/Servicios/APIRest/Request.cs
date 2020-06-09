@@ -49,6 +49,7 @@ namespace RedesSociales.Servicios.APIRest
                 newUrl += queryParameters;
 
             }
+            UrlParameters = newUrl;
         }
         #endregion Metodos
     }

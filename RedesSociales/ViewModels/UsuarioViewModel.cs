@@ -282,7 +282,7 @@ namespace RedesSociales.ViewModels
                 PeticionesDosUsuariosModel peticion = new PeticionesDosUsuariosModel()
                 {
                     Idusuario1 = usuario.Idusuario,
-                    Idusuario2 = usuario.Idusuario,
+                    Idusuario2 = usuario1.Idusuario,
                 };
                 APIResponse response = await CreateSeguir.EjecutarEstrategia(peticion);
                 if (response.isSuccess)

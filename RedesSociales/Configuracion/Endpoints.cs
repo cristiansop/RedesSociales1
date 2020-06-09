@@ -6,7 +6,7 @@ namespace RedesSociales.Configuracion
 {
     class Endpoints
     {
-        public static readonly string URL_SERVIDOR="http://127.0.0.1:9000";
+        public static readonly string URL_SERVIDOR= "http://localhost:9000";
         #region Usuario
         public static readonly string GET_USUARIO = "/usuario/get/";
         public static readonly string CREATE_USUARIO = "/usuario/create";

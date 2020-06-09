@@ -177,13 +177,9 @@ namespace RedesSociales.ViewModels
                 {
                     Usuario = JsonConvert.DeserializeObject<UsuarioModel>(response.Response);
                     await SeleccionarPublicacionesUsuario();
-
-
-
                 }
                 else
                 {
-
                     ((MessageViewModel)PopUp.BindingContext).Message = "No se encuentra el usuario";
                     await PopupNavigation.Instance.PushAsync(PopUp);
                 }

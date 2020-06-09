@@ -1,4 +1,5 @@
-﻿using Rg.Plugins.Popup.Pages;
+﻿using RedesSociales.ViewModels;
+using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,11 @@ namespace RedesSociales.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ComentsView : PopupPage
     {
+        ComentarioViewModel context = new ComentarioViewModel();
         public ComentsView()
         {
             InitializeComponent();
+            BindingContext = context;
         }
 
         void Cerrar_VistaComentarios(object sender, EventArgs e)

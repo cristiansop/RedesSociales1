@@ -25,7 +25,9 @@
                 <SearchBar Placeholder="Buscar usuario" />
             </Frame>
             <BoxView BackgroundColor="#DDD" HeightRequest="1" />
-            <CollectionView ItemsSource="{Binding Publicaciones}" EmptyView="No tienes publicaciones">
+            <CollectionView ItemsSource="{Binding Publicaciones}" 
+                            EmptyView="No tienes publicaciones"
+                            SelectionChanged="Seleccionar_Usuario">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Frame Style="{StaticResource publicationFrame}">
@@ -48,15 +50,16 @@
                                 <Label Text="{Binding Creador.apodo}" Grid.Row="0" Grid.ColumnSpan="2"
                                        VerticalOptions="Center"/>
 
+                                <!--<Image Source="{Binding Imagen}" Grid.Row="1" Grid.ColumnSpan="2" Aspect="AspectFill"/>-->
                                 <Image Source="img_1.jpg" Grid.Row="1" Grid.ColumnSpan="2" Aspect="AspectFill"/>
-
+                                
                                 <Label Text="{Binding Reacciones.Count}" Grid.Row="2" Grid.Column="0"/>
 
                                 <Button Text="Comentarios" Grid.Row="2" Grid.Column="1" Clicked="Buttton_Comentarios" />
 
                                 <Label Text="{Binding Descripcion}" Grid.Row="3" Grid.ColumnSpan="2"/>
 
-                                <Label Text="{Binding Fecha}" Grid.Row="4" Grid.Column="0"/>
+                                <Label Text="{Binding Fecha, StringFormat='{dd:mm:yy}'}" Grid.Row="4" Grid.Column="0"/>
 
                                 <BoxView BackgroundColor="#DDD" Grid.Row="5" Grid.ColumnSpan="2" HeightRequest="1" />
 

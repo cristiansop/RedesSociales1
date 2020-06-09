@@ -27,8 +27,8 @@
                  Padding="20"
                  Margin="20"
                  BackgroundColor="{StaticResource GeneralBackgroundColor}">
-        
-        <CollectionView ItemsSource="{Binding Publicaciones}" EmptyView="No hay comentarios">
+
+        <CollectionView ItemsSource="{Binding Publicacion.comentarios}" EmptyView="No hay comentarios">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid>

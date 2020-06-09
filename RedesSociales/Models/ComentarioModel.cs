@@ -9,22 +9,30 @@ namespace RedesSociales.Models
     public class ComentarioModel : NotificationObject
     {
         #region Properties
+
         [JsonIgnore]
         private UsuarioModel creador;
+
         [JsonProperty("idUsuario")]
         public int IdUsuario { get; set; }
+
         [JsonProperty("idComentario")]
         public int IdComentario { get; set; }
+
         [JsonProperty("Cuerpo")]
         public string Cuerpo { get; set; }
+
         [JsonProperty("idPublicacion")]
         public int Idpublicacion { get; set; }
+
         [JsonIgnore]
         public string Fecha { get; set; }
+
         [JsonIgnore]
         private PublicacionModel publicacion;
 
         #endregion Properties
+
         #region Initialize
         public ComentarioModel(UsuarioModel usuario, PublicacionModel publicacion)
         {
@@ -34,6 +42,7 @@ namespace RedesSociales.Models
             this.Idpublicacion = publicacion.IdPublicacion;
         }
         #endregion Initialize
+
         #region Getters/Setters
 
         public UsuarioModel Creador

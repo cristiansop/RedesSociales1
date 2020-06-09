@@ -25,5 +25,18 @@ namespace RedesSociales.Views
         {
             await PopupNavigation.Instance.PushAsync(new EditarPerfilView());
         }
+
+        private void Seleccionar_Usuario(object sender, SelectionChangedEventArgs e)
+        {
+            var us = e.CurrentSelection.FirstOrDefault(); // as UsuarioModel
+            if (us == null)
+                return;
+
+            Navigation.PushAsync(new PerfilView());
+
+            ((CollectionView)sender).SelectedItem = null;
+
+        }
+
     }
 }

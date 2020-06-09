@@ -9,7 +9,7 @@
         <ResourceDictionary>
             <!-- Colores gobales -->
             <Color x:Key="NavigationPrimary">#F1F2F3</Color>
-            <Color x:Key="GeneralBackgroundColor">#F0FAEF</Color>
+            <Color x:Key="GeneralBackgroundColor">#F1F2F3</Color>
             <Color x:Key="SecondaryBackgroundColor">#457B9D</Color>
             
             <!-- Estilos globales -->

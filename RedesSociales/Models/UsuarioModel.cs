@@ -10,7 +10,7 @@ namespace RedesSociales.Models
     public class UsuarioModel : BaseModel
     {
         #region Properties
-        [JsonProperty("idUsuario")]
+        [JsonIgnore]
         public int Idusuario { get; set; }
 
         [JsonProperty("Apodo")]

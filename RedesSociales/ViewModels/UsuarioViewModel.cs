@@ -45,12 +45,12 @@ namespace RedesSociales.ViewModels
         public ElegirRequest<UsuarioModel> GetUsuario1 { get; set; }
         public ElegirRequest<UsuarioModel> UpdateUsuario { get; set; }
         public ElegirRequest<BaseModel> DeleteUsuario { get; set; }
-        public ElegirRequest<BaseModel> CreateSeguir { get; set; }
+        public ElegirRequest<PeticionesDosUsuariosModel> CreateSeguir { get; set; }
         public ElegirRequest<BaseModel> GetSeguidos { get; set; }
         public ElegirRequest<BaseModel> GetSeguidos1 { get; set; }
         public ElegirRequest<BaseModel> GetSeguidores { get; set; }
         public ElegirRequest<BaseModel> GetSeguidores1 { get; set; }
-        public ElegirRequest<BaseModel> DeleteSeguir { get; set; }
+        public ElegirRequest<PeticionesDosUsuariosModel> DeleteSeguir { get; set; }
 
         #endregion Request
 
@@ -132,7 +132,7 @@ namespace RedesSociales.ViewModels
             DeleteUsuario = new ElegirRequest<BaseModel>();
             DeleteUsuario.ElegirEstrategia("POST", urlDeleteUsuario);
 
-            CreateSeguir = new ElegirRequest<BaseModel>();
+            CreateSeguir = new ElegirRequest<PeticionesDosUsuariosModel>();
             CreateSeguir.ElegirEstrategia("POST", urlCreateSeguir);
 
             GetSeguidos = new ElegirRequest<BaseModel>();
@@ -147,7 +147,7 @@ namespace RedesSociales.ViewModels
             GetSeguidores1 = new ElegirRequest<BaseModel>();
             GetSeguidores1.ElegirEstrategia("GET", urlGetSeguidores);
 
-            DeleteSeguir = new ElegirRequest<BaseModel>();
+            DeleteSeguir = new ElegirRequest<PeticionesDosUsuariosModel>();
             DeleteSeguir.ElegirEstrategia("POST", urlDeleteSeguir);
             #endregion API
         }
@@ -277,7 +277,29 @@ namespace RedesSociales.ViewModels
 
         public async Task CrearSeguir()
         {
-            throw new NotImplementedException();
+            try
+            {
+                PeticionesDosUsuariosModel peticion = new PeticionesDosUsuariosModel()
+                {
+                    Idusuario1 = usuario.Idusuario,
+                    Idusuario2 = usuario.Idusuario,
+                };
+                APIResponse response = await CreateSeguir.EjecutarEstrategia(peticion);
+                if (response.isSuccess)
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion eliminada exitosamente";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+                else
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al eliminar la publicacion";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
         }
 
         public async Task SeleccionarSeguidos()

@@ -4,7 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             BackgroundColor="{Binding NavigationPrimary}"
+             BackgroundColor="{StaticResource GeneralBackgroundColor}"
              NavigationPage.HasNavigationBar="False"
              xmlns:components="clr-namespace:RedesSociales.VisualComponents;assembly=RedesSociales"
              Icon="social_media.png"
@@ -19,7 +19,7 @@
             
             <StackLayout>
 
-                <Image Source="https://instagram.fclo9-1.fna.fbcdn.net/v/t51.2885-15/e35/p1080x1080/92994707_144972250366540_4219576000156587289_n.jpg"/>
+                <Image Source="social_media.png"/>
                 
                 <StackLayout Orientation="Horizontal">
                     <Label Text="{Binding Usuario.apodo}" />
@@ -38,13 +38,15 @@
                     </StackLayout>
                 </FlexLayout>
 
-                <Button Text="Editar perfil" />
+                <Button Text="Editar perfil" Clicked="Buttton_EditarPerfil" />
 
             </StackLayout>
 
             <!-- publicaciones del usuario -->
-            <BoxView BackgroundColor="Yellow" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
-            
+            <ScrollView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <BoxView BackgroundColor="Yellow" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"/>
+            </ScrollView>
+
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

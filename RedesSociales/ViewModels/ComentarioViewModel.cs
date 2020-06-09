@@ -12,7 +12,7 @@ using Xamarin.Forms;
 
 namespace RedesSociales.ViewModels
 {
-    class ComentarioViewModel
+    class ComentarioViewModel : ViewModelBase
     {
     }
 }

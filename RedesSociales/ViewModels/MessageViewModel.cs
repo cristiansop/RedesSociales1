@@ -9,7 +9,7 @@ using Xamarin.Forms;
 
 namespace RedesSociales.ViewModels
 {
-    public class MessageViewModel : NotificationObject
+    public class MessageViewModel : ViewModelBase
     {
         #region Properties
         private string message;

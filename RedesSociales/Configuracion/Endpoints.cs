@@ -8,7 +8,7 @@ namespace RedesSociales.Configuracion
     {
         public static readonly string URL_SERVIDOR="http://127.0.0.1:9000";
         #region Usuario
-        public static readonly string GET_USUARIO = "/usuario/get/:Apodo";
+        public static readonly string GET_USUARIO = "/usuario/get/";
         public static readonly string CREATE_USUARIO = "/usuario/create";
         public static readonly string UPDATE_USUARIO = "/usuario/update";
         public static readonly string DELETE_USUARIO = "/usuario/delete";

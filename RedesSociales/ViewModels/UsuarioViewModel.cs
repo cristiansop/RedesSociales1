@@ -14,6 +14,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
+using RedesSociales.Servicios.Handler;
 
 namespace RedesSociales.ViewModels
 {
@@ -22,6 +23,7 @@ namespace RedesSociales.ViewModels
         #region Properties
 
         #region Atributes
+        private LoadDataHandler loadDataHandler;
 
         public MessagePopupView PopUp { get; set; }
         private UsuarioModel usuario;
@@ -129,6 +131,7 @@ namespace RedesSociales.ViewModels
             IsModificarEnable=false;
             IsEliminarEnable=false;
             IsSeguirEnable=true;
+            loadDataHandler = new LoadDataHandler();
             Publicacionviewmodel = new PublicacionViewModel();
             InitializeRequest();
             InitializeCommands();
@@ -200,7 +203,8 @@ namespace RedesSociales.ViewModels
         #region Methods
         public void ActualizarComandos()
         {
-            if (Usuario.apodo == "el apodo en memoria")
+            UsuarioModel UsuarioMemoria=(UsuarioModel)Application.Current.Properties["Usuario"];
+            if (Usuario.apodo == UsuarioMemoria.apodo)
             {
                 IsModificarEnable = true;
                 ApodoUsuario.Value = Usuario.apodo;
@@ -234,7 +238,8 @@ namespace RedesSociales.ViewModels
                 APIResponse response = await UpdateUsuario.EjecutarEstrategia(usuario);
                 if (response.IsSuccess)
                 {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Categoría actualizada exitosamente";
+                    await loadDataHandler.PersistenceDataAsync("Usuario", usuario);
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Usuario actualizado exitosamente";
                     await PopupNavigation.Instance.PushAsync(PopUp);
                 }
                 else
@@ -279,10 +284,11 @@ namespace RedesSociales.ViewModels
         {
             try
             {
+                UsuarioModel UsuarioMemoria = (UsuarioModel)Application.Current.Properties["Usuario"];
                 PeticionesDosUsuariosModel peticion = new PeticionesDosUsuariosModel()
                 {
-                    Idusuario1 = usuario.Idusuario,
-                    //Idusuario2 = usuario1.Idusuario,
+                    Idusuario1 = UsuarioMemoria.Idusuario,
+                    Idusuario2 = Usuario.Idusuario,
                 };
                 APIResponse response = await CreateSeguir.EjecutarEstrategia(peticion);
                 if (response.IsSuccess)

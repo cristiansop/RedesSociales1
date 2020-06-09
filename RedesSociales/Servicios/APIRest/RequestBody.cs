@@ -16,7 +16,7 @@ namespace RedesSociales.Servicios.APIRest
             Verbo = verbo;
         }
 
-        public override async Task<APIResponse> SendRequest(T objecto)
+        public override async Task<APIResponse> SendRequest(T objecto, string Json = null)
         {
             /*Verbos POST y PUT*/
 
@@ -27,7 +27,18 @@ namespace RedesSociales.Servicios.APIRest
                 Response = ""
             };
 
-            string objetoJson = JsonConvert.SerializeObject(objecto);
+            string objetoJson = "";
+            if (Json != null)
+            {
+                objetoJson = Json;
+            }
+            else
+            {
+                objetoJson = JsonConvert.SerializeObject(objecto, new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore
+                });
+            }
             HttpContent content = new StringContent(objetoJson, Encoding.UTF8, "application/json");
 
             try

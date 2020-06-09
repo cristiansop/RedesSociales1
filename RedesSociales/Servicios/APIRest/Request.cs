@@ -34,7 +34,7 @@ namespace RedesSociales.Servicios.APIRest
         #endregion Getters / Setters
 
         #region Métodos
-        public abstract Task<APIResponse> SendRequest(T objecto,string Json=null);
+        public abstract Task<APIResponse> SendRequest(T objecto, string Json=null);
 
         public async Task ContruirURL(ParametersRequest parametros)
         {

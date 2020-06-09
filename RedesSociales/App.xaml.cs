@@ -34,7 +34,7 @@ namespace RedesSociales
         {
             InitializeComponent();
             LoadData = new LoadDataHandler();
-            MainPage = new NavigationPage(new MainPage());
+            MainPage = new NavigationPage(new LoginView());
         }
 
         protected override void OnStart()

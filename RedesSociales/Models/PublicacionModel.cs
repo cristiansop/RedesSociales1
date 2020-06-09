@@ -11,24 +11,38 @@ namespace RedesSociales.Models
         #region Properties
         [JsonIgnore]
         private UsuarioModel creador;
+
+
         [JsonProperty("idUsuario")]
         public int Idusuario { get; set; }
 
         [JsonProperty("idPublicacion")]
         public int IdPublicacion { get; set; }
+
+
         [JsonProperty("Archivo")]
         public string Imagen { get; set; }
+
+
         [JsonProperty("Tipo")]
         public string Tipo { get; set; }
+
+
         [JsonProperty("Descripcion")]
         public string Descripcion { get; set; }
 
         [JsonIgnore]
         public string Fecha { get; set; }
+
+
         [JsonIgnore]
         private List<UsuarioModel> reacciones;
+
+
         [JsonIgnore]
         private List<UsuarioModel> etiquetas;
+
+
         [JsonIgnore]
         private List<ComentarioModel> comentarios;
         #endregion Properties

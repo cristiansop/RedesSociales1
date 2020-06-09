@@ -33,6 +33,26 @@ namespace RedesSociales.ViewModels
         public ValidatableObject<string> EstadoUsuario { get; set; }
 
         #region Enables
+        private bool isModificarEnable;
+        private bool isEliminarEnable;
+        private bool isSeguirEnable;
+        private bool isCrearPublicacionEnable;
+        private bool isDeletePublicacionEnable;
+
+        public bool IsDeletePublicacionEnable
+        {
+            get { return isDeletePublicacionEnable; }
+            set { isDeletePublicacionEnable = value; }
+        }
+
+
+        public bool IsCrearPublicacionEnable
+        {
+            get { return isCrearPublicacionEnable; }
+            set { isCrearPublicacionEnable = value; }
+        }
+
+
         #endregion Enables
 
         #endregion Atributes
@@ -67,6 +87,37 @@ namespace RedesSociales.ViewModels
             set { usuario = value;
                 OnPropertyChanged(); }
         }
+        public bool IsSeguirEnable
+        {
+            get { return isSeguirEnable; }
+            set
+            {
+                isSeguirEnable = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+        public bool IsEliminarEnable
+        {
+            get { return isEliminarEnable; }
+            set
+            {
+                isEliminarEnable = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+        public bool IsModificarEnable
+        {
+            get { return isModificarEnable; }
+            set
+            {
+                isModificarEnable = value;
+                OnPropertyChanged();
+            }
+        }
 
         #endregion Getters/Setters
 
@@ -75,6 +126,9 @@ namespace RedesSociales.ViewModels
         {
             PopUp = new MessagePopupView();
             Usuario = new UsuarioModel();
+            IsModificarEnable=false;
+            IsEliminarEnable=false;
+            IsSeguirEnable=true;
             Publicacionviewmodel = new PublicacionViewModel();
             InitializeRequest();
             InitializeCommands();
@@ -144,9 +198,29 @@ namespace RedesSociales.ViewModels
         #endregion Initialize
 
         #region Methods
+        public void ActualizarComandos()
+        {
+            if (Usuario.apodo == "el apodo en memoria")
+            {
+                IsModificarEnable = true;
+                ApodoUsuario.Value = Usuario.apodo;
+                NombreUsuario.Value = Usuario.Nombre;
+                ApellidosUsuario.Value = Usuario.Apellidos;
+                FotoPerfilUsuario.Value = Usuario.FotoPerfil;
+                EstadoUsuario.Value = Usuario.Estado;
+                IsEliminarEnable = true;
+                IsSeguirEnable = false;
+                ((Command)UpdateUsuarioCommand).ChangeCanExecute();
+                ((Command)DeleteUsuarioCommand).ChangeCanExecute();
+            }
+            else
+            {
+                IsModificarEnable = true;
+            }
+        }
 
         public async Task ActualizarUsuario()
-        {
+        { 
             try
             {
                 UsuarioModel usuario = new UsuarioModel()
@@ -208,7 +282,7 @@ namespace RedesSociales.ViewModels
                 PeticionesDosUsuariosModel peticion = new PeticionesDosUsuariosModel()
                 {
                     Idusuario1 = usuario.Idusuario,
-                    Idusuario2 = usuario1.Idusuario,
+                    //Idusuario2 = usuario1.Idusuario,
                 };
                 APIResponse response = await CreateSeguir.EjecutarEstrategia(peticion);
                 if (response.IsSuccess)
@@ -289,10 +363,6 @@ namespace RedesSociales.ViewModels
             {
 
             }
-        }
-        public async Task IniciarUsuario()
-        {
-            
         }
         
 

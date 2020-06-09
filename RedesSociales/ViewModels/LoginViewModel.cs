@@ -44,7 +44,7 @@ namespace RedesSociales.ViewModels
                     FotoPerfil = Usuario.FotoPerfil,
                     Estado = Usuario.Estado
                 };
-                APIResponse response = await CreateUsuario.EjecutarEstrategia(usuario);
+                APIResponse response = await CreateUsuario.EjecutarEstrategia(Usuario);
                 if (response.IsSuccess)
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Usuario creado exitosamente";
@@ -58,9 +58,9 @@ namespace RedesSociales.ViewModels
             }
             catch (Exception e)
             {
-                //string s = e.Message; realizado para ver mensaje error
-                //Console.WriteLine(s);
-                //Console.WriteLine(s);
+                string s = e.Message;
+                Console.WriteLine(s);
+                Console.WriteLine(s);
             }
         }
         public async Task SeleccionarUsuario()
@@ -68,7 +68,7 @@ namespace RedesSociales.ViewModels
             try
             {
                 ParametersRequest parametros = new ParametersRequest();
-                parametros.Parametros.Add(Usuario.apodo);
+                parametros.Parametros.Add("Nicortiz738273822");
                 APIResponse response = await GetUsuario.EjecutarEstrategia(null, parametros);
                 if (response.IsSuccess)
                 {
@@ -84,9 +84,9 @@ namespace RedesSociales.ViewModels
             }
             catch (Exception e)
             {
-                //string s = e.Message; realizado para ver mensaje error
-                //Console.WriteLine(s);
-                //Console.WriteLine(s);
+                string s = e.Message;
+                Console.WriteLine(s);
+                Console.WriteLine(s);
 
             }
         }
@@ -122,7 +122,7 @@ namespace RedesSociales.ViewModels
                         FotoPerfil = user.Picture.ToString(),
                         Estado = "Activo"
                     };
-                    await SeleccionarUsuario();
+                    await CrearUsuario();
                     await NavigationService.PushPage(new MainPage());
                 }
             };

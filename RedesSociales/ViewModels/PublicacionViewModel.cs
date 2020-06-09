@@ -171,7 +171,10 @@ namespace RedesSociales.ViewModels
                 if (response.IsSuccess)
                 {
                     Usuario = JsonConvert.DeserializeObject<UsuarioModel>(response.Response);
-                    
+                    await SeleccionarPublicacionesUsuario();
+
+
+
                 }
                 else
                 {
@@ -422,12 +425,12 @@ namespace RedesSociales.ViewModels
                 APIResponse response = await CreateEtiqueta.EjecutarEstrategia(publicacion);
                 if (response.IsSuccess)
                 {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion creada exitosamente";
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Etiqueta creada exitosamente";
                     await PopupNavigation.Instance.PushAsync(PopUp);
                 }
                 else
                 {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al reaccionar publicacion";
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al eliminar Etiqueta";
                     await PopupNavigation.Instance.PushAsync(PopUp);
                 }
             }

@@ -36,7 +36,7 @@ namespace RedesSociales.Servicios.APIRest
             }
         }
 
-        public async Task<APIResponse> EjecutarEstrategia(T objecto, ParametersRequest parametersRequest = null)
+        public async Task<APIResponse> EjecutarEstrategia(T objecto, ParametersRequest parametersRequest = null,string Json = null)
         {
             parametersRequest = parametersRequest ?? new ParametersRequest();
             await EstrategiaEnvio.ContruirURL(parametersRequest);

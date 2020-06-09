@@ -11336,13 +11336,16 @@ namespace RedesSociales.Droid
 			public const int plus = 2131165328;
 			
 			// aapt resource value: 0x7F070091
-			public const int social_media = 2131165329;
+			public const int small_google = 2131165329;
 			
 			// aapt resource value: 0x7F070092
-			public const int tooltip_frame_dark = 2131165330;
+			public const int social_media = 2131165330;
 			
 			// aapt resource value: 0x7F070093
-			public const int tooltip_frame_light = 2131165331;
+			public const int tooltip_frame_dark = 2131165331;
+			
+			// aapt resource value: 0x7F070094
+			public const int tooltip_frame_light = 2131165332;
 			
 			static Drawable()
 			{

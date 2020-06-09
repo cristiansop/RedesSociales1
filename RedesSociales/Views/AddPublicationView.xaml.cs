@@ -6,22 +6,15 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using Rg.Plugins.Popup.Pages;
-using Rg.Plugins.Popup.Services;
 
 namespace RedesSociales.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class EditarPerfilView : PopupPage
+    public partial class AddPublicationView : ContentPage
     {
-        public EditarPerfilView()
+        public AddPublicationView()
         {
             InitializeComponent();
-        }
-
-        void Guardar_Cambios(object sender, EventArgs e)
-        {
-            PopupNavigation.Instance.PopAsync(true);
         }
     }
 }

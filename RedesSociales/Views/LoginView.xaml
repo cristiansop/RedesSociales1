@@ -4,7 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             BackgroundColor="{Binding NavigationPrimary}"
+             BackgroundColor="{StaticResource SecondaryBackgroundColor}"
              NavigationPage.HasNavigationBar="False"
              xmlns:components="clr-namespace:RedesSociales.VisualComponents;assembly=RedesSociales"
              Title="LoginView"
@@ -14,7 +14,7 @@
         <ResourceDictionary>
             <Style TargetType="Button" x:Key="googleButton">
                 <Setter Property="BackgroundColor" Value="#EA4335"/>
-                <Setter Property="ImageSource" Value="logo_google.png" />
+                <Setter Property="ImageSource" Value="small_google.png" />
                 <Setter Property="Font" Value="Arial"/>
                 <Setter Property="TextColor" Value="White"/>
                 <Setter Property="HorizontalOptions" Value="Center"/>
@@ -44,23 +44,7 @@
                         Text="Iniciar Sesión"
                         Command="{Binding Buttom_IniciarSesion}" />
             </StackLayout>
-            
+
         </Grid>
-        <!--
-        <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
-            <Image Source="logo_txt.png"/>
-            <Label Text="{Binding NombrePersona}" />
-
-
-            <Button x:Name="btn_google" Text="Inicio Sesion" Command="{Binding Buttom_IniciarSesion}"></Button>
-            <Grid VerticalOptions="Center" HorizontalOptions="Center">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="50" />
-                </Grid.RowDefinitions>
-                <Image Source="{components:ImageResource RedesSociales.Images.logo_txt.png}" Grid.Row="0"/>
-                <Button Style="{StaticResource googleButton}" Grid.Row="1"/>
-            </Grid>
-        </StackLayout>-->
     </ContentPage.Content>
 </ContentPage>

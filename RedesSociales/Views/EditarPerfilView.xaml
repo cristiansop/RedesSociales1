@@ -6,10 +6,30 @@
              mc:Ignorable="d"
              x:Class="RedesSociales.Views.EditarPerfilView"
              xmlns:components="clr-namespace:RedesSociales.VisualComponents;assembly=RedesSociales"
+             xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
              xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup">
-
-    <StackLayout>
-        <Image Source="{components:ImageResource RedesSociales.RedesSociales.Images.social-media.jpg}" />
+    
+    <pages:PopupPage.Animation>
+        <animations:ScaleAnimation 
+            PositionIn="Center"
+            PositionOut="Center"
+            ScaleIn="1.2"
+            ScaleOut="0.8"
+            DurationIn="400"
+            DurationOut="300"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="True"/>
+    </pages:PopupPage.Animation>
+    
+    <StackLayout HorizontalOptions="Center"
+                 VerticalOptions="Center"
+                 Spacing="20"
+                 Padding="20"
+                 Margin="20"
+                 BackgroundColor="{StaticResource GeneralBackgroundColor}">
+        
+        <Image Source="social_media.jpg" />
         <Button Text="Cambiar foto de perfil" />
         <StackLayout Orientation="Horizontal">
             <Label Text="Apodo" />
@@ -23,6 +43,7 @@
             <Label Text="Apellido" />
             <Entry Text="Ingrese su nombre"/>
         </StackLayout>
+        <Button Text="Guardar Cambios" Clicked="Guardar_Cambios" />
     </StackLayout>
     
 </pages:PopupPage>

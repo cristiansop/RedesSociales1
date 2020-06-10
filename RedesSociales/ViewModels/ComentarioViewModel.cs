@@ -39,6 +39,12 @@ namespace RedesSociales.ViewModels
         public SelectRequest<ComentarioModel> CreateComentario { get; set; }
         public SelectRequest<BaseModel> GetComentarios { get; set; }
         public SelectRequest<ComentarioModel> DeleteComentario { get; set; }
+        public SelectRequest<PeticionesUsuarioPublicacion> CreateLike { get; set; }
+        public SelectRequest<BaseModel> GetLikes { get; set; }
+        public SelectRequest<PeticionesUsuarioPublicacion> DeleteLike { get; set; }
+        public SelectRequest<PeticionesUsuarioPublicacion> CreateEtiqueta { get; set; }
+        public SelectRequest<BaseModel> GetEtiquetas { get; set; }
+        public SelectRequest<PeticionesUsuarioPublicacion> DeleteEtiqueta { get; set; }
 
         #endregion Request
 
@@ -46,6 +52,12 @@ namespace RedesSociales.ViewModels
         public ICommand CreateComentarioCommand { get; set; }
         public ICommand GetComentariosCommand { get; set; }
         public ICommand DeleteComentarioCommand { get; set; }
+        public ICommand CreateLikeCommand { get; set; }
+        public ICommand GetLikesCommand { get; set; }
+        public ICommand DeleteLikeCommand { get; set; }
+        public ICommand CreateEtiquetaCommand { get; set; }
+        public ICommand GetEtiquetasCommand { get; set; }
+        public ICommand DeleteEtiquetaCommand { get; set; }
 
         #endregion Commands
 
@@ -71,6 +83,12 @@ namespace RedesSociales.ViewModels
             string urlCreateComentario = Endpoints.URL_SERVIDOR + Endpoints.CREATE_COMENTARIO;
             string urlGetComentarios = Endpoints.URL_SERVIDOR + Endpoints.GET_COMENTARIOS;
             string urlDeleteComentario = Endpoints.URL_SERVIDOR + Endpoints.DELETE_COMENTARIO;
+            string urlCreateLike = Endpoints.URL_SERVIDOR + Endpoints.CREATE_LIKE;
+            string urlGetLikes = Endpoints.URL_SERVIDOR + Endpoints.GET_LIKES;
+            string urlDeleteLike = Endpoints.URL_SERVIDOR + Endpoints.DELETE_LIKE;
+            string urlCreateEtiqueta = Endpoints.URL_SERVIDOR + Endpoints.CREATE_ETIQUETA;
+            string urlGetEtiquetas = Endpoints.URL_SERVIDOR + Endpoints.GET_ETIQUETAS;
+            string urlDeleteEtiqueta = Endpoints.URL_SERVIDOR + Endpoints.DELETE_ETIQUETA;
             #endregion Url
 
             #region API
@@ -83,6 +101,23 @@ namespace RedesSociales.ViewModels
             DeleteComentario = new SelectRequest<ComentarioModel>();
             DeleteComentario.SelectStrategy("GET", urlDeleteComentario);
 
+            CreateLike = new SelectRequest<PeticionesUsuarioPublicacion>();
+            CreateLike.SelectStrategy("POST", urlCreateLike);
+
+            GetLikes = new SelectRequest<BaseModel>();
+            GetLikes.SelectStrategy("GET", urlGetLikes);
+
+            DeleteLike = new SelectRequest<PeticionesUsuarioPublicacion>();
+            DeleteLike.SelectStrategy("POST", urlDeleteLike);
+
+            CreateEtiqueta = new SelectRequest<PeticionesUsuarioPublicacion>();
+            CreateEtiqueta.SelectStrategy("POST", urlCreateEtiqueta);
+
+            GetEtiquetas = new SelectRequest<BaseModel>();
+            GetEtiquetas.SelectStrategy("GET", urlGetEtiquetas);
+
+            DeleteEtiqueta = new SelectRequest<PeticionesUsuarioPublicacion>();
+            DeleteEtiqueta.SelectStrategy("POST", urlDeleteEtiqueta);
             #endregion API
         }
         public void InitializeCommands()
@@ -92,6 +127,12 @@ namespace RedesSociales.ViewModels
             CreateComentarioCommand = new Command(async () => await CrearComentario(), () => true);
             GetComentariosCommand = new Command(async () => await SeleccionarComentarios(), () => true);
             DeleteComentarioCommand = new Command(async () => await EliminarComentario(), () => true);
+            CreateLikeCommand = new Command(async () => await CrearLike(), () => true);
+            GetLikesCommand = new Command(async () => await SeleccionarLikes(), () => true);
+            DeleteLikeCommand = new Command(async () => await EliminarLike(), () => true);
+            CreateEtiquetaCommand = new Command(async () => await CrearEtiqueta(), () => true);
+            GetEtiquetasCommand = new Command(async () => await SeleccionarEtiquetas(), () => true);
+            DeleteEtiquetaCommand = new Command(async () => await EliminarEtiqueta(), () => true);
 
             #endregion Comandos
         }
@@ -139,7 +180,7 @@ namespace RedesSociales.ViewModels
             try
             {
                 ParametersRequest parametros = new ParametersRequest();
-                parametros.Parameters.Add(Publicacion.IdPublicacion.ToString());
+                parametros.Parameters.Add(Publicacion.idPublicacion.ToString());
                 APIResponse response = await GetComentarios.RunStrategy(null, parametros);
                 if (response.IsSuccess)
                 {
@@ -184,6 +225,151 @@ namespace RedesSociales.ViewModels
             }
         }
 
+        public async Task CrearLike()
+        {
+            try
+            {
+                UsuarioModel Creador = (UsuarioModel)Application.Current.Properties["Usuario"];
+                PeticionesUsuarioPublicacion peticion = new PeticionesUsuarioPublicacion()
+                {
+                    idUsuario=Creador.idUsuario,
+                    idPublicacion=Publicacion.idPublicacion
+                };
+                APIResponse response = await CreateLike.RunStrategy(peticion);
+                if (response.IsSuccess)
+                {
+                    //isenablechange
+                }
+                else
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al reaccionar publicacion";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+
+        public async Task SeleccionarLikes()
+        {
+            ParametersRequest parametros = new ParametersRequest();
+            parametros.Parameters.Add(Publicacion.idPublicacion.ToString());
+            APIResponse response = await GetLikes.RunStrategy(null, parametros);
+            if (response.IsSuccess)
+            {
+                List<UsuarioModel> likes = JsonConvert.DeserializeObject<List<UsuarioModel>>(response.Response);
+                Publicacion.Reacciones = likes;
+            }
+            else
+            {
+                ((MessageViewModel)PopUp.BindingContext).Message = "Error encontrar las reacciones de la publicacion";
+                await PopupNavigation.Instance.PushAsync(PopUp);
+            }
+        }
+
+        public async Task EliminarLike()
+        {
+            try
+            {
+                UsuarioModel Creador = (UsuarioModel)Application.Current.Properties["Usuario"];
+                PeticionesUsuarioPublicacion peticion = new PeticionesUsuarioPublicacion()
+                {
+                    idUsuario = Creador.idUsuario,
+                    idPublicacion = Publicacion.idPublicacion
+                };
+                APIResponse response = await DeleteLike.RunStrategy(peticion);
+                if (response.IsSuccess)
+                {
+                    //isenablechange
+                }
+                else
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al reaccionar publicacion";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+
+        public async Task CrearEtiqueta()
+        {
+            try
+            {
+                //cambiar
+                UsuarioModel Creador = (UsuarioModel)Application.Current.Properties["Usuario"];
+                PeticionesUsuarioPublicacion peticion = new PeticionesUsuarioPublicacion()
+                {
+                    idUsuario = Creador.idUsuario,
+                    idPublicacion = Publicacion.idPublicacion
+                };
+                APIResponse response = await CreateEtiqueta.RunStrategy(peticion);
+                if (response.IsSuccess)
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion creada exitosamente";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+                else
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al reaccionar publicacion";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+
+        public async Task SeleccionarEtiquetas()
+        {
+            ParametersRequest parametros = new ParametersRequest();
+            parametros.Parameters.Add(Publicacion.idPublicacion.ToString());
+            APIResponse response = await GetEtiquetas.RunStrategy(null, parametros);
+            if (response.IsSuccess)
+            {
+                List<UsuarioModel> usuarios = JsonConvert.DeserializeObject<List<UsuarioModel>>(response.Response);
+                Publicacion.Etiquetas = usuarios;
+            }
+            else
+            {
+                ((MessageViewModel)PopUp.BindingContext).Message = "Error encontrar las reacciones de la publicacion";
+                await PopupNavigation.Instance.PushAsync(PopUp);
+            }
+        }
+
+        public async Task EliminarEtiqueta()
+        {
+            try
+            {
+                //cambiar
+                UsuarioModel Creador = (UsuarioModel)Application.Current.Properties["Usuario"];
+                PeticionesUsuarioPublicacion peticion = new PeticionesUsuarioPublicacion()
+                {
+                    idUsuario = Creador.idUsuario,
+                    idPublicacion = Publicacion.idPublicacion
+                };
+                APIResponse response = await CreateEtiqueta.RunStrategy(peticion);
+                if (response.IsSuccess)
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Etiqueta creada exitosamente";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+                else
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al eliminar Etiqueta";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
         #endregion Methods
 
     }

@@ -17,13 +17,13 @@ namespace RedesSociales.Models
         public int idUsuario { get; set; }
 
         [JsonProperty("idComentario")]
-        public int IdComentario { get; set; }
+        public int idComentario { get; set; }
 
         [JsonProperty("Cuerpo")]
         public string Cuerpo { get; set; }
 
         [JsonProperty("idPublicacion")]
-        public int Idpublicacion { get; set; }
+        public int idPublicacion { get; set; }
 
         [JsonIgnore]
         public string Fecha { get; set; }
@@ -39,7 +39,7 @@ namespace RedesSociales.Models
             this.creador = usuario;
             this.idUsuario = usuario.idUsuario;
             this.Publicacion = publicacion;
-            this.Idpublicacion = publicacion.IdPublicacion;
+            this.idPublicacion = publicacion.idPublicacion;
         }
         #endregion Initialize
 

@@ -10,8 +10,8 @@ namespace RedesSociales.Models
         [JsonProperty("idUsuario")]
         public int idUsuario { get; set; }
         [JsonProperty("idPublicacion")]
-        public int Idpublicacion { get; set; }
+        public int idPublicacion { get; set; }
         [JsonProperty("idComentario")]
-        public int Idcomentario { get; set; }
+        public int idComentario { get; set; }
     }
 }

@@ -26,12 +26,19 @@ namespace RedesSociales.ViewModels
         private LoadDataHandler loadDataHandler;
 
         public MessagePopupView PopUp { get; set; }
+
         private UsuarioModel usuario;
+
         public PublicacionViewModel Publicacionviewmodel { get; set; }
+
         public ValidatableObject<string> ApodoUsuario { get; set; }
+
         public ValidatableObject<string> NombreUsuario { get; set; }
+
         public ValidatableObject<string> ApellidosUsuario { get; set; }
+
         public ValidatableObject<string> FotoPerfilUsuario { get; set; }
+
         public ValidatableObject<string> EstadoUsuario { get; set; }
 
         #region Enables
@@ -41,18 +48,7 @@ namespace RedesSociales.ViewModels
         private bool isCrearPublicacionEnable;
         private bool isDeletePublicacionEnable;
 
-        public bool IsDeletePublicacionEnable
-        {
-            get { return isDeletePublicacionEnable; }
-            set { isDeletePublicacionEnable = value; }
-        }
-
-
-        public bool IsCrearPublicacionEnable
-        {
-            get { return isCrearPublicacionEnable; }
-            set { isCrearPublicacionEnable = value; }
-        }
+        
 
 
         #endregion Enables
@@ -66,7 +62,8 @@ namespace RedesSociales.ViewModels
         public SelectRequest<BaseModel> GetSeguidos { get; set; }
         public SelectRequest<BaseModel> GetSeguidores { get; set; }
         public SelectRequest<PeticionesDosUsuariosModel> DeleteSeguir { get; set; }
-
+        public SelectRequest<BaseModel> GetPublicacionesUsuario { get; set; }
+        public SelectRequest<PublicacionModel> DeletePublicacion { get; set; }
         #endregion Request
 
         #region Commands
@@ -76,6 +73,8 @@ namespace RedesSociales.ViewModels
         public ICommand GetSeguidosCommand { get; set; }
         public ICommand GetSeguidoresCommand { get; set; }
         public ICommand DeleteSeguirCommand { get; set; }
+        public ICommand GetPublicacionesUsuarioCommand { get; set; }
+        public ICommand DeletePublicacionCommand { get; set; }
 
         #endregion Commands
 
@@ -121,6 +120,18 @@ namespace RedesSociales.ViewModels
             }
         }
 
+        public bool IsDeletePublicacionEnable
+        {
+            get { return isDeletePublicacionEnable; }
+            set { isDeletePublicacionEnable = value; OnPropertyChanged(); }
+        }
+
+
+        public bool IsCrearPublicacionEnable
+        {
+            get { return isCrearPublicacionEnable; }
+            set { isCrearPublicacionEnable = value; OnPropertyChanged(); }
+        }
         #endregion Getters/Setters
 
         #region Initialize
@@ -132,10 +143,11 @@ namespace RedesSociales.ViewModels
             IsEliminarEnable=false;
             IsSeguirEnable=true;
             loadDataHandler = new LoadDataHandler();
-            Publicacionviewmodel = new PublicacionViewModel();
             InitializeRequest();
             InitializeCommands();
             InitializeFields();
+            ActualizarComandos();
+
         }
         public void InitializeRequest()
         {
@@ -146,6 +158,8 @@ namespace RedesSociales.ViewModels
             string urlGetSeguidos = Endpoints.URL_SERVIDOR + Endpoints.GET_SEGUIDOS;
             string urlGetSeguidores = Endpoints.URL_SERVIDOR + Endpoints.GET_SEGUIDORES;
             string urlDeleteSeguir = Endpoints.URL_SERVIDOR + Endpoints.DELETE_SEGUIR;
+            string urlGetPublicacionesUsuario = Endpoints.URL_SERVIDOR + Endpoints.GET_PUBLICACIONES_USUARIO;
+            string urlDeletePublicacion = Endpoints.URL_SERVIDOR + Endpoints.DELETE_PUBLICACIONES;
             #endregion Url
 
             #region API
@@ -167,6 +181,13 @@ namespace RedesSociales.ViewModels
 
             DeleteSeguir = new SelectRequest<PeticionesDosUsuariosModel>();
             DeleteSeguir.SelectStrategy("POST", urlDeleteSeguir);
+
+            GetPublicacionesUsuario = new SelectRequest<BaseModel>();
+            GetPublicacionesUsuario.SelectStrategy("GET", urlGetPublicacionesUsuario);
+
+            DeletePublicacion = new SelectRequest<PublicacionModel>();
+            DeletePublicacion.SelectStrategy("POST", urlDeletePublicacion);
+
             #endregion API
         }
         public void InitializeCommands()
@@ -179,6 +200,8 @@ namespace RedesSociales.ViewModels
             GetSeguidosCommand = new Command(async () => await SeleccionarSeguidos(), () => true);
             GetSeguidoresCommand = new Command(async () => await SeleccionarSeguidores(), () => true);
             DeleteSeguirCommand = new Command(async () => await EliminarSeguir(), () => true);
+            GetPublicacionesUsuarioCommand = new Command(async () => await SeleccionarPublicacionesUsuario(), () => true);
+            DeletePublicacionCommand = new Command(async () => await EliminarPublicacion(), () => true);
 
             #endregion Comandos
         }
@@ -206,20 +229,34 @@ namespace RedesSociales.ViewModels
             UsuarioModel UsuarioMemoria=(UsuarioModel)Application.Current.Properties["Usuario"];
             if (Usuario.Apodo == UsuarioMemoria.Apodo)
             {
-                IsModificarEnable = true;
+                
                 ApodoUsuario.Value = Usuario.Apodo;
                 NombreUsuario.Value = Usuario.NombreP;
                 ApellidosUsuario.Value = Usuario.ApellidoP;
                 FotoPerfilUsuario.Value = Usuario.FotoPerfilP;
                 EstadoUsuario.Value = Usuario.EstadoP;
+                IsModificarEnable = true;
                 IsEliminarEnable = true;
                 IsSeguirEnable = false;
+                IsCrearPublicacionEnable = true;
+                IsDeletePublicacionEnable = true;
                 ((Command)UpdateUsuarioCommand).ChangeCanExecute();
                 ((Command)DeleteUsuarioCommand).ChangeCanExecute();
+                ((Command)DeletePublicacionCommand).ChangeCanExecute();
+                ((Command)DeleteUsuarioCommand).ChangeCanExecute();
+
             }
             else
             {
-                IsModificarEnable = true;
+                foreach (UsuarioModel item in UsuarioMemoria.Seguidos)
+                {
+                    if (item.Apodo == Usuario.Apodo)
+                    {
+                        isSeguirEnable = false;
+                        break;
+                    }
+                    IsSeguirEnable = true;
+                }
             }
         }
 
@@ -370,7 +407,59 @@ namespace RedesSociales.ViewModels
 
             }
         }
-        
+
+        public async Task SeleccionarPublicacionesUsuario()
+        {
+            try
+            {
+                ParametersRequest parametros = new ParametersRequest();
+                parametros.Parameters.Add(Usuario.idUsuario.ToString());
+                APIResponse response = await GetPublicacionesUsuario.RunStrategy(null, parametros);
+                if (response.IsSuccess)
+                {
+                    List<PublicacionModel> publicaciones = JsonConvert.DeserializeObject<List<PublicacionModel>>(response.Response);
+                    Usuario.Publicaciones = publicaciones;
+                }
+                else
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "No se encuentran publicaciones del usuario";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+
+        public async Task EliminarPublicacion()
+        {
+            /*
+            try
+            {
+                UsuarioModel Creador = (UsuarioModel)Application.Current.Properties["Usuario"];
+                PeticionesUsuarioPublicacion publicacion = new PeticionesUsuarioPublicacion(Creador)
+                {
+                    idPublicacion = Publicacion.idPublicacion
+                };
+                APIResponse response = await DeletePublicacion.RunStrategy(publicacion);
+                if (response.IsSuccess)
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion eliminada exitosamente";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+                else
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al eliminar la publicacion";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+            }
+            catch (Exception e)
+            {
+
+            }*/
+
+        }
 
         #endregion Methods
 

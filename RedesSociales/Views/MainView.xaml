@@ -50,7 +50,7 @@
                                 <Label Text="{Binding Creador.Apodo}" Grid.Row="0" Grid.ColumnSpan="2"
                                        VerticalOptions="Center"/>
 
-                                <!--<Image Source="{Binding Imagen}" Grid.Row="1" Grid.ColumnSpan="2" Aspect="AspectFill"/>-->
+                                <!--<Image Source="{Binding Archivo}" Grid.Row="1" Grid.ColumnSpan="2" Aspect="AspectFill"/>-->
                                 <Image Source="img_1.jpg" Grid.Row="1" Grid.ColumnSpan="2" Aspect="AspectFill"/>
                                 
                                 <Label Text="{Binding Reacciones.Count}" Grid.Row="2" Grid.Column="0"/>

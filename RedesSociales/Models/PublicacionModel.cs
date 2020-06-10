@@ -17,11 +17,11 @@ namespace RedesSociales.Models
         public int idUsuario { get; set; }
 
         [JsonProperty("idPublicacion")]
-        public int IdPublicacion { get; set; }
+        public int idPublicacion { get; set; }
 
 
         [JsonProperty("Archivo")]
-        public string Imagen { get; set; }
+        public string Archivo { get; set; }
 
 
         [JsonProperty("Tipo")]

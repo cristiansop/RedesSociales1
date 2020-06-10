@@ -45,12 +45,7 @@ namespace RedesSociales.ViewModels
                     EstadoP = Usuario.EstadoP
                 };
                 APIResponse response = await CreateUsuario.RunStrategy(Usuario);
-                if (response.IsSuccess)
-                {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Usuario creado exitosamente";
-                    await PopupNavigation.Instance.PushAsync(PopUp);
-                }
-                else
+                if (!(response.IsSuccess))
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Error al crear usuario";
                     await PopupNavigation.Instance.PushAsync(PopUp);
@@ -68,12 +63,15 @@ namespace RedesSociales.ViewModels
             try
             {
                 ParametersRequest parametros = new ParametersRequest();
-                parametros.Parameters.Add("u1");
+                parametros.Parameters.Add(Usuario.Apodo);
                 APIResponse response = await GetUsuario.RunStrategy(null, parametros);
                 if (response.IsSuccess)
                 {
-                    Usuario = JsonConvert.DeserializeObject<UsuarioModel>(response.Response);
-                    //agregar cambios necesarios para jhoan que aun no dice
+                    UsuarioModel usuario = JsonConvert.DeserializeObject<UsuarioModel>(response.Response);
+                    if (usuario.Apodo==Usuario.Apodo)
+                    {
+                        Usuario = usuario;
+                    }
                 }
                 else
                 {
@@ -84,9 +82,6 @@ namespace RedesSociales.ViewModels
             }
             catch (Exception e)
             {
-                string s = e.Message;
-                Console.WriteLine(s);
-                Console.WriteLine(s);
 
             }
         }
@@ -117,24 +112,18 @@ namespace RedesSociales.ViewModels
                     Usuario = new UsuarioModel()
                     {
                         idUsuario = 0,
-                        Apodo = user.Email,
+                        Apodo = user.Email.Remove(user.Email.LastIndexOf('@')),
                         NombreP = user.GivenName,
                         ApellidoP = user.FamilyName,
                         FotoPerfilP = user.Picture.ToString(),
                         EstadoP = "Activo"
                     };
-                    //await CrearUsuario();
-                    //await SeleccionarUsuario();
-                    //Console.WriteLine(Usuario.NombreP);
-
-                    //SelectRequest<UsuarioModel> request = new SelectRequest<UsuarioModel>();
-                    //request.SelectStrategy("GET", "http://192.168.1.2:9000/usuario/get/u1");
-                    //request.SelectStrategy("GET", "https://f83c42a2-6f28-4213-acde-43515fdba286.mock.pstmn.io/usuario/get");
-                    //APIResponse response = await request.RunStrategy(null);
-                   // Usuario = JsonConvert.DeserializeObject<UsuarioModel>(response.Response);
-                    //Console.WriteLine(response);
-
-
+                    await SeleccionarUsuario();
+                    if (Usuario.idUsuario == 0)
+                    {
+                        await CrearUsuario();
+                        await SeleccionarUsuario();
+                    }
                     await loadDataHandler.PersistenceDataAsync("Usuario", Usuario);
                     await NavigationService.PushPage(new MainPage());
                 }

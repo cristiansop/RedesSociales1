@@ -39,7 +39,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
 
-                        <Label Text="{Binding Creador.apodo}" Grid.Column="0" VerticalOptions="Center"/>
+                        <Label Text="{Binding Creador.Apodo}" Grid.Column="0" VerticalOptions="Center"/>
 
                         <Label Text="{Binding }" Grid.Column="1" />
 

@@ -14,7 +14,7 @@ namespace RedesSociales.Models
         private UsuarioModel creador;
 
         [JsonProperty("idUsuario")]
-        public int IdUsuario { get; set; }
+        public int idUsuario { get; set; }
 
         [JsonProperty("idComentario")]
         public int IdComentario { get; set; }
@@ -37,7 +37,7 @@ namespace RedesSociales.Models
         public ComentarioModel(UsuarioModel usuario, PublicacionModel publicacion)
         {
             this.creador = usuario;
-            this.IdUsuario = usuario.Idusuario;
+            this.idUsuario = usuario.idUsuario;
             this.Publicacion = publicacion;
             this.Idpublicacion = publicacion.IdPublicacion;
         }

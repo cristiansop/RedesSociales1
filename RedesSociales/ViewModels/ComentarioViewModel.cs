@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using RedesSociales.Configuracion;
 using RedesSociales.Models;
-using RedesSociales.Models.AuxiliarModels;
-using RedesSociales.Servicios.APIRest;
+using RedesSociales.Models.Auxiliary;
+using RedesSociales.Servicios.Rest;
 using RedesSociales.Servicios.Propagacion;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -36,9 +36,9 @@ namespace RedesSociales.ViewModels
 
         #region Request
 
-        public ElegirRequest<ComentarioModel> CreateComentario { get; set; }
-        public ElegirRequest<BaseModel> GetComentarios { get; set; }
-        public ElegirRequest<ComentarioModel> DeleteComentario { get; set; }
+        public SelectRequest<ComentarioModel> CreateComentario { get; set; }
+        public SelectRequest<BaseModel> GetComentarios { get; set; }
+        public SelectRequest<ComentarioModel> DeleteComentario { get; set; }
 
         #endregion Request
 
@@ -74,14 +74,14 @@ namespace RedesSociales.ViewModels
             #endregion Url
 
             #region API
-            CreateComentario = new ElegirRequest<ComentarioModel>();
-            CreateComentario.ElegirEstrategia("POST", urlCreateComentario);
+            CreateComentario = new SelectRequest<ComentarioModel>();
+            CreateComentario.SelectStrategy("POST", urlCreateComentario);
 
-            GetComentarios = new ElegirRequest<BaseModel>();
-            GetComentarios.ElegirEstrategia("GET", urlGetComentarios);
+            GetComentarios = new SelectRequest<BaseModel>();
+            GetComentarios.SelectStrategy("GET", urlGetComentarios);
 
-            DeleteComentario = new ElegirRequest<ComentarioModel>();
-            DeleteComentario.ElegirEstrategia("GET", urlDeleteComentario);
+            DeleteComentario = new SelectRequest<ComentarioModel>();
+            DeleteComentario.SelectStrategy("GET", urlDeleteComentario);
 
             #endregion API
         }
@@ -116,7 +116,7 @@ namespace RedesSociales.ViewModels
                 {
                     Cuerpo = CuerpoEntry.Value
                 };
-                APIResponse response = await CreateComentario.EjecutarEstrategia(peticion);
+                APIResponse response = await CreateComentario.RunStrategy(peticion);
                 if (response.IsSuccess)
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion eliminada exitosamente";
@@ -139,8 +139,8 @@ namespace RedesSociales.ViewModels
             try
             {
                 ParametersRequest parametros = new ParametersRequest();
-                parametros.Parametros.Add(Publicacion.IdPublicacion.ToString());
-                APIResponse response = await GetComentarios.EjecutarEstrategia(null, parametros);
+                parametros.Parameters.Add(Publicacion.IdPublicacion.ToString());
+                APIResponse response = await GetComentarios.RunStrategy(null, parametros);
                 if (response.IsSuccess)
                 {
                     List<ComentarioModel> comentarios = JsonConvert.DeserializeObject<List<ComentarioModel>>(response.Response);
@@ -166,7 +166,7 @@ namespace RedesSociales.ViewModels
                 {
                     Cuerpo = CuerpoEntry.Value
                 };
-                APIResponse response = await DeleteComentario.EjecutarEstrategia(peticion);
+                APIResponse response = await DeleteComentario.RunStrategy(peticion);
                 if (response.IsSuccess)
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion eliminada exitosamente";

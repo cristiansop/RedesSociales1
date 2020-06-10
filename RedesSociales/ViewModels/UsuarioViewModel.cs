@@ -1,7 +1,7 @@
 ﻿using RedesSociales.Configuracion;
 using RedesSociales.Models;
-using RedesSociales.Models.AuxiliarModels;
-using RedesSociales.Servicios.APIRest;
+using RedesSociales.Models.Auxiliary;
+using RedesSociales.Servicios.Rest;
 using RedesSociales.Servicios.Propagacion;
 using RedesSociales.Validations.Base;
 using RedesSociales.Validations.Rules;
@@ -60,12 +60,12 @@ namespace RedesSociales.ViewModels
         #endregion Atributes
 
         #region Request
-        public ElegirRequest<UsuarioModel> UpdateUsuario { get; set; }
-        public ElegirRequest<BaseModel> DeleteUsuario { get; set; }
-        public ElegirRequest<PeticionesDosUsuariosModel> CreateSeguir { get; set; }
-        public ElegirRequest<BaseModel> GetSeguidos { get; set; }
-        public ElegirRequest<BaseModel> GetSeguidores { get; set; }
-        public ElegirRequest<PeticionesDosUsuariosModel> DeleteSeguir { get; set; }
+        public SelectRequest<UsuarioModel> UpdateUsuario { get; set; }
+        public SelectRequest<BaseModel> DeleteUsuario { get; set; }
+        public SelectRequest<PeticionesDosUsuariosModel> CreateSeguir { get; set; }
+        public SelectRequest<BaseModel> GetSeguidos { get; set; }
+        public SelectRequest<BaseModel> GetSeguidores { get; set; }
+        public SelectRequest<PeticionesDosUsuariosModel> DeleteSeguir { get; set; }
 
         #endregion Request
 
@@ -150,23 +150,23 @@ namespace RedesSociales.ViewModels
 
             #region API
 
-            UpdateUsuario = new ElegirRequest<UsuarioModel>();
-            UpdateUsuario.ElegirEstrategia("POST", urlUpdateUsuario);
+            UpdateUsuario = new SelectRequest<UsuarioModel>();
+            UpdateUsuario.SelectStrategy("POST", urlUpdateUsuario);
 
-            DeleteUsuario = new ElegirRequest<BaseModel>();
-            DeleteUsuario.ElegirEstrategia("POST", urlDeleteUsuario);
+            DeleteUsuario = new SelectRequest<BaseModel>();
+            DeleteUsuario.SelectStrategy("POST", urlDeleteUsuario);
 
-            CreateSeguir = new ElegirRequest<PeticionesDosUsuariosModel>();
-            CreateSeguir.ElegirEstrategia("POST", urlCreateSeguir);
+            CreateSeguir = new SelectRequest<PeticionesDosUsuariosModel>();
+            CreateSeguir.SelectStrategy("POST", urlCreateSeguir);
 
-            GetSeguidos = new ElegirRequest<BaseModel>();
-            GetSeguidos.ElegirEstrategia("GET", urlGetSeguidos);
+            GetSeguidos = new SelectRequest<BaseModel>();
+            GetSeguidos.SelectStrategy("GET", urlGetSeguidos);
 
-            GetSeguidores = new ElegirRequest<BaseModel>();
-            GetSeguidores.ElegirEstrategia("GET", urlGetSeguidores);
+            GetSeguidores = new SelectRequest<BaseModel>();
+            GetSeguidores.SelectStrategy("GET", urlGetSeguidores);
 
-            DeleteSeguir = new ElegirRequest<PeticionesDosUsuariosModel>();
-            DeleteSeguir.ElegirEstrategia("POST", urlDeleteSeguir);
+            DeleteSeguir = new SelectRequest<PeticionesDosUsuariosModel>();
+            DeleteSeguir.SelectStrategy("POST", urlDeleteSeguir);
             #endregion API
         }
         public void InitializeCommands()
@@ -192,7 +192,7 @@ namespace RedesSociales.ViewModels
             EstadoUsuario = new ValidatableObject<string>();
             
 
-            ApodoUsuario.Validations.Add(new RequiredRule<string> { ValidationMessage = "El apodo del usuario es obligatorio" });
+            ApodoUsuario.Validations.Add(new RequiredRule<string> { ValidationMessage = "El Apodo del usuario es obligatorio" });
             NombreUsuario.Validations.Add(new RequiredRule<string> { ValidationMessage = "El nombre del usuario es obligatorio" });
             ApellidosUsuario.Validations.Add(new RequiredRule<string> { ValidationMessage = "los apellidos del usuario es obligatorio" });
             EstadoUsuario.Validations.Add(new RequiredRule<string> { ValidationMessage = "El Estado de la cuenta es obligatorio" });
@@ -204,14 +204,14 @@ namespace RedesSociales.ViewModels
         public void ActualizarComandos()
         {
             UsuarioModel UsuarioMemoria=(UsuarioModel)Application.Current.Properties["Usuario"];
-            if (Usuario.apodo == UsuarioMemoria.apodo)
+            if (Usuario.Apodo == UsuarioMemoria.Apodo)
             {
                 IsModificarEnable = true;
-                ApodoUsuario.Value = Usuario.apodo;
-                NombreUsuario.Value = Usuario.Nombre;
-                ApellidosUsuario.Value = Usuario.Apellidos;
-                FotoPerfilUsuario.Value = Usuario.FotoPerfil;
-                EstadoUsuario.Value = Usuario.Estado;
+                ApodoUsuario.Value = Usuario.Apodo;
+                NombreUsuario.Value = Usuario.NombreP;
+                ApellidosUsuario.Value = Usuario.ApellidoP;
+                FotoPerfilUsuario.Value = Usuario.FotoPerfilP;
+                EstadoUsuario.Value = Usuario.EstadoP;
                 IsEliminarEnable = true;
                 IsSeguirEnable = false;
                 ((Command)UpdateUsuarioCommand).ChangeCanExecute();
@@ -229,13 +229,13 @@ namespace RedesSociales.ViewModels
             {
                 UsuarioModel usuario = new UsuarioModel()
                 {
-                    apodo = ApodoUsuario.Value,
-                    Nombre = NombreUsuario.Value,
-                    Apellidos = ApellidosUsuario.Value,
-                    FotoPerfil = FotoPerfilUsuario.Value,
-                    Estado = EstadoUsuario.Value
+                    Apodo = ApodoUsuario.Value,
+                    NombreP = NombreUsuario.Value,
+                    ApellidoP = ApellidosUsuario.Value,
+                    FotoPerfilP = FotoPerfilUsuario.Value,
+                    EstadoP = EstadoUsuario.Value
                 };
-                APIResponse response = await UpdateUsuario.EjecutarEstrategia(usuario);
+                APIResponse response = await UpdateUsuario.RunStrategy(usuario);
                 if (response.IsSuccess)
                 {
                     await loadDataHandler.PersistenceDataAsync("Usuario", usuario);
@@ -260,9 +260,9 @@ namespace RedesSociales.ViewModels
             {
                 UsuarioModel usuario1 = new UsuarioModel()
                 {
-                    Idusuario = Usuario.Idusuario
+                    idUsuario = Usuario.idUsuario
                 };
-                APIResponse response = await DeleteUsuario.EjecutarEstrategia(usuario1);
+                APIResponse response = await DeleteUsuario.RunStrategy(usuario1);
                 if (response.IsSuccess)
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Usuario eliminado exitosamente";
@@ -287,10 +287,10 @@ namespace RedesSociales.ViewModels
                 UsuarioModel UsuarioMemoria = (UsuarioModel)Application.Current.Properties["Usuario"];
                 PeticionesDosUsuariosModel peticion = new PeticionesDosUsuariosModel()
                 {
-                    Idusuario1 = UsuarioMemoria.Idusuario,
-                    Idusuario2 = Usuario.Idusuario,
+                    idUsuario1 = UsuarioMemoria.idUsuario,
+                    idUsuario2 = Usuario.idUsuario,
                 };
-                APIResponse response = await CreateSeguir.EjecutarEstrategia(peticion);
+                APIResponse response = await CreateSeguir.RunStrategy(peticion);
                 if (response.IsSuccess)
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion eliminada exitosamente";
@@ -311,8 +311,8 @@ namespace RedesSociales.ViewModels
         public async Task SeleccionarSeguidos()
         {
             ParametersRequest parametros = new ParametersRequest();
-            parametros.Parametros.Add(Usuario.Idusuario.ToString());
-            APIResponse response = await GetSeguidos.EjecutarEstrategia(null, parametros);
+            parametros.Parameters.Add(Usuario.idUsuario.ToString());
+            APIResponse response = await GetSeguidos.RunStrategy(null, parametros);
             if (response.IsSuccess)
             {
                 List<UsuarioModel> usuarios = JsonConvert.DeserializeObject<List<UsuarioModel>>(response.Response);
@@ -329,8 +329,8 @@ namespace RedesSociales.ViewModels
         public async Task SeleccionarSeguidores()
         {
             ParametersRequest parametros = new ParametersRequest();
-            parametros.Parametros.Add(Usuario.Idusuario.ToString());
-            APIResponse response = await GetSeguidores.EjecutarEstrategia(null, parametros);
+            parametros.Parameters.Add(Usuario.idUsuario.ToString());
+            APIResponse response = await GetSeguidores.RunStrategy(null, parametros);
             if (response.IsSuccess)
             {
                 List<UsuarioModel> usuarios = JsonConvert.DeserializeObject<List<UsuarioModel>>(response.Response);
@@ -350,10 +350,10 @@ namespace RedesSociales.ViewModels
             {
                 PeticionesDosUsuariosModel peticion = new PeticionesDosUsuariosModel()
                 {
-                    Idusuario1 = usuario.Idusuario,
-                    Idusuario2 = usuario.Idusuario,
+                    idUsuario1 = usuario.idUsuario,
+                    idUsuario2 = usuario.idUsuario,
                 };
-                APIResponse response = await DeleteSeguir.EjecutarEstrategia(peticion);
+                APIResponse response = await DeleteSeguir.RunStrategy(peticion);
                 if (response.IsSuccess)
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion eliminada exitosamente";

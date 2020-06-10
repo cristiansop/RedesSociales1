@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace RedesSociales.Models.AuxiliarModels
+namespace RedesSociales.Models.Auxiliary
 {
     public class APIResponse
     {
@@ -15,6 +15,5 @@ namespace RedesSociales.Models.AuxiliarModels
         #region Initialize
         public APIResponse() { }
         #endregion Initialize
-
     }
 }

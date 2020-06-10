@@ -8,8 +8,8 @@ namespace RedesSociales.Models
     public class PeticionesDosUsuariosModel
     {
         [JsonProperty("idUsuario1")]
-        public int Idusuario1 { get; set; }
+        public int idUsuario1 { get; set; }
         [JsonProperty("idUsuario2")]
-        public int Idusuario2 { get; set; }
+        public int idUsuario2 { get; set; }
     }
 }

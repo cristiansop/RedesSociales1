@@ -8,12 +8,12 @@ using Xamarin.Forms;
 using System.Threading.Tasks;
 using RedesSociales.Models;
 using RedesSociales.Servicios.Navigation;
-using RedesSociales.Servicios.APIRest;
+using RedesSociales.Models.Auxiliary;
+using RedesSociales.Servicios.Rest;
 using RedesSociales.Views;
 using RedesSociales.Servicios.Handler;
 using RedesSociales.Configuracion;
 using Newtonsoft.Json;
-using RedesSociales.Models.AuxiliarModels;
 
 namespace RedesSociales.ViewModels
 {
@@ -29,22 +29,22 @@ namespace RedesSociales.ViewModels
         public UsuarioModel Usuario { get; set; }
 
         //Getters y Setters
-        public ElegirRequest<UsuarioModel> CreateUsuario { get; set; }
-        public ElegirRequest<UsuarioModel> GetUsuario { get; set; }
+        public SelectRequest<UsuarioModel> CreateUsuario { get; set; }
+        public SelectRequest<UsuarioModel> GetUsuario { get; set; }
         public async Task CrearUsuario()
         {
             try
             {
                 UsuarioModel usuario = new UsuarioModel()
                 {
-                    Idusuario=0,
-                    apodo = Usuario.apodo,
-                    Nombre = Usuario.Nombre,
-                    Apellidos = Usuario.Apellidos,
-                    FotoPerfil = Usuario.FotoPerfil,
-                    Estado = Usuario.Estado
+                    idUsuario = 0,
+                    Apodo = Usuario.Apodo,
+                    NombreP = Usuario.NombreP,
+                    ApellidoP = Usuario.ApellidoP,
+                    FotoPerfilP = Usuario.FotoPerfilP,
+                    EstadoP = Usuario.EstadoP
                 };
-                APIResponse response = await CreateUsuario.EjecutarEstrategia(Usuario);
+                APIResponse response = await CreateUsuario.RunStrategy(Usuario);
                 if (response.IsSuccess)
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Usuario creado exitosamente";
@@ -68,8 +68,8 @@ namespace RedesSociales.ViewModels
             try
             {
                 ParametersRequest parametros = new ParametersRequest();
-                parametros.Parametros.Add("Nicortiz738273822");
-                APIResponse response = await GetUsuario.EjecutarEstrategia(null, parametros);
+                parametros.Parameters.Add("u1");
+                APIResponse response = await GetUsuario.RunStrategy(null, parametros);
                 if (response.IsSuccess)
                 {
                     Usuario = JsonConvert.DeserializeObject<UsuarioModel>(response.Response);
@@ -99,10 +99,10 @@ namespace RedesSociales.ViewModels
             string urlGetUsuario = Endpoints.URL_SERVIDOR + Endpoints.GET_USUARIO;
 
 
-            CreateUsuario = new ElegirRequest<UsuarioModel>();
-            CreateUsuario.ElegirEstrategia("POST", urlCretateUsuario);
-            GetUsuario = new ElegirRequest<UsuarioModel>();
-            GetUsuario.ElegirEstrategia("GET", urlGetUsuario);
+            CreateUsuario = new SelectRequest<UsuarioModel>();
+            CreateUsuario.SelectStrategy("POST", urlCretateUsuario);
+            GetUsuario = new SelectRequest<UsuarioModel>();
+            GetUsuario.SelectStrategy("GET", urlGetUsuario);
             PopUp = new MessagePopupView();
         }
 
@@ -116,13 +116,25 @@ namespace RedesSociales.ViewModels
                     GoogleUser user = e.Data;
                     Usuario = new UsuarioModel()
                     {
-                        apodo = user.Email,
-                        Nombre = user.GivenName,
-                        Apellidos = user.FamilyName,
-                        FotoPerfil = user.Picture.ToString(),
-                        Estado = "Activo"
+                        idUsuario = 0,
+                        Apodo = user.Email,
+                        NombreP = user.GivenName,
+                        ApellidoP = user.FamilyName,
+                        FotoPerfilP = user.Picture.ToString(),
+                        EstadoP = "Activo"
                     };
                     //await CrearUsuario();
+                    //await SeleccionarUsuario();
+                    //Console.WriteLine(Usuario.NombreP);
+
+                    //SelectRequest<UsuarioModel> request = new SelectRequest<UsuarioModel>();
+                    //request.SelectStrategy("GET", "http://192.168.1.2:9000/usuario/get/u1");
+                    //request.SelectStrategy("GET", "https://f83c42a2-6f28-4213-acde-43515fdba286.mock.pstmn.io/usuario/get");
+                    //APIResponse response = await request.RunStrategy(null);
+                   // Usuario = JsonConvert.DeserializeObject<UsuarioModel>(response.Response);
+                    //Console.WriteLine(response);
+
+
                     await loadDataHandler.PersistenceDataAsync("Usuario", Usuario);
                     await NavigationService.PushPage(new MainPage());
                 }

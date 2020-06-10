@@ -10,11 +10,11 @@ namespace RedesSociales.Models
     public class UsuarioModel : BaseModel
     {
         #region Properties
-        [JsonIgnore]
-        public int Idusuario { get; set; }
+        [JsonProperty("idUsuario")]
+        public int idUsuario { get; set; }
 
         [JsonProperty("Apodo")]
-        public string apodo { get; set; }
+        public string Apodo { get; set; }
 
         [JsonIgnore]
         private List<UsuarioModel> seguidos;
@@ -23,16 +23,16 @@ namespace RedesSociales.Models
         private List<UsuarioModel> seguidores;
 
         [JsonProperty("Nombre")]
-        private string nombre;
+        private string Nombre;
 
-        [JsonProperty("Apellidos")]
-        private string apellidos;
+        [JsonProperty("Apellido")]
+        private string Apellido;
 
         [JsonProperty("FotoPerfil")]
-        private string fotoperfil;
+        private string FotoPerfil;
 
         [JsonProperty("Estado")]
-        private string estado;
+        private string Estado;
 
         [JsonIgnore]
         private List<PublicacionModel> publicaciones;
@@ -46,28 +46,28 @@ namespace RedesSociales.Models
             set { publicaciones = value; OnPropertyChanged(); }
         }
 
-        public string Estado
+        public string EstadoP
         {
-            get { return estado; }
-            set { estado = value; OnPropertyChanged(); }
+            get { return Estado; }
+            set { Estado = value; OnPropertyChanged(); }
         }
 
-        public string FotoPerfil
+        public string FotoPerfilP
         {
-            get { return fotoperfil; }
-            set { fotoperfil = value; OnPropertyChanged(); }
+            get { return FotoPerfil; }
+            set { FotoPerfil = value; OnPropertyChanged(); }
         }
 
-        public string Apellidos
+        public string ApellidoP
         {
-            get { return apellidos; }
-            set { apellidos = value; OnPropertyChanged(); }
+            get { return Apellido; }
+            set { Apellido = value; OnPropertyChanged(); }
         }
 
-        public string Nombre
+        public string NombreP
         {
-            get { return nombre; }
-            set { nombre = value; OnPropertyChanged(); }
+            get { return Nombre; }
+            set { Nombre = value; OnPropertyChanged(); }
         }
 
         public List<UsuarioModel> Seguidos

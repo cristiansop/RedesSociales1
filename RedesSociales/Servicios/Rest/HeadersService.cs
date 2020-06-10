@@ -3,31 +3,31 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 
-namespace RedesSociales.Servicios.APIRest
+namespace RedesSociales.Servicios.Rest
 {
-    public class ServicioHeaders
+    public class HeadersService
     {
-        #region Atributos
+        #region Properties
         public Dictionary<string, string> Headers { get; set; }
-        #endregion Atributos
+        #endregion Properties
 
-        #region Inicializador
-        public ServicioHeaders()
+        #region Initialize
+        public HeadersService()
         {
             Headers = new Dictionary<string, string>();
             Headers.Add("ContentType", "application/json");
         }
-        #endregion Inicializador
+        #endregion Initialize
 
-        #region Métodos
-        public HttpRequestMessage AgregarCabeceras(HttpRequestMessage requestMessage)
+        #region Methods
+        public HttpRequestMessage AddHeaders(HttpRequestMessage requestMessage)
         {
-            foreach (var h in Headers)
+            foreach(var h in Headers)
             {
                 requestMessage.Headers.Add(h.Key, h.Value);
             }
             return requestMessage;
         }
-        #endregion Métodos
+        #endregion Methods
     }
 }

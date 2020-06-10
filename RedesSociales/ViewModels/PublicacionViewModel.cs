@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using RedesSociales.Configuracion;
 using RedesSociales.Models;
-using RedesSociales.Models.AuxiliarModels;
-using RedesSociales.Servicios.APIRest;
+using RedesSociales.Models.Auxiliary;
+using RedesSociales.Servicios.Rest;
 using RedesSociales.Servicios.Propagacion;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -38,17 +38,17 @@ namespace RedesSociales.ViewModels
 
         #endregion Atributes
         #region Request
-        public ElegirRequest<UsuarioModel> GetUsuario { get; set; }
-        public ElegirRequest<PublicacionModel> CreatePublicacion { get; set; }
-        public ElegirRequest<BaseModel> GetPublicacionesSeguidos { get; set; }
-        public ElegirRequest<BaseModel> GetPublicacionesUsuario { get; set; }
-        public ElegirRequest<PublicacionModel> DeletePublicacion { get; set; }
-        public ElegirRequest<PublicacionModel> CreateLike { get; set; }
-        public ElegirRequest<BaseModel> GetLikes { get; set; }
-        public ElegirRequest<PublicacionModel> DeleteLike { get; set; }
-        public ElegirRequest<PublicacionModel> CreateEtiqueta { get; set; }
-        public ElegirRequest<BaseModel> GetEtiquetas { get; set; }
-        public ElegirRequest<PublicacionModel> DeleteEtiqueta { get; set; }
+        public SelectRequest<UsuarioModel> GetUsuario { get; set; }
+        public SelectRequest<PublicacionModel> CreatePublicacion { get; set; }
+        public SelectRequest<BaseModel> GetPublicacionesSeguidos { get; set; }
+        public SelectRequest<BaseModel> GetPublicacionesUsuario { get; set; }
+        public SelectRequest<PublicacionModel> DeletePublicacion { get; set; }
+        public SelectRequest<PublicacionModel> CreateLike { get; set; }
+        public SelectRequest<BaseModel> GetLikes { get; set; }
+        public SelectRequest<PublicacionModel> DeleteLike { get; set; }
+        public SelectRequest<PublicacionModel> CreateEtiqueta { get; set; }
+        public SelectRequest<BaseModel> GetEtiquetas { get; set; }
+        public SelectRequest<PublicacionModel> DeleteEtiqueta { get; set; }
         #endregion Request
         #region Commands
         public ICommand GetUsuarioCommand { get; set; }
@@ -105,38 +105,38 @@ namespace RedesSociales.ViewModels
             #endregion Url
             #region API
 
-            GetUsuario = new ElegirRequest<UsuarioModel>();
-            GetUsuario.ElegirEstrategia("GET", urlGetUsuario);
+            GetUsuario = new SelectRequest<UsuarioModel>();
+            GetUsuario.SelectStrategy("GET", urlGetUsuario);
 
-            DeletePublicacion = new ElegirRequest<PublicacionModel>();
-            DeletePublicacion.ElegirEstrategia("POST", urlDeletePublicacion);
+            DeletePublicacion = new SelectRequest<PublicacionModel>();
+            DeletePublicacion.SelectStrategy("POST", urlDeletePublicacion);
 
-            CreatePublicacion = new ElegirRequest<PublicacionModel>();
-            CreatePublicacion.ElegirEstrategia("POST", urlCreatePublicacion);
+            CreatePublicacion = new SelectRequest<PublicacionModel>();
+            CreatePublicacion.SelectStrategy("POST", urlCreatePublicacion);
 
-            GetPublicacionesSeguidos = new ElegirRequest<BaseModel>();
-            GetPublicacionesSeguidos.ElegirEstrategia("GET", urlGetPublicacionesSeguidos);
+            GetPublicacionesSeguidos = new SelectRequest<BaseModel>();
+            GetPublicacionesSeguidos.SelectStrategy("GET", urlGetPublicacionesSeguidos);
 
-            GetPublicacionesUsuario = new ElegirRequest<BaseModel>();
-            GetPublicacionesUsuario.ElegirEstrategia("GET", urlGetPublicacionesUsuario);
+            GetPublicacionesUsuario = new SelectRequest<BaseModel>();
+            GetPublicacionesUsuario.SelectStrategy("GET", urlGetPublicacionesUsuario);
 
-            CreateLike = new ElegirRequest<PublicacionModel>();
-            CreateLike.ElegirEstrategia("POST", urlCreateLike);
+            CreateLike = new SelectRequest<PublicacionModel>();
+            CreateLike.SelectStrategy("POST", urlCreateLike);
 
-            GetLikes = new ElegirRequest<BaseModel>();
-            GetLikes.ElegirEstrategia("GET", urlGetLikes);
+            GetLikes = new SelectRequest<BaseModel>();
+            GetLikes.SelectStrategy("GET", urlGetLikes);
 
-            DeleteLike = new ElegirRequest<PublicacionModel>();
-            DeleteLike.ElegirEstrategia("POST", urlDeleteLike);
+            DeleteLike = new SelectRequest<PublicacionModel>();
+            DeleteLike.SelectStrategy("POST", urlDeleteLike);
 
-            CreateEtiqueta = new ElegirRequest<PublicacionModel>();
-            CreateEtiqueta.ElegirEstrategia("POST", urlCreateEtiqueta);
+            CreateEtiqueta = new SelectRequest<PublicacionModel>();
+            CreateEtiqueta.SelectStrategy("POST", urlCreateEtiqueta);
 
-            GetEtiquetas = new ElegirRequest<BaseModel>();
-            GetEtiquetas.ElegirEstrategia("GET", urlGetEtiquetas);
+            GetEtiquetas = new SelectRequest<BaseModel>();
+            GetEtiquetas.SelectStrategy("GET", urlGetEtiquetas);
 
-            DeleteEtiqueta = new ElegirRequest<PublicacionModel>();
-            DeleteEtiqueta.ElegirEstrategia("POST", urlDeleteEtiqueta);
+            DeleteEtiqueta = new SelectRequest<PublicacionModel>();
+            DeleteEtiqueta.SelectStrategy("POST", urlDeleteEtiqueta);
 
             #endregion API
         }
@@ -162,7 +162,7 @@ namespace RedesSociales.ViewModels
             TipoPublicacion = new ValidatableObject<string>();
             DescripcionPublicacion = new ValidatableObject<string>();
             BusquedaUsuario = new ValidatableObject<string>();
-            BusquedaUsuario.Validations.Add(new RequiredRule<string> { ValidationMessage = "El apodo del usuario es obligatorio" });
+            BusquedaUsuario.Validations.Add(new RequiredRule<string> { ValidationMessage = "El Apodo del usuario es obligatorio" });
 
         }
         #endregion Initialize
@@ -171,8 +171,8 @@ namespace RedesSociales.ViewModels
             try
             {
                 ParametersRequest parametros = new ParametersRequest();
-                parametros.Parametros.Add(BusquedaUsuario.Value);
-                APIResponse response = await GetUsuario.EjecutarEstrategia(null, parametros);
+                parametros.Parameters.Add(BusquedaUsuario.Value);
+                APIResponse response = await GetUsuario.RunStrategy(null, parametros);
                 if (response.IsSuccess)
                 {
                     Usuario = JsonConvert.DeserializeObject<UsuarioModel>(response.Response);
@@ -199,7 +199,7 @@ namespace RedesSociales.ViewModels
                     Tipo=TipoPublicacion.Value,
                     Descripcion=DescripcionPublicacion.Value
                 };
-                APIResponse response = await CreatePublicacion.EjecutarEstrategia(publicacion);
+                APIResponse response = await CreatePublicacion.RunStrategy(publicacion);
                 if (response.IsSuccess)
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion creada exitosamente";
@@ -222,8 +222,8 @@ namespace RedesSociales.ViewModels
             try
             {
                 ParametersRequest parametros = new ParametersRequest();
-                parametros.Parametros.Add(Creador.Idusuario.ToString());
-                APIResponse response = await GetPublicacionesUsuario.EjecutarEstrategia(null, parametros);
+                parametros.Parameters.Add(Creador.idUsuario.ToString());
+                APIResponse response = await GetPublicacionesUsuario.RunStrategy(null, parametros);
                 if (response.IsSuccess)
                 {
                     List<PublicacionModel> publicaciones = JsonConvert.DeserializeObject<List<PublicacionModel>>(response.Response);
@@ -252,8 +252,8 @@ namespace RedesSociales.ViewModels
             try
             {
                 ParametersRequest parametros = new ParametersRequest();
-                parametros.Parametros.Add(Usuario.Idusuario.ToString());
-                APIResponse response = await GetPublicacionesUsuario.EjecutarEstrategia(null, parametros);
+                parametros.Parameters.Add(Usuario.idUsuario.ToString());
+                APIResponse response = await GetPublicacionesUsuario.RunStrategy(null, parametros);
                 if (response.IsSuccess)
                 {
                     List<PublicacionModel> publicaciones = JsonConvert.DeserializeObject<List<PublicacionModel>>(response.Response);
@@ -285,7 +285,7 @@ namespace RedesSociales.ViewModels
                 {
                     IdPublicacion=Publicacion.IdPublicacion
                 };
-                APIResponse response = await DeletePublicacion.EjecutarEstrategia(publicacion);
+                APIResponse response = await DeletePublicacion.RunStrategy(publicacion);
                 if (response.IsSuccess)
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion eliminada exitosamente";
@@ -311,7 +311,7 @@ namespace RedesSociales.ViewModels
                 {
                     IdPublicacion = Publicacion.IdPublicacion
                 };
-                APIResponse response = await CreateLike.EjecutarEstrategia(publicacion);
+                APIResponse response = await CreateLike.RunStrategy(publicacion);
                 if (response.IsSuccess)
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion creada exitosamente";
@@ -332,8 +332,8 @@ namespace RedesSociales.ViewModels
         public async Task SeleccionarLikes()
         {
             ParametersRequest parametros = new ParametersRequest();
-            parametros.Parametros.Add(Publicacion.Idusuario.ToString());
-            APIResponse response = await GetLikes.EjecutarEstrategia(null, parametros);
+            parametros.Parameters.Add(Publicacion.idUsuario.ToString());
+            APIResponse response = await GetLikes.RunStrategy(null, parametros);
             if (response.IsSuccess)
             {
                 List<UsuarioModel> usuarios = JsonConvert.DeserializeObject<List<UsuarioModel>>(response.Response);
@@ -354,7 +354,7 @@ namespace RedesSociales.ViewModels
                 {
                     IdPublicacion = Publicacion.IdPublicacion
                 };
-                APIResponse response = await DeleteLike.EjecutarEstrategia(publicacion);
+                APIResponse response = await DeleteLike.RunStrategy(publicacion);
                 if (response.IsSuccess)
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion creada exitosamente";
@@ -380,7 +380,7 @@ namespace RedesSociales.ViewModels
                 {
                     IdPublicacion = Publicacion.IdPublicacion
                 };
-                APIResponse response = await CreateEtiqueta.EjecutarEstrategia(publicacion);
+                APIResponse response = await CreateEtiqueta.RunStrategy(publicacion);
                 if (response.IsSuccess)
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion creada exitosamente";
@@ -401,8 +401,8 @@ namespace RedesSociales.ViewModels
         public async Task SeleccionarEtiquetas()
         {
             ParametersRequest parametros = new ParametersRequest();
-            parametros.Parametros.Add(Publicacion.Idusuario.ToString());
-            APIResponse response = await GetEtiquetas.EjecutarEstrategia(null, parametros);
+            parametros.Parameters.Add(Publicacion.idUsuario.ToString());
+            APIResponse response = await GetEtiquetas.RunStrategy(null, parametros);
             if (response.IsSuccess)
             {
                 List<UsuarioModel> usuarios = JsonConvert.DeserializeObject<List<UsuarioModel>>(response.Response);
@@ -423,7 +423,7 @@ namespace RedesSociales.ViewModels
                 {
                     IdPublicacion = Publicacion.IdPublicacion
                 };
-                APIResponse response = await CreateEtiqueta.EjecutarEstrategia(publicacion);
+                APIResponse response = await CreateEtiqueta.RunStrategy(publicacion);
                 if (response.IsSuccess)
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Etiqueta creada exitosamente";

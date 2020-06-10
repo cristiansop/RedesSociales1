@@ -26,8 +26,7 @@
             </Frame>
             <BoxView BackgroundColor="#DDD" HeightRequest="1" />
             <CollectionView ItemsSource="{Binding Publicaciones}" 
-                            EmptyView="No tienes publicaciones"
-                            SelectionChanged="Seleccionar_Usuario">
+                            EmptyView="No tienes publicaciones">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Frame Style="{StaticResource publicationFrame}">
@@ -47,13 +46,21 @@
                                     <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
 
-                                <Label Text="{Binding Creador.Apodo}" Grid.Row="0" Grid.ColumnSpan="2"
-                                       VerticalOptions="Center"/>
+                                <!--<Label Text="{Binding Creador.Apodo}" Grid.Row="0" Grid.ColumnSpan="2"
+                                       VerticalOptions="Center"/>-->
+
+                                <Button Text="{Binding Creador.Apodo}" 
+                                        Grid.Row="0" 
+                                        Grid.ColumnSpan="2" 
+                                        VerticalOptions="Center"/>
 
                                 <!--<Image Source="{Binding Imagen}" Grid.Row="1" Grid.ColumnSpan="2" Aspect="AspectFill"/>-->
                                 <Image Source="img_1.jpg" Grid.Row="1" Grid.ColumnSpan="2" Aspect="AspectFill"/>
-                                
-                                <Label Text="{Binding Reacciones.Count}" Grid.Row="2" Grid.Column="0"/>
+
+                                <FlexLayout>
+                                    <Button Text="Me gusta" />
+                                    <Label Text="{Binding Reacciones.Count}" Grid.Row="2" Grid.Column="0"/>
+                                </FlexLayout>
 
                                 <Button Text="Comentarios" Grid.Row="2" Grid.Column="1" Clicked="Buttton_Comentarios" />
 

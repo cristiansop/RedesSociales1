@@ -47,6 +47,7 @@ namespace RedesSociales.ViewModels
         #endregion Request
 
         #region Commands
+        public ICommand RefreshCommand { get; set; }
         public ICommand CreateSeguirCommand { get; set; }
         public ICommand GetSeguidosCommand { get; set; }
         public ICommand GetSeguidoresCommand { get; set; }
@@ -127,6 +128,7 @@ namespace RedesSociales.ViewModels
             GetSeguidoresCommand = new Command(async () => await SeleccionarSeguidores(), () => true);
             DeleteSeguirCommand = new Command(async () => await EliminarSeguir(), () => true);
             GetPublicacionesUsuarioCommand = new Command(async () => await SeleccionarPublicacionesUsuario(), () => true);
+            RefreshCommand = new Command(() => ActualizarPerfil(), () => true);
 
             #endregion Comandos
         }

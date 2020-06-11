@@ -95,7 +95,7 @@ namespace RedesSociales.ViewModels
         public ICommand DeleteSeguirCommand { get; set; }
         public ICommand GetPublicacionesUsuarioCommand { get; set; }
         public ICommand ValidateFormCommand { get; set; }
-
+        public ICommand RefreshCommand { get; set; }
 
         #endregion Commands
 
@@ -171,7 +171,8 @@ namespace RedesSociales.ViewModels
             GetSeguidoresCommand = new Command(async () => await SeleccionarSeguidores(), () => true);
             ValidateFormCommand = new Command(() => ValidateForm());
             GetPublicacionesUsuarioCommand = new Command(async () => await SeleccionarPublicacionesUsuario(), () => true);
-            
+            RefreshCommand = new Command(() => ActualizarPerfil(), () => true);
+
             #endregion Comandos
         }
 
@@ -211,7 +212,7 @@ namespace RedesSociales.ViewModels
 
         public async void ActualizarPerfil()
         {
-            //await SeleccionarPublicacionesUsuario();
+            await SeleccionarPublicacionesUsuario();
             await SeleccionarSeguidores();
             await SeleccionarSeguidos();
 
@@ -298,8 +299,6 @@ namespace RedesSociales.ViewModels
                     Usuario.Seguidos = usuarios;
                     Seguidos = Usuario.Seguidos.Count;
                 }
-                
-
             }
             else
             {

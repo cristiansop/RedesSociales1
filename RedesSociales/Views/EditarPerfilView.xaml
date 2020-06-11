@@ -47,8 +47,8 @@
             <Label Text="Apellido" />
             <Entry Text="{Binding ApellidosUsuario}"/>
         </StackLayout>
-        <Button Text="Guardar Cambios" Command="UpdateUsuarioCommand" />
-        <Button Text="Borrar cuenta" Command="DeleteUsuarioCommand" />
+        <Button Text="Guardar Cambios" Command="{Binding UpdateUsuarioCommand}" />
+        <Button Text="Borrar cuenta" Command="{Binding DeleteUsuarioCommand}" />
     </StackLayout>
     
 </pages:PopupPage>

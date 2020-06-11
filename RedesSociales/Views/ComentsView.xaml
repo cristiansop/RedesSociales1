@@ -53,8 +53,6 @@
                         <Label Text="{Binding Publicacion.Reacciones.Count}" Grid.Row="2" Grid.Column="0"/>
                     </FlexLayout>
 
-                    <Button Text="Comentarios" Grid.Row="2" Grid.Column="1" Clicked="Buttton_Comentarios" />
-
                     <Label Text="{Binding Publicacion.Descripcion}" Grid.Row="3" Grid.ColumnSpan="2"/>
 
                     <Label Text="{Binding Publicacion.Fecha}" Grid.Row="4" Grid.Column="0"/>
@@ -86,6 +84,8 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+            <Entry Text="{Binding CuerpoEntry}" Placeholder="Escriba su comentario" />
+            <Button Text="Comentar" Command="{Binding CreateComentarioCommand}" />
         </StackLayout>
     </ContentPage.Content>
     

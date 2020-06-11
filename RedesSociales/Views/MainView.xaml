@@ -24,7 +24,7 @@
         <StackLayout>
             
             <Frame BackgroundColor="#DDD" HasShadow="False" CornerRadius="20" Padding="0,0,0,-1" Margin="30, 10">
-                <SearchBar Placeholder="Buscar usuario"  SearchCommand="GetUsuarioCommand" />
+                <SearchBar Placeholder="Buscar usuario"  SearchCommand="{Binding GetUsuarioCommand}" />
             </Frame>
             
             <BoxView BackgroundColor="#DDD" HeightRequest="1" />

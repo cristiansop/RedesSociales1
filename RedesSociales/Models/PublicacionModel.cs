@@ -55,6 +55,9 @@ namespace RedesSociales.Models
             this.creador = usuario;
             this.idUsuario = usuario.idUsuario;
             this.Apodo = usuario.Apodo;
+            Comentarios = new List<PeticionesComentariosPublicacion>();
+            Etiquetas = new List<PeticionesSeguidos>();
+            Reacciones = new List<PeticionesSeguidos>();
             Tiempo = "";
         }
 

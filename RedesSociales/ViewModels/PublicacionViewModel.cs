@@ -45,11 +45,14 @@ namespace RedesSociales.ViewModels
         public SelectRequest<UsuarioModel> GetUsuario { get; set; }
         public SelectRequest<PublicacionModel> CreatePublicacion { get; set; }
         public SelectRequest<BaseModel> GetPublicacionesSeguidos { get; set; }
+        public SelectRequest<BaseModel> GetLikes { get; set; }
         public SelectRequest<BaseModel> GetPublicacionesUsuario { get; set; }
         public SelectRequest<PublicacionModel> DeletePublicacion { get; set; }
         #endregion Request
 
         #region Commands
+        public ICommand RefreshPublicacionCommand { get; set; }
+        public ICommand GetLikesCommand { get; set; }
         public ICommand GetUsuarioCommand { get; set; }
         public ICommand GetPublicacionesUsuarioCommand { get; set; }
         public ICommand CreatePublicacionCommand { get; set; }
@@ -96,6 +99,7 @@ namespace RedesSociales.ViewModels
             #region Url
             string urlGetUsuario = Endpoints.URL_SERVIDOR + Endpoints.GET_USUARIO;
             string urlCreatePublicacion = Endpoints.URL_SERVIDOR + Endpoints.CREATE_PUBLICACION;
+            string urlGetLikes = Endpoints.URL_SERVIDOR + Endpoints.GET_LIKES;
             string urlGetPublicacionesSeguidos = Endpoints.URL_SERVIDOR + Endpoints.GET_PUBLICACIONES_SEGUIDOS;
             string urlGetPublicacionesUsuario = Endpoints.URL_SERVIDOR + Endpoints.GET_PUBLICACIONES_USUARIO;
             string urlDeletePublicacion = Endpoints.URL_SERVIDOR + Endpoints.DELETE_PUBLICACIONES;
@@ -118,7 +122,8 @@ namespace RedesSociales.ViewModels
             GetPublicacionesUsuario = new SelectRequest<BaseModel>();
             GetPublicacionesUsuario.SelectStrategy("GET", urlGetPublicacionesUsuario);
 
-            
+            GetLikes = new SelectRequest<BaseModel>();
+            GetLikes.SelectStrategy("GET", urlGetLikes);
 
             #endregion API
         }
@@ -126,10 +131,12 @@ namespace RedesSociales.ViewModels
         public void InitializeCommands()
         {
             GetUsuarioCommand = new Command(async () => await SeleccionarUsuario(), () => true);
+            GetLikesCommand = new Command(async () => await SeleccionarLikes(), () => true);
             CreatePublicacionCommand = new Command(async () => await CrearPublicacion(), () => true);
             GetPublicacionesSeguidosCommand = new Command(async () => await SeleccionarPublicacionesSeguidos(), () => true);
             GetPublicacionesUsuarioCommand = new Command(async () => await SeleccionarPublicacionesUsuario(), () => true);
             DeletePublicacionCommand = new Command(async () => await EliminarPublicacion(), () => true);
+            RefreshPublicacionCommand = new Command(() =>  TraerPublicaciones(), () => true);
         }
 
         public void InitializeFields()
@@ -209,6 +216,25 @@ namespace RedesSociales.ViewModels
 
             }
         }
+        public async Task SeleccionarLikes()
+        {
+            ParametersRequest parametros = new ParametersRequest();
+            parametros.Parameters.Add(Publicacion.idPublicacion.ToString());
+            APIResponse response = await GetLikes.RunStrategy(null, parametros);
+            if (response.IsSuccess)
+            {
+                if (response.Code == 200)
+                {
+                    List<PeticionesSeguidos> likes = JsonConvert.DeserializeObject<List<PeticionesSeguidos>>(response.Response);
+                    Publicacion.Reacciones = likes;
+                }
+            }
+            else
+            {
+                ((MessageViewModel)PopUp.BindingContext).Message = "Error encontrar las reacciones de la publicacion";
+                await PopupNavigation.Instance.PushAsync(PopUp);
+            }
+        }
 
         public async Task SeleccionarPublicacionesSeguidos()
         {
@@ -224,6 +250,11 @@ namespace RedesSociales.ViewModels
                         List<PublicacionModel> publicaciones = JsonConvert.DeserializeObject<List<PublicacionModel>>(response.Response);
                         ObservableCollection<PublicacionModel> publicaciones1 = new ObservableCollection<PublicacionModel>(publicaciones);
                         Publicaciones = new ObservableCollection<PublicacionModel>(Publicaciones.Union(publicaciones1).ToList());
+                        foreach (PublicacionModel item in Publicaciones)
+                        {
+                            Publicacion = item;
+                            await SeleccionarLikes();
+                        }
                     }
                 }
                 else

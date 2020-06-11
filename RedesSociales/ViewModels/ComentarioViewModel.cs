@@ -28,8 +28,16 @@ namespace RedesSociales.ViewModels
         public UsuarioModel Usuario { get; set; }
         public PublicacionModel Publicacion { get; set; }
         public ValidatableObject<string> CuerpoEntry { get; set; }
+        private bool like;
 
         #region Enables
+
+        private bool isCommentEnable;
+        private bool isTagEnable;
+
+        
+
+
         #endregion Enables
 
         #endregion Atributes
@@ -59,13 +67,31 @@ namespace RedesSociales.ViewModels
         public ICommand GetEtiquetasCommand { get; set; }
         public ICommand DeleteEtiquetaCommand { get; set; }
         public ICommand DeletePublicacionCommand { get; set; }
+        public ICommand LikeCommand { get; set; }
+        public ICommand RefreshCommand { get; set; }
+
 
         #endregion Commands
 
         #endregion Properties
 
         #region Getters/Setters
+        public bool Like
+        {
+            get { return like; }
+            set { like = value; OnPropertyChanged(); }
+        }
 
+        public bool IsCommentEnable
+        {
+            get { return isCommentEnable; }
+            set { isCommentEnable = value; OnPropertyChanged(); }
+        }
+        public bool IsCreatorEnable
+        {
+            get { return isTagEnable; }
+            set { isTagEnable = value; OnPropertyChanged(); }
+        }
         #endregion Getters/Setters
 
         #region Initialize
@@ -74,9 +100,14 @@ namespace RedesSociales.ViewModels
             PopUp = new MessagePopupView();
             Usuario = (UsuarioModel)Application.Current.Properties["Usuario"];
             Publicacion = new PublicacionModel();
+            Like = false;
+            IsCommentEnable = false;
+            IsCreatorEnable = false;
             InitializeRequest();
             InitializeCommands();
             InitializeFields();
+            AddValidations();
+            //TraerPublicacion();
         }
         public void InitializeRequest()
         {
@@ -129,16 +160,18 @@ namespace RedesSociales.ViewModels
         {
             #region Comandos
 
-            CreateComentarioCommand = new Command(async () => await CrearComentario(), () => true);
+            CreateComentarioCommand = new Command(async () => await CrearComentario(), () => IsCommentEnable);
             GetComentariosCommand = new Command(async () => await SeleccionarComentarios(), () => true);
             DeleteComentarioCommand = new Command(async () => await EliminarComentario(), () => true);
+            LikeCommand=new Command(async () => await DarLike(), () => true);
             CreateLikeCommand = new Command(async () => await CrearLike(), () => true);
             GetLikesCommand = new Command(async () => await SeleccionarLikes(), () => true);
             DeleteLikeCommand = new Command(async () => await EliminarLike(), () => true);
-            CreateEtiquetaCommand = new Command(async () => await CrearEtiqueta(), () => true);
+            CreateEtiquetaCommand = new Command(async () => await CrearEtiqueta(), () => IsCreatorEnable);
             GetEtiquetasCommand = new Command(async () => await SeleccionarEtiquetas(), () => true);
-            DeleteEtiquetaCommand = new Command(async () => await EliminarEtiqueta(), () => true);
+            DeleteEtiquetaCommand = new Command(async () => await EliminarEtiqueta(), () => IsCreatorEnable);
             DeletePublicacionCommand = new Command(async () => await EliminarPublicacion(), () => true);
+            RefreshCommand = new Command( () =>  TraerPublicacion(), () => true);
 
             #endregion Comandos
         }
@@ -149,12 +182,40 @@ namespace RedesSociales.ViewModels
         {
             CuerpoEntry = new ValidatableObject<string>();
 
-            CuerpoEntry.Validations.Add(new RequiredRule<string> { ValidationMessage = "El Cuerpo del comentario es obligatorio" });
-
         }
+        public void AddValidations()
+        {
+            CuerpoEntry.Validations.Add(new RequiredRule<string> { ValidationMessage = "El Cuerpo del comentario es obligatorio" });
+        }
+
         #endregion Initialize
 
         #region Methods
+        private void ValidateForm()
+        {
+            bool CuerpoValidate = CuerpoEntry.Validate();
+            IsCommentEnable = CuerpoValidate;
+            ((Command)CreateComentarioCommand).ChangeCanExecute();
+        }
+        public async Task DarLike()
+        {
+            if (Like)
+            {
+                await EliminarLike();
+                Like = false;
+            }
+            else
+            {
+                await CrearLike();
+                Like = true;
+            }
+        }
+        public async void TraerPublicacion()
+        {
+            await SeleccionarComentarios();
+            await SeleccionarEtiquetas();
+            await SeleccionarLikes();
+        }
         public async Task CrearComentario()
         {
             try
@@ -219,12 +280,12 @@ namespace RedesSociales.ViewModels
                 APIResponse response = await DeleteComentario.RunStrategy(peticion);
                 if (response.IsSuccess)
                 {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion eliminada exitosamente";
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Comentario eliminada exitosamente";
                     await PopupNavigation.Instance.PushAsync(PopUp);
                 }
                 else
                 {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al sequir al usuario";
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al eliminar el comentario";
                     await PopupNavigation.Instance.PushAsync(PopUp);
                 }
             }

@@ -35,7 +35,6 @@ namespace RedesSociales.Views
             Navigation.PushAsync(new PerfilView());
 
             ((CollectionView)sender).SelectedItem = null;
-
         }
 
     }

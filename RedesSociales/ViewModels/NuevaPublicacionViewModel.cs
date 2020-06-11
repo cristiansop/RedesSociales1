@@ -111,7 +111,6 @@ namespace RedesSociales.ViewModels
 
             jsonObject.Add("img64", base64String);
             string json = JsonConvert.SerializeObject(jsonObject);
-
         }
     }
 }

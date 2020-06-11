@@ -20,13 +20,16 @@
     </ContentPage.Resources>
 
     <ContentPage.Content>
+        
         <StackLayout>
+            
             <Frame BackgroundColor="#DDD" HasShadow="False" CornerRadius="20" Padding="0,0,0,-1" Margin="30, 10">
-                <SearchBar Placeholder="Buscar usuario" />
+                <SearchBar Placeholder="Buscar usuario"  SearchCommand="GetUsuarioCommand" />
             </Frame>
+            
             <BoxView BackgroundColor="#DDD" HeightRequest="1" />
-            <CollectionView ItemsSource="{Binding Publicaciones}" 
-                            EmptyView="No tienes publicaciones">
+            
+            <CollectionView ItemsSource="{Binding Publicaciones}" EmptyView="No tienes publicaciones">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Frame Style="{StaticResource publicationFrame}">
@@ -66,25 +69,17 @@
 
                                 <Label Text="{Binding Descripcion}" Grid.Row="3" Grid.ColumnSpan="2"/>
 
-                                <Label Text="{Binding Fecha, StringFormat='{dd:mm:yy}'}" Grid.Row="4" Grid.Column="0"/>
+                                <Label Text="{Binding Fecha}" Grid.Row="4" Grid.Column="0"/>
 
                                 <BoxView BackgroundColor="#DDD" Grid.Row="5" Grid.ColumnSpan="2" HeightRequest="1" />
 
                             </Grid>
-                            <!--
-                            <StackLayout>
-                                <Label Text="{Binding Creador.Apodo}"/>
-                                <Image Source="logo_google.jpg"/>
-                                <FlexLayout JustifyContent="SpaceEvenly">
-                                    <Label Text="{Binding Reacciones.Count}"/>
-                                </FlexLayout>
-                                <Label Text="{Binding Fecha}"/>
-                            </StackLayout>
-                            -->
                         </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+            
         </StackLayout>
+        
     </ContentPage.Content>
 </ContentPage>

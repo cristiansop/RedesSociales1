@@ -25,12 +25,13 @@ namespace RedesSociales.ViewModels
         #region Properties
 
         #region Atributes
-        private LoadDataHandler loadDataHandler;
 
-        public MessagePopupView PopUp { get; set; }
+        private LoadDataHandler loadDataHandler;
         private ObservableCollection<PublicacionModel> publicaciones;
         private PublicacionModel publicacion;
         private UsuarioModel usuario;
+
+        public MessagePopupView PopUp { get; set; }
         public UsuarioModel UsuarioMemoria { get; set; }
         public ValidatableObject<string> BusquedaUsuario { get; set; }
         public ValidatableObject<string> FotoPublicacion { get; set; }
@@ -54,9 +55,11 @@ namespace RedesSociales.ViewModels
         public ICommand CreatePublicacionCommand { get; set; }
         public ICommand GetPublicacionesSeguidosCommand { get; set; }
         public ICommand DeletePublicacionCommand { get; set; }
+
         #endregion Commands
 
         #endregion Properties
+
         #region Getters/Setters
         public PublicacionModel Publicacion
         {
@@ -74,7 +77,6 @@ namespace RedesSociales.ViewModels
             set { publicaciones = value; OnPropertyChanged(); }
         }
         #endregion Getters/Setters
-
 
         #region Initialize
         public PublicacionViewModel()
@@ -138,6 +140,8 @@ namespace RedesSociales.ViewModels
 
         }
         #endregion Initialize
+
+        #region Methods
         private async Task SeleccionarUsuario()
         {
             try
@@ -168,8 +172,8 @@ namespace RedesSociales.ViewModels
                 PublicacionModel publicacion = new PublicacionModel(Creador)
                 {
                     Archivo = FotoPublicacion.Value,
-                    Tipo=TipoPublicacion.Value,
-                    Descripcion=DescripcionPublicacion.Value
+                    Tipo = TipoPublicacion.Value,
+                    Descripcion = DescripcionPublicacion.Value
                 };
                 APIResponse response = await CreatePublicacion.RunStrategy(publicacion);
                 if (response.IsSuccess)
@@ -224,7 +228,7 @@ namespace RedesSociales.ViewModels
                 if (response.IsSuccess)
                 {
                     List<PublicacionModel> publicaciones = JsonConvert.DeserializeObject<List<PublicacionModel>>(response.Response);
-                    Publicaciones= new ObservableCollection<PublicacionModel>(publicaciones);
+                    Publicaciones = new ObservableCollection<PublicacionModel>(publicaciones);
                 }
                 else
                 {
@@ -244,7 +248,7 @@ namespace RedesSociales.ViewModels
             {
                 PublicacionModel publicacion = new PublicacionModel(UsuarioMemoria)
                 {
-                    idPublicacion=Publicacion.idPublicacion
+                    idPublicacion = Publicacion.idPublicacion
                 };
                 APIResponse response = await DeletePublicacion.RunStrategy(publicacion);
                 if (response.IsSuccess)
@@ -263,5 +267,6 @@ namespace RedesSociales.ViewModels
 
             }
         }
+        #endregion Methods
     }
 }

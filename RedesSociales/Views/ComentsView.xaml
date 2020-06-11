@@ -1,54 +1,92 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms" 
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="RedesSociales.Views.ComentsView"
-             xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
-             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup">
+             x:Class="RedesSociales.Views.ComentsView">
 
-    <pages:PopupPage.Animation>
-        <animations:ScaleAnimation 
-            PositionIn="Center"
-            PositionOut="Center"
-            ScaleIn="1.2"
-            ScaleOut="0.8"
-            DurationIn="400"
-            DurationOut="300"
-            EasingIn="SinOut"
-            EasingOut="SinIn"
-            HasBackgroundAnimation="True"/>
-    </pages:PopupPage.Animation>
-
-    <StackLayout HorizontalOptions="Center"
+    <ContentPage.Resources>
+        
+    </ContentPage.Resources>
+    
+    <ContentPage.Content>
+        
+        <StackLayout HorizontalOptions="Center"
                  VerticalOptions="Center"
                  Spacing="20"
                  Padding="20"
                  Margin="20"
                  BackgroundColor="{StaticResource GeneralBackgroundColor}">
 
-        <CollectionView ItemsSource="{Binding Publicacion.comentarios}" EmptyView="No hay comentarios">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
+            <Frame Style="{StaticResource publicationFrame}">
 
-                        <Label Text="{Binding Creador.Apodo}" Grid.Column="0" VerticalOptions="Center"/>
+                <Grid>
 
-                        <Label Text="{Binding }" Grid.Column="1" />
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                        <Label Text="{Binding Fecha}" Grid.Column="2"/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
 
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </StackLayout>
+                    <!--<Label Text="{Binding Creador.Apodo}" Grid.Row="0" Grid.ColumnSpan="2"
+                                       VerticalOptions="Center"/>-->
 
-</pages:PopupPage>
+                    <Button Text="{Binding Usuario.Apodo}" 
+                                        Grid.Row="0" 
+                                        Grid.ColumnSpan="2" 
+                                        VerticalOptions="Center"/>
+
+                    <!--<Image Source="{Binding Archivo}" Grid.Row="1" Grid.ColumnSpan="2" Aspect="AspectFill"/>-->
+                    <Image Source="img_1.jpg" Grid.Row="1" Grid.ColumnSpan="2" Aspect="AspectFill"/>
+
+                    <FlexLayout>
+                        <Button Text="Me gusta" />
+                        <Label Text="{Binding Publicacion.Reacciones.Count}" Grid.Row="2" Grid.Column="0"/>
+                    </FlexLayout>
+
+                    <Button Text="Comentarios" Grid.Row="2" Grid.Column="1" Clicked="Buttton_Comentarios" />
+
+                    <Label Text="{Binding Publicacion.Descripcion}" Grid.Row="3" Grid.ColumnSpan="2"/>
+
+                    <Label Text="{Binding Publicacion.Fecha}" Grid.Row="4" Grid.Column="0"/>
+
+                    <BoxView BackgroundColor="#DDD" Grid.Row="5" Grid.ColumnSpan="2" HeightRequest="1" />
+
+                </Grid>
+            </Frame>
+
+
+            <CollectionView ItemsSource="{Binding Publicacion.Comentarios}" EmptyView="No hay comentarios">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Text="{Binding Creador}" Grid.Column="0" VerticalOptions="Center"/>
+
+                            <Label Text="{Binding Cuerpo}" Grid.Column="1" />
+
+                            <Label Text="{Binding Fecha}" Grid.Column="2"/>
+
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
+    
+</ContentPage>

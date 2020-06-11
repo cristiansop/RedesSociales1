@@ -33,17 +33,22 @@
         <Button Text="Cambiar foto de perfil" />
         <StackLayout Orientation="Horizontal">
             <Label Text="Apodo" />
-            <Label Text="Ingrese su nombre"/>
+            <Label Text="{Binding ApodoUsuario}"/>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Estado" />
+            <Label Text="{Binding EstadoUsuario}"/>
         </StackLayout>
         <StackLayout Orientation="Horizontal">
             <Label Text="Nombre" />
-            <Entry Text="Ingrese su nombre"/>
+            <Entry Text="{Binding NombreUsuario}"/>
         </StackLayout>
         <StackLayout Orientation="Horizontal">
             <Label Text="Apellido" />
-            <Entry Text="Ingrese su nombre"/>
+            <Entry Text="{Binding ApellidosUsuario}"/>
         </StackLayout>
-        <Button Text="Guardar Cambios" Clicked="Guardar_Cambios" />
+        <Button Text="Guardar Cambios" Command="UpdateUsuarioCommand" />
+        <Button Text="Borrar cuenta" Command="DeleteUsuarioCommand" />
     </StackLayout>
     
 </pages:PopupPage>

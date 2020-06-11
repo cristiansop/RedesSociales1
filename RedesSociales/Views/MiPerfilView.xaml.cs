@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RedesSociales.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,11 +11,14 @@ using Xamarin.Forms.Xaml;
 namespace RedesSociales.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class AddPublicationView : ContentPage
+    public partial class MiPerfilView : ContentPage
     {
-        public AddPublicationView()
+        PerfilViewModel context = new PerfilViewModel();
+
+        public MiPerfilView()
         {
             InitializeComponent();
+            BindingContext = context;
         }
     }
 }

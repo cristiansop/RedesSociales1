@@ -13,7 +13,7 @@ using Xamarin.Forms.Xaml;
 namespace RedesSociales.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ComentsView : PopupPage
+    public partial class ComentsView : ContentPage
     {
         ComentarioViewModel context = new ComentarioViewModel();
         public ComentsView()
@@ -22,9 +22,10 @@ namespace RedesSociales.Views
             BindingContext = context;
         }
 
+        /*
         void Cerrar_VistaComentarios(object sender, EventArgs e)
         {
             PopupNavigation.Instance.PopAsync(true);
-        }
+        }*/
     }
 }

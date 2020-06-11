@@ -28,7 +28,7 @@ namespace RedesSociales.ViewModels
 
         private UsuarioModel usuario;
 
-        public PublicacionViewModel Publicacionviewmodel { get; set; }
+        public PublicacionViewModel Publicacionviewmodel { get; set; } // y esto?
 
         public ValidatableObject<string> ApodoUsuario { get; set; }
 

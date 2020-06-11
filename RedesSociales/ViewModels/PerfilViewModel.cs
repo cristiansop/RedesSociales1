@@ -212,8 +212,8 @@ namespace RedesSociales.ViewModels
         public async void ActualizarPerfil()
         {
             await SeleccionarPublicacionesUsuario();
-            //await SeleccionarSeguidores();
-            //await SeleccionarSeguidos();
+            await SeleccionarSeguidores();
+            await SeleccionarSeguidos();
 
         }
         public async Task ActualizarUsuario()
@@ -290,7 +290,7 @@ namespace RedesSociales.ViewModels
             APIResponse response = await GetSeguidos.RunStrategy(null, parametros);
             if (response.IsSuccess)
             {
-                List<UsuarioModel> usuarios = JsonConvert.DeserializeObject<List<UsuarioModel>>(response.Response);
+                List<PeticionesSeguidos> usuarios = JsonConvert.DeserializeObject<List<PeticionesSeguidos>>(response.Response);
                 Usuario.Seguidos = usuarios;
 
             }
@@ -308,7 +308,7 @@ namespace RedesSociales.ViewModels
             APIResponse response = await GetSeguidores.RunStrategy(null, parametros);
             if (response.IsSuccess)
             {
-                List<UsuarioModel> usuarios = JsonConvert.DeserializeObject<List<UsuarioModel>>(response.Response);
+                List<PeticionesSeguidos> usuarios = JsonConvert.DeserializeObject<List<PeticionesSeguidos>>(response.Response);
                 Usuario.Seguidores = usuarios;
 
             }

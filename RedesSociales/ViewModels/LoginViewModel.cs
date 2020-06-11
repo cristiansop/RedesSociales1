@@ -125,8 +125,6 @@ namespace RedesSociales.ViewModels
                         await CrearUsuario();
                         await SeleccionarUsuario();
                     }
-                    Usuario.Seguidores = new List<UsuarioModel>();
-                    Usuario.Seguidos = new List<UsuarioModel>();
                     await loadDataHandler.PersistenceDataAsync("Usuario", Usuario);
                     await NavigationService.PushPage(new MainPage());
                 }

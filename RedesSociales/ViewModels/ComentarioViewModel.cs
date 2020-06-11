@@ -190,7 +190,7 @@ namespace RedesSociales.ViewModels
                 APIResponse response = await GetComentarios.RunStrategy(null, parametros);
                 if (response.IsSuccess)
                 {
-                    List<ComentarioModel> comentarios = JsonConvert.DeserializeObject<List<ComentarioModel>>(response.Response);
+                    List<PeticionesComentariosPublicacion> comentarios = JsonConvert.DeserializeObject<List<PeticionesComentariosPublicacion>>(response.Response);
                     Publicacion.Comentarios = comentarios;
                 }
                 else
@@ -264,7 +264,7 @@ namespace RedesSociales.ViewModels
             APIResponse response = await GetLikes.RunStrategy(null, parametros);
             if (response.IsSuccess)
             {
-                List<UsuarioModel> likes = JsonConvert.DeserializeObject<List<UsuarioModel>>(response.Response);
+                List<PeticionesSeguidos> likes = JsonConvert.DeserializeObject<List<PeticionesSeguidos>>(response.Response);
                 Publicacion.Reacciones = likes;
             }
             else
@@ -330,7 +330,7 @@ namespace RedesSociales.ViewModels
             APIResponse response = await GetEtiquetas.RunStrategy(null, parametros);
             if (response.IsSuccess)
             {
-                List<UsuarioModel> usuarios = JsonConvert.DeserializeObject<List<UsuarioModel>>(response.Response);
+                List<PeticionesSeguidos> usuarios = JsonConvert.DeserializeObject<List<PeticionesSeguidos>>(response.Response);
                 Publicacion.Etiquetas = usuarios;
             }
             else

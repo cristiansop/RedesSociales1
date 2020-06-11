@@ -17,10 +17,10 @@ namespace RedesSociales.Models
         public string Apodo { get; set; }
 
         [JsonIgnore]
-        private List<UsuarioModel> seguidos;
+        private List<PeticionesSeguidos> seguidos;
 
         [JsonIgnore]
-        private List<UsuarioModel> seguidores;
+        private List<PeticionesSeguidos> seguidores;
 
         [JsonProperty("Nombre")]
         private string Nombre;
@@ -40,6 +40,12 @@ namespace RedesSociales.Models
         #endregion Properties
 
         #region Getters/Setters
+        public UsuarioModel()
+        {
+            Publicaciones = new List<PublicacionModel>();
+            Seguidores = new List<PeticionesSeguidos>();
+            Seguidos = new List<PeticionesSeguidos>();
+        }
         public List<PublicacionModel> Publicaciones
         {
             get { return publicaciones; }
@@ -70,13 +76,13 @@ namespace RedesSociales.Models
             set { Nombre = value; OnPropertyChanged(); }
         }
 
-        public List<UsuarioModel> Seguidos
+        public List<PeticionesSeguidos> Seguidos
         {
             get { return seguidos; }
             set { seguidos = value; OnPropertyChanged(); }
         }
 
-        public List<UsuarioModel> Seguidores
+        public List<PeticionesSeguidos> Seguidores
         {
             get { return seguidores; }
             set { seguidores = value; OnPropertyChanged(); }

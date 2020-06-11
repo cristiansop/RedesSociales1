@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace RedesSociales.Models
 {
-    public class PeticionesDosUsuariosModel
+    public class PeticionesDosUsuariosModel : BaseModel
     {
         [JsonProperty("idUsuario1")]
         public int idUsuario1 { get; set; }

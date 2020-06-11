@@ -6,7 +6,7 @@ using System.Text;
 
 namespace RedesSociales.Models
 {
-    public class ComentarioModel : NotificationObject
+    public class ComentarioModel : BaseModel
     {
         #region Properties
 

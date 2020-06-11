@@ -5,13 +5,21 @@ using System.Text;
 
 namespace RedesSociales.Models
 {
-    public class PeticionesComentarios : BaseModel
+    public class PeticionesComentariosPublicacion : BaseModel
     {
         [JsonProperty("idUsuario")]
         public int idUsuario { get; set; }
-        [JsonProperty("idPublicacion")]
-        public int idPublicacion { get; set; }
+
+        [JsonProperty("Apodo")]
+        public string Apodo { get; set; }
+
         [JsonProperty("idComentario")]
         public int idComentario { get; set; }
+
+        [JsonProperty("Cuerpo")]
+        public string Cuerpo { get; set; }
+
+        [JsonProperty("Tiempo")]
+        public string Tiempo { get; set; }
     }
 }

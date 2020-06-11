@@ -138,11 +138,12 @@ namespace RedesSociales.ViewModels
             await SeleccionarPublicacionesUsuario();
             await SeleccionarSeguidores();
             await SeleccionarSeguidos();
-            foreach (UsuarioModel item in Usuario.Seguidores)
+            foreach (PeticionesSeguidos item in Usuario.Seguidores)
             {
-                if (item.Apodo == UsuarioMemoria.Apodo)
+                if (item.Apodo.Equals(UsuarioMemoria.Apodo))
                 {
                     IsSeguirEnable = false;
+                    break;
                 }
             }
 
@@ -181,7 +182,7 @@ namespace RedesSociales.ViewModels
             APIResponse response = await GetSeguidos.RunStrategy(null, parametros);
             if (response.IsSuccess)
             {
-                List<UsuarioModel> usuarios = JsonConvert.DeserializeObject<List<UsuarioModel>>(response.Response);
+                List<PeticionesSeguidos> usuarios = JsonConvert.DeserializeObject<List<PeticionesSeguidos>>(response.Response);
                 Usuario.Seguidos = usuarios;
 
             }
@@ -189,6 +190,8 @@ namespace RedesSociales.ViewModels
             {
                 ((MessageViewModel)PopUp.BindingContext).Message = "Error encontrar los seguidos del usuario";
                 await PopupNavigation.Instance.PushAsync(PopUp);
+                await Task.Delay(TimeSpan.FromSeconds(1));
+                await PopupNavigation.Instance.PopAsync();
             }
         }
 
@@ -199,7 +202,7 @@ namespace RedesSociales.ViewModels
             APIResponse response = await GetSeguidores.RunStrategy(null, parametros);
             if (response.IsSuccess)
             {
-                List<UsuarioModel> usuarios = JsonConvert.DeserializeObject<List<UsuarioModel>>(response.Response);
+                List<PeticionesSeguidos> usuarios = JsonConvert.DeserializeObject<List<PeticionesSeguidos>>(response.Response);
                 Usuario.Seguidores = usuarios;
 
             }
@@ -207,6 +210,8 @@ namespace RedesSociales.ViewModels
             {
                 ((MessageViewModel)PopUp.BindingContext).Message = "Error encontrar los seguidores del usuario";
                 await PopupNavigation.Instance.PushAsync(PopUp);
+                await Task.Delay(TimeSpan.FromSeconds(1));
+                await PopupNavigation.Instance.PopAsync();
             }
         }
 
@@ -224,11 +229,15 @@ namespace RedesSociales.ViewModels
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion eliminada exitosamente";
                     await PopupNavigation.Instance.PushAsync(PopUp);
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    await PopupNavigation.Instance.PopAsync();
                 }
                 else
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Error al dejar de sequir al usuario";
                     await PopupNavigation.Instance.PushAsync(PopUp);
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    await PopupNavigation.Instance.PopAsync();
                 }
             }
             catch (Exception e)
@@ -253,6 +262,8 @@ namespace RedesSociales.ViewModels
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "No se encuentran publicaciones del usuario";
                     await PopupNavigation.Instance.PushAsync(PopUp);
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    await PopupNavigation.Instance.PopAsync();
                 }
             }
             catch (Exception e)

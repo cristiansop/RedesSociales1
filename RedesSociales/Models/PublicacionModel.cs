@@ -6,7 +6,7 @@ using System.Text;
 
 namespace RedesSociales.Models
 {
-    public class PublicacionModel: NotificationObject
+    public class PublicacionModel : BaseModel
     {
         #region Properties
         [JsonIgnore]
@@ -33,20 +33,20 @@ namespace RedesSociales.Models
         [JsonProperty("Descripcion")]
         public string Descripcion { get; set; }
 
-        [JsonIgnore]
-        public string Fecha { get; set; }
+        [JsonProperty("Tiempo")]
+        public string Tiempo { get; set; }
 
 
         [JsonIgnore]
-        private List<UsuarioModel> reacciones;
+        private List<PeticionesSeguidos> reacciones;
 
 
         [JsonIgnore]
-        private List<UsuarioModel> etiquetas;
+        private List<PeticionesSeguidos> etiquetas;
 
 
         [JsonIgnore]
-        private List<ComentarioModel> comentarios;
+        private List<PeticionesComentariosPublicacion> comentarios;
         #endregion Properties
 
         #region Inicialize
@@ -54,10 +54,15 @@ namespace RedesSociales.Models
         {
             this.creador = usuario;
             this.idUsuario = usuario.idUsuario;
+            this.Apodo = usuario.Apodo;
+            Tiempo = "";
         }
 
         public PublicacionModel()
         {
+            Comentarios = new List<PeticionesComentariosPublicacion>();
+            Etiquetas = new List<PeticionesSeguidos>();
+            Reacciones = new List<PeticionesSeguidos>();
         }
         #endregion Inicialize
 
@@ -70,17 +75,17 @@ namespace RedesSociales.Models
                 OnPropertyChanged(); }
         }
 
-        public List<UsuarioModel> Etiquetas
+        public List<PeticionesSeguidos> Etiquetas
         {
             get { return etiquetas; }
             set { etiquetas = value; OnPropertyChanged(); }
         }
-        public List<UsuarioModel> Reacciones
+        public List<PeticionesSeguidos> Reacciones
         {
             get { return reacciones; }
             set { reacciones = value; OnPropertyChanged(); }
         }
-        public List<ComentarioModel> Comentarios
+        public List<PeticionesComentariosPublicacion> Comentarios
         {
             get { return comentarios; }
             set { comentarios = value; OnPropertyChanged(); }

@@ -83,10 +83,12 @@ namespace RedesSociales.ViewModels
         {
             loadDataHandler = new LoadDataHandler();
             UsuarioMemoria = (UsuarioModel)Application.Current.Properties["Usuario"];
+            Publicaciones = new ObservableCollection<PublicacionModel>();
             Usuario = new UsuarioModel();
             InitializeRequest();
             InitializeCommands();
             InitializeFields();
+            //TraerPublicaciones();
         }
 
         public void InitializeRequest()
@@ -142,7 +144,13 @@ namespace RedesSociales.ViewModels
         #endregion Initialize
 
         #region Methods
-        private async Task SeleccionarUsuario()
+        public async void TraerPublicaciones()
+        {
+            await SeleccionarPublicacionesSeguidos();            
+
+        }
+
+        public async Task SeleccionarUsuario()
         {
             try
             {
@@ -180,11 +188,17 @@ namespace RedesSociales.ViewModels
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion creada exitosamente";
                     await PopupNavigation.Instance.PushAsync(PopUp);
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    await PopupNavigation.Instance.PopAsync();
+                    //await PopupNavigation.Instance.PopAsync();
                 }
                 else
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Error al crear publicacion";
                     await PopupNavigation.Instance.PushAsync(PopUp);
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    await PopupNavigation.Instance.PopAsync();
+                    //await PopupNavigation.Instance.PopAsync();
                 }
             }
             catch (Exception e)
@@ -210,6 +224,8 @@ namespace RedesSociales.ViewModels
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "No se encuentran publicaciones del usuario";
                     await PopupNavigation.Instance.PushAsync(PopUp);
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    await PopupNavigation.Instance.PopAsync();
                 }
             }
             catch (Exception e)
@@ -234,6 +250,8 @@ namespace RedesSociales.ViewModels
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "No se encuentran publicaciones del usuario";
                     await PopupNavigation.Instance.PushAsync(PopUp);
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    await PopupNavigation.Instance.PopAsync();
                 }
             }
             catch (Exception e)
@@ -255,11 +273,15 @@ namespace RedesSociales.ViewModels
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion eliminada exitosamente";
                     await PopupNavigation.Instance.PushAsync(PopUp);
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    await PopupNavigation.Instance.PopAsync();
                 }
                 else
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Error al eliminar la publicacion";
                     await PopupNavigation.Instance.PushAsync(PopUp);
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    await PopupNavigation.Instance.PopAsync();
                 }
             }
             catch (Exception e)

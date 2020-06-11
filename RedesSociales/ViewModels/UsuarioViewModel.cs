@@ -63,7 +63,7 @@ namespace RedesSociales.ViewModels
         {
             get { return usuario; }
             set { usuario = value;
-                ActualizarPerfil();
+                //ActualizarPerfil();
                 OnPropertyChanged(); }
         }
         public bool IsSeguirEnable
@@ -87,7 +87,7 @@ namespace RedesSociales.ViewModels
             loadDataHandler = new LoadDataHandler();
             InitializeRequest();
             InitializeCommands();
-            ActualizarPerfil();
+            //ActualizarPerfil();
 
         }
         public void InitializeRequest()

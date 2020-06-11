@@ -112,7 +112,7 @@ namespace RedesSociales.ViewModels
                     Usuario = new UsuarioModel()
                     {
                         idUsuario = 0,
-                        Apodo = user.Email.Remove(user.Email.LastIndexOf('@')),
+                        Apodo = user.Email,//user.Email.Remove(user.Email.LastIndexOf('@')),
                         NombreP = user.GivenName,
                         ApellidoP = user.FamilyName,
                         FotoPerfilP = user.Picture.ToString(),

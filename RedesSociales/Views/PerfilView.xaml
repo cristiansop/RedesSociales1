@@ -27,18 +27,6 @@
 
     <ContentPage.Content>
         <StackLayout>
-            <!--
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <BoxView BackgroundColor="{StaticResource SecondaryBackgroundColor}" Grid.Row="0" />
-                <Image Source="social_media.png" Grid.Row="1" HeightRequest="100" 
-                       WidthRequest="50" TranslationY="-60"/>
-            </Grid>-->
-
             <StackLayout>
                 <Image Source="social_media.png" Grid.Row="1" HeightRequest="100" WidthRequest="50" Margin="20"/>
                 <StackLayout VerticalOptions="Center" Grid.Row="1" HorizontalOptions="Center">

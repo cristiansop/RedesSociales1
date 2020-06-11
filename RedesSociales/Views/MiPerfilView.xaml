@@ -4,6 +4,8 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
+             Icon="social_media.png"
+             BackgroundColor="{StaticResource GeneralBackgroundColor}"
              x:Class="RedesSociales.Views.MiPerfilView">
     
     <ContentPage.Resources>
@@ -23,17 +25,6 @@
 
     <ContentPage.Content>
         <StackLayout>
-            <!--
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <BoxView BackgroundColor="{StaticResource SecondaryBackgroundColor}" Grid.Row="0" />
-                <Image Source="social_media.png" Grid.Row="1" HeightRequest="100" 
-                       WidthRequest="50" TranslationY="-60"/>
-            </Grid>-->
 
             <StackLayout>
                 <Image Source="social_media.png" Grid.Row="1" HeightRequest="100" WidthRequest="50" Margin="20"/>

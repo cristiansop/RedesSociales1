@@ -11,7 +11,7 @@
         VerticalOptions="Center" 
         HorizontalOptions="Center" 
         Padding="20, 20, 20, 20">
-        <Label Text="{Binding Message}"/>
+        <Label Text="{Binding Message}" FontSize="Title"/>
     </StackLayout>
   
 </pages:PopupPage>

@@ -4,11 +4,13 @@ using Xamarin.Forms.Xaml;
 using RedesSociales.Views;
 using RedesSociales.Servicios.Navigation;
 using RedesSociales.Servicios.Handler;
+using RedesSociales.Models;
 
 namespace RedesSociales
 {
     public partial class App : Application
     {
+
         #region Properties
         static NavigationService navigationService;
         static LoadDataHandler LoadData;
@@ -28,14 +30,31 @@ namespace RedesSociales
         }
         #endregion Getters & Setters
 
-
-
         public App()
         {
             InitializeComponent();
             LoadData = new LoadDataHandler();
-            MainPage = new NavigationPage(new LoginView());
+            // -- test 
+            Test();
+            // --
+            MainPage = new NavigationPage(new MainPage());
         }
+
+        /// <summary>
+        public async void Test()
+        {
+            UsuarioModel Usuario = new UsuarioModel()
+            {
+                idUsuario = 0,
+                Apodo = "jhoanseb",
+                NombreP = "Jhoan",
+                ApellidoP = "Lozano",
+                FotoPerfilP = "",
+                EstadoP = "Activo"
+            };
+            await LoadData.PersistenceDataAsync("Usuario", Usuario);
+        }
+        /// </summary>
 
         protected override void OnStart()
         {

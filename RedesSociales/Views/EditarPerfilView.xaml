@@ -30,11 +30,14 @@
                  BackgroundColor="{StaticResource GeneralBackgroundColor}">
         
         <Image Source="social_media.jpg" />
+        
         <Button Text="Cambiar foto de perfil" />
+        
         <StackLayout Orientation="Horizontal">
             <Label Text="Apodo" />
             <Label Text="{Binding ApodoUsuario.Value}" />
         </StackLayout>
+        
         <StackLayout Orientation="Horizontal">
             <Label Text="Estado" />
             <Entry Text="{Binding EstadoUsuario.Value}" Placeholder="{Binding EstadoInicial}">
@@ -43,6 +46,7 @@
                 </Entry.Behaviors>
             </Entry>
         </StackLayout>
+        
         <StackLayout Orientation="Horizontal">
             <Label Text="Nombre" />
             <Entry Text="{Binding NombreUsuario.Value}" Placeholder="{Binding NombreInicial}">
@@ -51,6 +55,7 @@
                 </Entry.Behaviors>
             </Entry>
         </StackLayout>
+        
         <StackLayout Orientation="Horizontal">
             <Label Text="Apellido" />
             <Entry Text="{Binding ApellidosUsuario.Value}" Placeholder="{Binding ApellidoInicial}">
@@ -59,7 +64,9 @@
                 </Entry.Behaviors>
             </Entry>
         </StackLayout>
+        
         <Button Text="Guardar Cambios" Command="{Binding UpdateUsuarioCommand}" />
+        
         <Button Text="Borrar cuenta" Command="{Binding DeleteUsuarioCommand}" />
     </StackLayout>
     

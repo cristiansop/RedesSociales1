@@ -7,7 +7,7 @@
              x:Class="RedesSociales.Views.EditarPerfilView"
              xmlns:components="clr-namespace:RedesSociales.VisualComponents;assembly=RedesSociales"
              xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
-             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup">
+             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup" xmlns:behaviors="clr-namespace:RedesSociales.Behaviors">
     
     <pages:PopupPage.Animation>
         <animations:ScaleAnimation 
@@ -33,19 +33,31 @@
         <Button Text="Cambiar foto de perfil" />
         <StackLayout Orientation="Horizontal">
             <Label Text="Apodo" />
-            <Label Text="{Binding ApodoUsuario}"/>
+            <Label Text="{Binding ApodoUsuario.Value}" />
         </StackLayout>
         <StackLayout Orientation="Horizontal">
             <Label Text="Estado" />
-            <Label Text="{Binding EstadoUsuario}"/>
+            <Entry Text="{Binding EstadoUsuario.Value}" Placeholder="{Binding EstadoInicial}">
+                <Entry.Behaviors>
+                    <behaviors:EventToCommandBehavior EventName="TextChanged" Command="{Binding ValidateFormCommand}" />
+                </Entry.Behaviors>
+            </Entry>
         </StackLayout>
         <StackLayout Orientation="Horizontal">
             <Label Text="Nombre" />
-            <Entry Text="{Binding NombreUsuario}"/>
+            <Entry Text="{Binding NombreUsuario.Value}" Placeholder="{Binding NombreInicial}">
+                <Entry.Behaviors>
+                    <behaviors:EventToCommandBehavior EventName="TextChanged" Command="{Binding ValidateFormCommand}" />
+                </Entry.Behaviors>
+            </Entry>
         </StackLayout>
         <StackLayout Orientation="Horizontal">
             <Label Text="Apellido" />
-            <Entry Text="{Binding ApellidosUsuario}"/>
+            <Entry Text="{Binding ApellidosUsuario.Value}" Placeholder="{Binding ApellidoInicial}">
+                <Entry.Behaviors>
+                    <behaviors:EventToCommandBehavior EventName="TextChanged" Command="{Binding ValidateFormCommand}" />
+                </Entry.Behaviors>
+            </Entry>
         </StackLayout>
         <Button Text="Guardar Cambios" Command="{Binding UpdateUsuarioCommand}" />
         <Button Text="Borrar cuenta" Command="{Binding DeleteUsuarioCommand}" />

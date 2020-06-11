@@ -45,12 +45,12 @@
                 <FlexLayout JustifyContent="SpaceAround">
                     <StackLayout VerticalOptions="Center">
                         <Label Style="{StaticResource LabelTitle}" Text="Seguidores" />
-                        <Label Text="{Binding Usuario.Seguidores.Count}" HorizontalOptions="Center" />
+                        <Label Text="{Binding Seguidores}" HorizontalOptions="Center" />
                     </StackLayout>
 
                     <StackLayout VerticalOptions="Center">
                         <Label Style="{StaticResource LabelTitle}" Text="Seguidos" />
-                        <Label Text="{Binding Usuario.Seguidos.Count}" HorizontalOptions="Center" />
+                        <Label Text="{Binding Seguidos}" HorizontalOptions="Center" />
                     </StackLayout>
                 </FlexLayout>
 

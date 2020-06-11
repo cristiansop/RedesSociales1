@@ -11,7 +11,7 @@
         VerticalOptions="Center" 
         HorizontalOptions="Center" 
         Padding="20, 20, 20, 20">
-        <Label Text="Test"/>
+        <Label Text="{Binding Message}"/>
     </StackLayout>
   
 </pages:PopupPage>

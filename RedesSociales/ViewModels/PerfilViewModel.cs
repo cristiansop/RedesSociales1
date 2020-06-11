@@ -28,8 +28,6 @@ namespace RedesSociales.ViewModels
 
         private UsuarioModel usuario;
 
-        public PublicacionViewModel Publicacionviewmodel { get; set; } // y esto?
-
         public ValidatableObject<string> ApodoUsuario { get; set; }
 
         public ValidatableObject<string> NombreUsuario { get; set; }
@@ -40,6 +38,43 @@ namespace RedesSociales.ViewModels
 
         public ValidatableObject<string> EstadoUsuario { get; set; }
 
+        public string  NombreInicial { get; set; }
+        public string  ApellidoInicial { get; set; }
+        public string EstadoInicial { get; set; }
+
+        private bool isEditEnable;
+        private int seguidores;
+        private int seguidos;
+        #endregion properties
+
+        #region Sets/Gets
+        public bool IsEditEnable
+        {
+            get { return isEditEnable; }
+            set
+            {
+                isEditEnable = value;
+                OnPropertyChanged();
+            }
+        }
+        public int Seguidores
+        {
+            get { return seguidores; }
+            set
+            {
+                seguidores = value;
+                OnPropertyChanged();
+            }
+        }
+        public int Seguidos
+        {
+            get { return seguidos; }
+            set
+            {
+                seguidos = value;
+                OnPropertyChanged();
+            }
+        }
 
         #endregion Atributes
 
@@ -59,6 +94,7 @@ namespace RedesSociales.ViewModels
         public ICommand GetSeguidoresCommand { get; set; }
         public ICommand DeleteSeguirCommand { get; set; }
         public ICommand GetPublicacionesUsuarioCommand { get; set; }
+        public ICommand ValidateFormCommand { get; set; }
 
 
         #endregion Commands
@@ -84,10 +120,12 @@ namespace RedesSociales.ViewModels
             loadDataHandler = new LoadDataHandler();
             PopUp = new MessagePopupView();
             Usuario = (UsuarioModel)Application.Current.Properties["Usuario"];
+            IsEditEnable = false;
             InitializeRequest();
             InitializeCommands();
             InitializeFields();
             ActualizarPerfil();
+            AddValidations();
         }
         public void InitializeRequest()
         {
@@ -127,38 +165,55 @@ namespace RedesSociales.ViewModels
         {
             #region Comandos
 
-            UpdateUsuarioCommand = new Command(async () => await ActualizarUsuario(), () => true);
+            UpdateUsuarioCommand = new Command(async () => await ActualizarUsuario(), () => IsEditEnable);
             DeleteUsuarioCommand = new Command(async () => await EliminarUsuario(), () => true);
             GetSeguidosCommand = new Command(async () => await SeleccionarSeguidos(), () => true);
             GetSeguidoresCommand = new Command(async () => await SeleccionarSeguidores(), () => true);
+            ValidateFormCommand = new Command(() => ValidateForm());
             GetPublicacionesUsuarioCommand = new Command(async () => await SeleccionarPublicacionesUsuario(), () => true);
-
+            
             #endregion Comandos
         }
 
         public void InitializeFields()
         {
             ApodoUsuario = new ValidatableObject<string>();
+            ApodoUsuario.Value = Usuario.Apodo;
             NombreUsuario = new ValidatableObject<string>();
             ApellidosUsuario = new ValidatableObject<string>();
             FotoPerfilUsuario = new ValidatableObject<string>();
             EstadoUsuario = new ValidatableObject<string>();
-
-
+            Seguidores = Usuario.Seguidores.Count;
+            Seguidos = Usuario.Seguidos.Count;
+            EstadoUsuario.Value = Usuario.EstadoP;
+            NombreInicial = Usuario.NombreP;
+            ApellidoInicial = Usuario.ApellidoP;
+            EstadoInicial = Usuario.EstadoP;
+        }
+        public void AddValidations()
+        {
             ApodoUsuario.Validations.Add(new RequiredRule<string> { ValidationMessage = "El Apodo del usuario es obligatorio" });
             NombreUsuario.Validations.Add(new RequiredRule<string> { ValidationMessage = "El nombre del usuario es obligatorio" });
             ApellidosUsuario.Validations.Add(new RequiredRule<string> { ValidationMessage = "los apellidos del usuario es obligatorio" });
             EstadoUsuario.Validations.Add(new RequiredRule<string> { ValidationMessage = "El Estado de la cuenta es obligatorio" });
-
         }
         #endregion Initialize
 
         #region Methods
+        private void ValidateForm()
+        {
+            bool NombreUsuarioValidate = NombreUsuario.Validate();
+            bool ApellidosUsuarioValidate = ApellidosUsuario.Validate();
+            bool EstadoUsuarioValidate = EstadoUsuario.Validate();
+            IsEditEnable = NombreUsuarioValidate && ApellidosUsuarioValidate && EstadoUsuarioValidate;
+            ((Command)UpdateUsuarioCommand).ChangeCanExecute();
+        }
+
         public async void ActualizarPerfil()
         {
             await SeleccionarPublicacionesUsuario();
-            await SeleccionarSeguidores();
-            await SeleccionarSeguidos();
+            //await SeleccionarSeguidores();
+            //await SeleccionarSeguidos();
 
         }
         public async Task ActualizarUsuario()
@@ -167,10 +222,11 @@ namespace RedesSociales.ViewModels
             {
                 UsuarioModel usuario = new UsuarioModel()
                 {
+                    idUsuario = Usuario.idUsuario,
                     Apodo = ApodoUsuario.Value,
                     NombreP = NombreUsuario.Value,
                     ApellidoP = ApellidosUsuario.Value,
-                    FotoPerfilP = FotoPerfilUsuario.Value,
+                    FotoPerfilP = "",
                     EstadoP = EstadoUsuario.Value
                 };
                 APIResponse response = await UpdateUsuario.RunStrategy(usuario);
@@ -183,11 +239,16 @@ namespace RedesSociales.ViewModels
                     Usuario.EstadoP = usuario.EstadoP;
                     ((MessageViewModel)PopUp.BindingContext).Message = "Usuario actualizado exitosamente";
                     await PopupNavigation.Instance.PushAsync(PopUp);
+                    await Task.Delay(TimeSpan.FromSeconds(2));
+                    await PopupNavigation.Instance.PopAsync();
+                    await PopupNavigation.Instance.PopAsync();
                 }
                 else
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Error al actualizar usuario";
                     await PopupNavigation.Instance.PushAsync(PopUp);
+                    await Task.Delay(TimeSpan.FromSeconds(2));
+                    await PopupNavigation.Instance.PopAsync();
                 }
             }
             catch (Exception e)

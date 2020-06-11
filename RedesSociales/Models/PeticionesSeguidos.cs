@@ -10,6 +10,6 @@ namespace RedesSociales.Models
         [JsonProperty("idUsuario")]
         public int idUsuario { get; set; }
         [JsonProperty("Apodo")]
-        public int Apodo { get; set; }
+        public string Apodo { get; set; }
     }
 }

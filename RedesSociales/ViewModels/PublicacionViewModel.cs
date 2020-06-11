@@ -16,6 +16,7 @@ using RedesSociales.Validations.Base;
 using Newtonsoft.Json;
 using RedesSociales.Validations.Rules;
 using RedesSociales.Servicios.Handler;
+using System.Linq;
 
 namespace RedesSociales.ViewModels
 {
@@ -27,9 +28,10 @@ namespace RedesSociales.ViewModels
         private LoadDataHandler loadDataHandler;
 
         public MessagePopupView PopUp { get; set; }
-        public ObservableCollection<PublicacionModel> Publicaciones { get; set; }
+        private ObservableCollection<PublicacionModel> publicaciones;
         private PublicacionModel publicacion;
         private UsuarioModel usuario;
+        public UsuarioModel UsuarioMemoria { get; set; }
         public ValidatableObject<string> BusquedaUsuario { get; set; }
         public ValidatableObject<string> FotoPublicacion { get; set; }
         public ValidatableObject<string> TipoPublicacion { get; set; }
@@ -66,6 +68,11 @@ namespace RedesSociales.ViewModels
             get { return usuario; }
             set { usuario = value; OnPropertyChanged(); }
         }
+        public ObservableCollection<PublicacionModel> Publicaciones
+        {
+            get { return publicaciones; }
+            set { publicaciones = value; OnPropertyChanged(); }
+        }
         #endregion Getters/Setters
 
 
@@ -73,6 +80,8 @@ namespace RedesSociales.ViewModels
         public PublicacionViewModel()
         {
             loadDataHandler = new LoadDataHandler();
+            UsuarioMemoria = (UsuarioModel)Application.Current.Properties["Usuario"];
+            Usuario = new UsuarioModel();
             InitializeRequest();
             InitializeCommands();
             InitializeFields();
@@ -139,7 +148,6 @@ namespace RedesSociales.ViewModels
                 if (response.IsSuccess)
                 {
                     Usuario = JsonConvert.DeserializeObject<UsuarioModel>(response.Response);
-                    await SeleccionarPublicacionesUsuario();
                 }
                 else
                 {
@@ -185,15 +193,14 @@ namespace RedesSociales.ViewModels
         {
             try
             {
-                UsuarioModel Creador = (UsuarioModel)Application.Current.Properties["Usuario"];
                 ParametersRequest parametros = new ParametersRequest();
-                parametros.Parameters.Add(Creador.idUsuario.ToString());
+                parametros.Parameters.Add(UsuarioMemoria.idUsuario.ToString());
                 APIResponse response = await GetPublicacionesUsuario.RunStrategy(null, parametros);
                 if (response.IsSuccess)
                 {
                     List<PublicacionModel> publicaciones = JsonConvert.DeserializeObject<List<PublicacionModel>>(response.Response);
-                    Publicaciones = new ObservableCollection<PublicacionModel>(publicaciones);
-                    
+                    ObservableCollection<PublicacionModel> publicaciones1 = new ObservableCollection<PublicacionModel>(publicaciones);
+                    Publicaciones = new ObservableCollection<PublicacionModel>(Publicaciones.Union(publicaciones1).ToList());
                 }
                 else
                 {
@@ -235,8 +242,7 @@ namespace RedesSociales.ViewModels
         {
             try
             {
-                UsuarioModel Creador = (UsuarioModel)Application.Current.Properties["Usuario"];
-                PublicacionModel publicacion = new PublicacionModel(Creador)
+                PublicacionModel publicacion = new PublicacionModel(UsuarioMemoria)
                 {
                     idPublicacion=Publicacion.idPublicacion
                 };

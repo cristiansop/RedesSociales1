@@ -12,9 +12,11 @@ namespace RedesSociales.Models
         [JsonIgnore]
         private UsuarioModel creador;
 
-
         [JsonProperty("idUsuario")]
         public int idUsuario { get; set; }
+
+        [JsonProperty("Apodo")]
+        public string Apodo { get; set; }
 
         [JsonProperty("idPublicacion")]
         public int idPublicacion { get; set; }

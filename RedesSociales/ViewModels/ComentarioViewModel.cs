@@ -45,7 +45,7 @@ namespace RedesSociales.ViewModels
         public SelectRequest<PeticionesUsuarioPublicacion> CreateEtiqueta { get; set; }
         public SelectRequest<BaseModel> GetEtiquetas { get; set; }
         public SelectRequest<PeticionesUsuarioPublicacion> DeleteEtiqueta { get; set; }
-
+        public SelectRequest<PublicacionModel> DeletePublicacion { get; set; }
         #endregion Request
 
         #region Commands
@@ -58,6 +58,7 @@ namespace RedesSociales.ViewModels
         public ICommand CreateEtiquetaCommand { get; set; }
         public ICommand GetEtiquetasCommand { get; set; }
         public ICommand DeleteEtiquetaCommand { get; set; }
+        public ICommand DeletePublicacionCommand { get; set; }
 
         #endregion Commands
 
@@ -71,7 +72,7 @@ namespace RedesSociales.ViewModels
         public ComentarioViewModel()
         {
             PopUp = new MessagePopupView();
-            Usuario = new UsuarioModel();
+            Usuario = (UsuarioModel)Application.Current.Properties["Usuario"];
             Publicacion = new PublicacionModel();
             InitializeRequest();
             InitializeCommands();
@@ -89,6 +90,7 @@ namespace RedesSociales.ViewModels
             string urlCreateEtiqueta = Endpoints.URL_SERVIDOR + Endpoints.CREATE_ETIQUETA;
             string urlGetEtiquetas = Endpoints.URL_SERVIDOR + Endpoints.GET_ETIQUETAS;
             string urlDeleteEtiqueta = Endpoints.URL_SERVIDOR + Endpoints.DELETE_ETIQUETA;
+            string urlDeletePublicacion = Endpoints.URL_SERVIDOR + Endpoints.DELETE_PUBLICACIONES;
             #endregion Url
 
             #region API
@@ -118,6 +120,9 @@ namespace RedesSociales.ViewModels
 
             DeleteEtiqueta = new SelectRequest<PeticionesUsuarioPublicacion>();
             DeleteEtiqueta.SelectStrategy("POST", urlDeleteEtiqueta);
+
+            DeletePublicacion = new SelectRequest<PublicacionModel>();
+            DeletePublicacion.SelectStrategy("POST", urlDeletePublicacion);
             #endregion API
         }
         public void InitializeCommands()
@@ -133,6 +138,7 @@ namespace RedesSociales.ViewModels
             CreateEtiquetaCommand = new Command(async () => await CrearEtiqueta(), () => true);
             GetEtiquetasCommand = new Command(async () => await SeleccionarEtiquetas(), () => true);
             DeleteEtiquetaCommand = new Command(async () => await EliminarEtiqueta(), () => true);
+            DeletePublicacionCommand = new Command(async () => await EliminarPublicacion(), () => true);
 
             #endregion Comandos
         }
@@ -229,10 +235,9 @@ namespace RedesSociales.ViewModels
         {
             try
             {
-                UsuarioModel Creador = (UsuarioModel)Application.Current.Properties["Usuario"];
                 PeticionesUsuarioPublicacion peticion = new PeticionesUsuarioPublicacion()
                 {
-                    idUsuario=Creador.idUsuario,
+                    idUsuario=Usuario.idUsuario,
                     idPublicacion=Publicacion.idPublicacion
                 };
                 APIResponse response = await CreateLike.RunStrategy(peticion);
@@ -300,20 +305,13 @@ namespace RedesSociales.ViewModels
         {
             try
             {
-                //cambiar
-                UsuarioModel Creador = (UsuarioModel)Application.Current.Properties["Usuario"];
                 PeticionesUsuarioPublicacion peticion = new PeticionesUsuarioPublicacion()
                 {
-                    idUsuario = Creador.idUsuario,
+                    idUsuario = Usuario.idUsuario,
                     idPublicacion = Publicacion.idPublicacion
                 };
                 APIResponse response = await CreateEtiqueta.RunStrategy(peticion);
-                if (response.IsSuccess)
-                {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion creada exitosamente";
-                    await PopupNavigation.Instance.PushAsync(PopUp);
-                }
-                else
+                if (!(response.IsSuccess))
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Error al reaccionar publicacion";
                     await PopupNavigation.Instance.PushAsync(PopUp);
@@ -362,6 +360,31 @@ namespace RedesSociales.ViewModels
                 else
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "Error al eliminar Etiqueta";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+        public async Task EliminarPublicacion()
+        {
+            try
+            {
+                PublicacionModel publicacion = new PublicacionModel(Usuario)
+                {
+                    idPublicacion = Publicacion.idPublicacion
+                };
+                APIResponse response = await DeletePublicacion.RunStrategy(publicacion);
+                if (response.IsSuccess)
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion eliminada exitosamente";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+                else
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al eliminar la publicacion";
                     await PopupNavigation.Instance.PushAsync(PopUp);
                 }
             }

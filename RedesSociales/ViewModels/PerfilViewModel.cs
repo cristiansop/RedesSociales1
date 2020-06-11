@@ -1,12 +1,4 @@
-﻿using RedesSociales.Configuracion;
-using RedesSociales.Models;
-using RedesSociales.Models.Auxiliary;
-using RedesSociales.Servicios.Rest;
-using RedesSociales.Servicios.Propagacion;
-using RedesSociales.Validations.Base;
-using RedesSociales.Validations.Rules;
-using RedesSociales.Views;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
@@ -15,10 +7,17 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 using RedesSociales.Servicios.Handler;
-
+using RedesSociales.Configuracion;
+using RedesSociales.Models;
+using RedesSociales.Models.Auxiliary;
+using RedesSociales.Servicios.Rest;
+using RedesSociales.Servicios.Propagacion;
+using RedesSociales.Validations.Base;
+using RedesSociales.Validations.Rules;
+using RedesSociales.Views;
 namespace RedesSociales.ViewModels
-{
-    public class UsuarioViewModel: ViewModelBase
+{ 
+    public class PerfilViewModel : ViewModelBase
     {
         #region Properties
 
@@ -28,18 +27,25 @@ namespace RedesSociales.ViewModels
         public MessagePopupView PopUp { get; set; }
 
         private UsuarioModel usuario;
-        public UsuarioModel UsuarioMemoria { get; set; }
 
-        #region Enables
+        public PublicacionViewModel Publicacionviewmodel { get; set; }
 
-        private bool isSeguirEnable;    
+        public ValidatableObject<string> ApodoUsuario { get; set; }
 
-        #endregion Enables
+        public ValidatableObject<string> NombreUsuario { get; set; }
+
+        public ValidatableObject<string> ApellidosUsuario { get; set; }
+
+        public ValidatableObject<string> FotoPerfilUsuario { get; set; }
+
+        public ValidatableObject<string> EstadoUsuario { get; set; }
+
 
         #endregion Atributes
 
         #region Request
-        public SelectRequest<PeticionesDosUsuariosModel> CreateSeguir { get; set; }
+        public SelectRequest<UsuarioModel> UpdateUsuario { get; set; }
+        public SelectRequest<BaseModel> DeleteUsuario { get; set; }
         public SelectRequest<BaseModel> GetSeguidos { get; set; }
         public SelectRequest<BaseModel> GetSeguidores { get; set; }
         public SelectRequest<PeticionesDosUsuariosModel> DeleteSeguir { get; set; }
@@ -47,11 +53,13 @@ namespace RedesSociales.ViewModels
         #endregion Request
 
         #region Commands
-        public ICommand CreateSeguirCommand { get; set; }
+        public ICommand UpdateUsuarioCommand { get; set; }
+        public ICommand DeleteUsuarioCommand { get; set; }
         public ICommand GetSeguidosCommand { get; set; }
         public ICommand GetSeguidoresCommand { get; set; }
         public ICommand DeleteSeguirCommand { get; set; }
         public ICommand GetPublicacionesUsuarioCommand { get; set; }
+
 
         #endregion Commands
 
@@ -62,37 +70,30 @@ namespace RedesSociales.ViewModels
         public UsuarioModel Usuario
         {
             get { return usuario; }
-            set { usuario = value;
-                ActualizarPerfil();
-                OnPropertyChanged(); }
-        }
-        public bool IsSeguirEnable
-        {
-            get { return isSeguirEnable; }
             set
             {
-                isSeguirEnable = value;
+                usuario = value;
                 OnPropertyChanged();
             }
         }
         #endregion Getters/Setters
 
         #region Initialize
-        public UsuarioViewModel()
+        public PerfilViewModel()
         {
-            PopUp = new MessagePopupView();
-            Usuario = new UsuarioModel();
-            UsuarioMemoria = (UsuarioModel)Application.Current.Properties["Usuario"];
-            IsSeguirEnable =true;
             loadDataHandler = new LoadDataHandler();
+            PopUp = new MessagePopupView();
+            Usuario = (UsuarioModel)Application.Current.Properties["Usuario"];
             InitializeRequest();
             InitializeCommands();
+            InitializeFields();
             ActualizarPerfil();
-
         }
         public void InitializeRequest()
         {
             #region Url
+            string urlUpdateUsuario = Endpoints.URL_SERVIDOR + Endpoints.UPDATE_USUARIO;
+            string urlDeleteUsuario = Endpoints.URL_SERVIDOR + Endpoints.DELETE_USUARIO;
             string urlCreateSeguir = Endpoints.URL_SERVIDOR + Endpoints.CREATE_SEGUIR;
             string urlGetSeguidos = Endpoints.URL_SERVIDOR + Endpoints.GET_SEGUIDOS;
             string urlGetSeguidores = Endpoints.URL_SERVIDOR + Endpoints.GET_SEGUIDORES;
@@ -102,8 +103,11 @@ namespace RedesSociales.ViewModels
 
             #region API
 
-            CreateSeguir = new SelectRequest<PeticionesDosUsuariosModel>();
-            CreateSeguir.SelectStrategy("POST", urlCreateSeguir);
+            UpdateUsuario = new SelectRequest<UsuarioModel>();
+            UpdateUsuario.SelectStrategy("POST", urlUpdateUsuario);
+
+            DeleteUsuario = new SelectRequest<BaseModel>();
+            DeleteUsuario.SelectStrategy("POST", urlDeleteUsuario);
 
             GetSeguidos = new SelectRequest<BaseModel>();
             GetSeguidos.SelectStrategy("GET", urlGetSeguidos);
@@ -122,13 +126,30 @@ namespace RedesSociales.ViewModels
         public void InitializeCommands()
         {
             #region Comandos
-            CreateSeguirCommand = new Command(async () => await CrearSeguir(), () => true);
+
+            UpdateUsuarioCommand = new Command(async () => await ActualizarUsuario(), () => true);
+            DeleteUsuarioCommand = new Command(async () => await EliminarUsuario(), () => true);
             GetSeguidosCommand = new Command(async () => await SeleccionarSeguidos(), () => true);
             GetSeguidoresCommand = new Command(async () => await SeleccionarSeguidores(), () => true);
-            DeleteSeguirCommand = new Command(async () => await EliminarSeguir(), () => true);
             GetPublicacionesUsuarioCommand = new Command(async () => await SeleccionarPublicacionesUsuario(), () => true);
 
             #endregion Comandos
+        }
+
+        public void InitializeFields()
+        {
+            ApodoUsuario = new ValidatableObject<string>();
+            NombreUsuario = new ValidatableObject<string>();
+            ApellidosUsuario = new ValidatableObject<string>();
+            FotoPerfilUsuario = new ValidatableObject<string>();
+            EstadoUsuario = new ValidatableObject<string>();
+
+
+            ApodoUsuario.Validations.Add(new RequiredRule<string> { ValidationMessage = "El Apodo del usuario es obligatorio" });
+            NombreUsuario.Validations.Add(new RequiredRule<string> { ValidationMessage = "El nombre del usuario es obligatorio" });
+            ApellidosUsuario.Validations.Add(new RequiredRule<string> { ValidationMessage = "los apellidos del usuario es obligatorio" });
+            EstadoUsuario.Validations.Add(new RequiredRule<string> { ValidationMessage = "El Estado de la cuenta es obligatorio" });
+
         }
         #endregion Initialize
 
@@ -138,33 +159,60 @@ namespace RedesSociales.ViewModels
             await SeleccionarPublicacionesUsuario();
             await SeleccionarSeguidores();
             await SeleccionarSeguidos();
-            foreach (UsuarioModel item in Usuario.Seguidores)
-            {
-                if (item.Apodo == UsuarioMemoria.Apodo)
-                {
-                    IsSeguirEnable = false;
-                }
-            }
 
         }
-        public async Task CrearSeguir()
+        public async Task ActualizarUsuario()
         {
             try
             {
-                PeticionesDosUsuariosModel peticion = new PeticionesDosUsuariosModel()
+                UsuarioModel usuario = new UsuarioModel()
                 {
-                    idUsuario1 = UsuarioMemoria.idUsuario,
-                    idUsuario2 = Usuario.idUsuario,
+                    Apodo = ApodoUsuario.Value,
+                    NombreP = NombreUsuario.Value,
+                    ApellidoP = ApellidosUsuario.Value,
+                    FotoPerfilP = FotoPerfilUsuario.Value,
+                    EstadoP = EstadoUsuario.Value
                 };
-                APIResponse response = await CreateSeguir.RunStrategy(peticion);
+                APIResponse response = await UpdateUsuario.RunStrategy(usuario);
                 if (response.IsSuccess)
                 {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion eliminada exitosamente";
+                    await loadDataHandler.PersistenceDataAsync("Usuario", usuario);
+                    Usuario.FotoPerfilP = usuario.FotoPerfilP;
+                    Usuario.NombreP = usuario.NombreP;
+                    Usuario.ApellidoP = usuario.ApellidoP;
+                    Usuario.EstadoP = usuario.EstadoP;
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Usuario actualizado exitosamente";
                     await PopupNavigation.Instance.PushAsync(PopUp);
                 }
                 else
                 {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al sequir al usuario";
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al actualizar usuario";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+
+        public async Task EliminarUsuario()
+        {
+            try
+            {
+                UsuarioModel usuario1 = new UsuarioModel()
+                {
+                    idUsuario = Usuario.idUsuario
+                };
+                APIResponse response = await DeleteUsuario.RunStrategy(usuario1);
+                if (response.IsSuccess)
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Usuario eliminado exitosamente";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                }
+                else
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al eliminar usuario";
                     await PopupNavigation.Instance.PushAsync(PopUp);
                 }
             }
@@ -210,33 +258,6 @@ namespace RedesSociales.ViewModels
             }
         }
 
-        public async Task EliminarSeguir()
-        {
-            try
-            {
-                PeticionesDosUsuariosModel peticion = new PeticionesDosUsuariosModel()
-                {
-                    idUsuario1 = UsuarioMemoria.idUsuario,
-                    idUsuario2 = Usuario.idUsuario,
-                };
-                APIResponse response = await DeleteSeguir.RunStrategy(peticion);
-                if (response.IsSuccess)
-                {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion eliminada exitosamente";
-                    await PopupNavigation.Instance.PushAsync(PopUp);
-                }
-                else
-                {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al dejar de sequir al usuario";
-                    await PopupNavigation.Instance.PushAsync(PopUp);
-                }
-            }
-            catch (Exception e)
-            {
-
-            }
-        }
-
         public async Task SeleccionarPublicacionesUsuario()
         {
             try
@@ -260,7 +281,6 @@ namespace RedesSociales.ViewModels
 
             }
         }
-
         #endregion Methods
 
     }

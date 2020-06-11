@@ -2,6 +2,8 @@
 using Newtonsoft.Json.Linq;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
+using RedesSociales.Models;
+using RedesSociales.Validations.Base;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,8 +17,11 @@ namespace RedesSociales.ViewModels
 {
     public class NuevaPublicacionViewModel : ViewModelBase
     {
+        #region Properties
         #region Atributes
-
+        public UsuarioModel Usuario { get; set; } 
+        public ValidatableObject<string> TipoPublicacion { get; set; }
+        public ValidatableObject<string> DescripcionPublicacion { get; set; }
         public ICommand TomarFoto { get; set; }
         public ICommand SeleccionarFoto { get; set; }
         public ICommand Enviar { get; set; }
@@ -24,6 +29,7 @@ namespace RedesSociales.ViewModels
         private MemoryStream memoryStream { get; set; }
 
         #endregion Atributes
+        #endregion Properties
 
         public NuevaPublicacionViewModel()
         {

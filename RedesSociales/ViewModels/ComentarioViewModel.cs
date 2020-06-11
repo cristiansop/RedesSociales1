@@ -190,8 +190,11 @@ namespace RedesSociales.ViewModels
                 APIResponse response = await GetComentarios.RunStrategy(null, parametros);
                 if (response.IsSuccess)
                 {
-                    List<PeticionesComentariosPublicacion> comentarios = JsonConvert.DeserializeObject<List<PeticionesComentariosPublicacion>>(response.Response);
-                    Publicacion.Comentarios = comentarios;
+                    if (response.Code == 200)
+                    {
+                        List<PeticionesComentariosPublicacion> comentarios = JsonConvert.DeserializeObject<List<PeticionesComentariosPublicacion>>(response.Response);
+                        Publicacion.Comentarios = comentarios;
+                    }
                 }
                 else
                 {
@@ -264,8 +267,11 @@ namespace RedesSociales.ViewModels
             APIResponse response = await GetLikes.RunStrategy(null, parametros);
             if (response.IsSuccess)
             {
-                List<PeticionesSeguidos> likes = JsonConvert.DeserializeObject<List<PeticionesSeguidos>>(response.Response);
-                Publicacion.Reacciones = likes;
+                if (response.Code == 200)
+                {
+                    List<PeticionesSeguidos> likes = JsonConvert.DeserializeObject<List<PeticionesSeguidos>>(response.Response);
+                    Publicacion.Reacciones = likes;
+                }
             }
             else
             {
@@ -330,8 +336,11 @@ namespace RedesSociales.ViewModels
             APIResponse response = await GetEtiquetas.RunStrategy(null, parametros);
             if (response.IsSuccess)
             {
-                List<PeticionesSeguidos> usuarios = JsonConvert.DeserializeObject<List<PeticionesSeguidos>>(response.Response);
-                Publicacion.Etiquetas = usuarios;
+                if (response.Code == 200)
+                {
+                    List<PeticionesSeguidos> usuarios = JsonConvert.DeserializeObject<List<PeticionesSeguidos>>(response.Response);
+                    Publicacion.Etiquetas = usuarios;
+                }
             }
             else
             {

@@ -182,9 +182,11 @@ namespace RedesSociales.ViewModels
             APIResponse response = await GetSeguidos.RunStrategy(null, parametros);
             if (response.IsSuccess)
             {
-                List<PeticionesSeguidos> usuarios = JsonConvert.DeserializeObject<List<PeticionesSeguidos>>(response.Response);
-                Usuario.Seguidos = usuarios;
-
+                if (response.Code == 200)
+                {
+                    List<PeticionesSeguidos> usuarios = JsonConvert.DeserializeObject<List<PeticionesSeguidos>>(response.Response);
+                    Usuario.Seguidos = usuarios;
+                }
             }
             else
             {
@@ -202,9 +204,11 @@ namespace RedesSociales.ViewModels
             APIResponse response = await GetSeguidores.RunStrategy(null, parametros);
             if (response.IsSuccess)
             {
-                List<PeticionesSeguidos> usuarios = JsonConvert.DeserializeObject<List<PeticionesSeguidos>>(response.Response);
-                Usuario.Seguidores = usuarios;
-
+                if (response.Code == 200)
+                {
+                    List<PeticionesSeguidos> usuarios = JsonConvert.DeserializeObject<List<PeticionesSeguidos>>(response.Response);
+                    Usuario.Seguidores = usuarios;
+                }
             }
             else
             {
@@ -255,8 +259,12 @@ namespace RedesSociales.ViewModels
                 APIResponse response = await GetPublicacionesUsuario.RunStrategy(null, parametros);
                 if (response.IsSuccess)
                 {
-                    List<PublicacionModel> publicaciones = JsonConvert.DeserializeObject<List<PublicacionModel>>(response.Response);
-                    Usuario.Publicaciones = publicaciones;
+                    if (response.Code == 200)
+                    {
+                        List<PublicacionModel> publicaciones = JsonConvert.DeserializeObject<List<PublicacionModel>>(response.Response);
+                        Usuario.Publicaciones = publicaciones;
+                    }
+                    
                 }
                 else
                 {

@@ -159,7 +159,10 @@ namespace RedesSociales.ViewModels
                 APIResponse response = await GetUsuario.RunStrategy(null, parametros);
                 if (response.IsSuccess)
                 {
-                    Usuario = JsonConvert.DeserializeObject<UsuarioModel>(response.Response);
+                    if (response.Code == 200)
+                    {
+                        Usuario = JsonConvert.DeserializeObject<UsuarioModel>(response.Response);
+                    }
                 }
                 else
                 {
@@ -216,9 +219,12 @@ namespace RedesSociales.ViewModels
                 APIResponse response = await GetPublicacionesUsuario.RunStrategy(null, parametros);
                 if (response.IsSuccess)
                 {
-                    List<PublicacionModel> publicaciones = JsonConvert.DeserializeObject<List<PublicacionModel>>(response.Response);
-                    ObservableCollection<PublicacionModel> publicaciones1 = new ObservableCollection<PublicacionModel>(publicaciones);
-                    Publicaciones = new ObservableCollection<PublicacionModel>(Publicaciones.Union(publicaciones1).ToList());
+                    if (response.Code == 200)
+                    {
+                        List<PublicacionModel> publicaciones = JsonConvert.DeserializeObject<List<PublicacionModel>>(response.Response);
+                        ObservableCollection<PublicacionModel> publicaciones1 = new ObservableCollection<PublicacionModel>(publicaciones);
+                        Publicaciones = new ObservableCollection<PublicacionModel>(Publicaciones.Union(publicaciones1).ToList());
+                    }
                 }
                 else
                 {
@@ -243,8 +249,12 @@ namespace RedesSociales.ViewModels
                 APIResponse response = await GetPublicacionesUsuario.RunStrategy(null, parametros);
                 if (response.IsSuccess)
                 {
-                    List<PublicacionModel> publicaciones = JsonConvert.DeserializeObject<List<PublicacionModel>>(response.Response);
-                    Publicaciones = new ObservableCollection<PublicacionModel>(publicaciones);
+                    if (response.Code == 200)
+                    {
+                        List<PublicacionModel> publicaciones = JsonConvert.DeserializeObject<List<PublicacionModel>>(response.Response);
+                        Publicaciones = new ObservableCollection<PublicacionModel>(publicaciones);
+                    }
+                    
                 }
                 else
                 {

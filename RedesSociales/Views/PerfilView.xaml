@@ -58,9 +58,8 @@
                     </StackLayout>
                 </FlexLayout>
 
-                <Button Text="Editar perfil" 
-                        CornerRadius="20" BackgroundColor="Transparent" BorderColor="Black" BorderWidth="1"
-                        Clicked="Buttton_EditarPerfil" />
+                <Button Text="Seguir" 
+                        CornerRadius="20" BackgroundColor="Transparent" BorderColor="Black" BorderWidth="1" />
 
             </StackLayout>
 

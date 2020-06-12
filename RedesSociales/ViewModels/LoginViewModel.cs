@@ -15,6 +15,7 @@ using RedesSociales.Servicios.Handler;
 using RedesSociales.Configuracion;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.IO;
 
 namespace RedesSociales.ViewModels
 {
@@ -105,7 +106,7 @@ namespace RedesSociales.ViewModels
                         Apodo = user.Email.Remove(user.Email.LastIndexOf('@')),
                         NombreP = user.GivenName,
                         ApellidoP = user.FamilyName,
-                        FotoPerfilP = user.Picture.ToString(),
+                        FotoPerfilP = "",
                         EstadoP = "Activo"
                     };
                     await SeleccionarUsuario();
@@ -118,13 +119,12 @@ namespace RedesSociales.ViewModels
                     {
                         StorageUser(Usuario);
                         await loadDataHandler.PersistenceDataAsync("Usuario", Usuario);
-                        await NavigationService.PushPage(new MainPage());
+                        Application.Current.MainPage = new MainPage();
                     }
                     else
                     {
                         ((MessageViewModel)PopUp.BindingContext).Message = "Error al conectar con el servidor";
                         await PopupNavigation.Instance.PushAsync(PopUp);
-                        await Task.Delay(1500);
 
                     }
                 }
@@ -141,12 +141,12 @@ namespace RedesSociales.ViewModels
         }
         public async void StorageUser(UsuarioModel user)
         {
-            await loadDataHandler.PersistenceDataAsync("Usuario.idUsuario", Usuario.idUsuario);
-            await loadDataHandler.PersistenceDataAsync("Usuario.Apodo", Usuario.Apodo);
-            await loadDataHandler.PersistenceDataAsync("Usuario.Estado", Usuario.EstadoP);
-            await loadDataHandler.PersistenceDataAsync("Usuario.Nombre", Usuario.NombreP);
-            await loadDataHandler.PersistenceDataAsync("Usuario.Apellido", Usuario.ApellidoP);
-            await loadDataHandler.PersistenceDataAsync("Usuario.FotoPerfil", Usuario.FotoPerfilP);
+            await loadDataHandler.PersistenceDataAsync("Usuario.idUsuario", user.idUsuario);
+            await loadDataHandler.PersistenceDataAsync("Usuario.Apodo", user.Apodo);
+            await loadDataHandler.PersistenceDataAsync("Usuario.Estado", user.EstadoP);
+            await loadDataHandler.PersistenceDataAsync("Usuario.Nombre", user.NombreP);
+            await loadDataHandler.PersistenceDataAsync("Usuario.Apellido", user.ApellidoP);
+            await loadDataHandler.PersistenceDataAsync("Usuario.FotoPerfil", user.FotoPerfilP);
         }
     }
 }

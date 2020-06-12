@@ -25,8 +25,8 @@ namespace RedesSociales.Models
         [JsonProperty("idPublicacion")]
         public int idPublicacion { get; set; }
 
-        [JsonIgnore]
-        public string Fecha { get; set; }
+        [JsonProperty("Tiempo")]
+        public string Tiempo { get; set; }
 
         [JsonIgnore]
         private PublicacionModel publicacion;
@@ -34,12 +34,13 @@ namespace RedesSociales.Models
         #endregion Properties
 
         #region Initialize
-        public ComentarioModel(UsuarioModel usuario, PublicacionModel publicacion)
+        public ComentarioModel(int usuarioT, int publicacionT, string CuerpoT)
         {
-            this.creador = usuario;
-            this.idUsuario = usuario.idUsuario;
-            this.Publicacion = publicacion;
-            this.idPublicacion = publicacion.idPublicacion;
+            idUsuario = usuarioT;
+            idPublicacion = publicacionT;
+            Cuerpo = CuerpoT;
+            idComentario = 0;
+            Tiempo = "";
         }
         #endregion Initialize
 

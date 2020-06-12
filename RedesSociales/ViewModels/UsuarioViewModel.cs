@@ -270,7 +270,7 @@ namespace RedesSociales.ViewModels
 
         public async void TraerPublicacionDetalle(PublicacionModel publicacion)
         {
-            await NavigationService.PushPage(new ComentsView(publicacion));
+            await NavigationService.PushPage(new ComentsView());
         }
 
         #endregion Methods

@@ -102,6 +102,7 @@ namespace RedesSociales.ViewModels
             InitializeCommands();
             InitializeFields();
             TraerPublicaciones();
+            PopUp = new MessagePopupView();
         }
 
         public void InitializeRequest()

@@ -52,7 +52,7 @@
             </StackLayout>
 
             <!-- publicaciones del usuario -->
-            <CollectionView ItemsSource="{Binding Usuario.Publicaciones}">
+            <CollectionView ItemsSource="{Binding Publicaciones}">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical" Span="2" />
                 </CollectionView.ItemsLayout>
@@ -65,7 +65,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <Image Grid.Row="0" Grid.Column="0" Source="img_1.jpg" />
+                            <Image Grid.Row="0" Grid.Column="0" Source="{Binding Imagen}" />
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

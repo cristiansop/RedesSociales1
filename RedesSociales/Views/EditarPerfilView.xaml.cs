@@ -15,7 +15,7 @@ namespace RedesSociales.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class EditarPerfilView : PopupPage
     {
-        PerfilViewModel context = new PerfilViewModel();
+        EditarPerfilViewModel context = new EditarPerfilViewModel();
         public EditarPerfilView()
         {
             InitializeComponent();

@@ -10,7 +10,7 @@ namespace RedesSociales
 {
     public partial class App : Application
     {
-
+        public bool IsLogin;
         #region Properties
         static NavigationService navigationService;
         static LoadDataHandler LoadData;
@@ -30,28 +30,53 @@ namespace RedesSociales
         }
         #endregion Getters & Setters
 
+
+
         public App()
         {
             InitializeComponent();
             LoadData = new LoadDataHandler();
-            MainPage = new NavigationPage(new MainPage());
-        }
-
-        /// <summary>
-        public async void Test()
-        {
-            UsuarioModel Usuario = new UsuarioModel()
+            CheckLogin();
+            MainPage = new NavigationPage(new LoginView());
+            if (IsLogin)
             {
-                idUsuario = 0,
-                Apodo = "jhoanseb",
-                NombreP = "Jhoan",
-                ApellidoP = "Lozano",
-                FotoPerfilP = "",
-                EstadoP = "Activo"
-            };
-            await LoadData.PersistenceDataAsync("Usuario", Usuario);
+                MainPage = new NavigationPage(new MainPage());
+            }
+            else
+            {
+                MainPage = new NavigationPage(new LoginView());
+            }
+
         }
-        /// </summary>
+        public async void CheckLogin()
+        {
+            IsLogin = false;
+            if(await LoadData.LoadData("Usuario.idUsuario"))
+            {
+                string idUsuarioT = (string)Current.Properties["Usuario.idUsuario"];
+                IsLogin = true;
+                await LoadData.LoadData("Usuario.Apodo");
+                string Apodo = (string)Current.Properties["Usuario.Apodo"];
+                await LoadData.LoadData("Usuario.Estado");
+                string Estado = (string)Current.Properties["Usuario.Estado"];
+                await LoadData.LoadData("Usuario.Nombre");
+                string Nombre = (string)Current.Properties["Usuario.Nombre"];
+                await LoadData.LoadData("Usuario.Apellido");
+                string Apellido = (string)Current.Properties["Usuario.Apellido"];
+                await LoadData.LoadData("Usuario.FotoPerfil");
+                string FotoPerfil = (string)Current.Properties["Usuario.FotoPerfil"];
+                UsuarioModel Usuario = new UsuarioModel()
+                {
+                    idUsuario = Int32.Parse(idUsuarioT),
+                    Apodo = Apodo,
+                    NombreP = Nombre,
+                    ApellidoP = Apellido,
+                    FotoPerfilP = FotoPerfil,
+                    EstadoP = Estado
+                };
+                Current.Properties["Usuario"] = Usuario;
+            }
+        }
 
         protected override void OnStart()
         {

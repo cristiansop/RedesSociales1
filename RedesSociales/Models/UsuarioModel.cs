@@ -3,7 +3,7 @@ using RedesSociales.Servicios.Propagacion;
 using System;
 using System.Collections.Generic;
 using System.Text;
-
+using Xamarin.Forms;
 
 namespace RedesSociales.Models
 {
@@ -37,6 +37,9 @@ namespace RedesSociales.Models
         [JsonIgnore]
         private List<PublicacionModel> publicaciones;
 
+        [JsonIgnore]
+        private ImageSource imagenPerfil;
+
         #endregion Properties
 
         #region Getters/Setters
@@ -56,6 +59,12 @@ namespace RedesSociales.Models
         {
             get { return Estado; }
             set { Estado = value; OnPropertyChanged(); }
+        }
+
+        public ImageSource ImagenPerfil
+        {
+            get { return imagenPerfil; }
+            set { imagenPerfil = value; OnPropertyChanged(); }
         }
 
         public string FotoPerfilP

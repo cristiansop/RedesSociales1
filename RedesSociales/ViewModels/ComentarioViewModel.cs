@@ -15,6 +15,7 @@ using RedesSociales.Validations.Rules;
 using Rg.Plugins.Popup.Services;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json;
+using System.Linq;
 
 namespace RedesSociales.ViewModels
 {
@@ -29,7 +30,7 @@ namespace RedesSociales.ViewModels
         public PublicacionModel Publicacion { get; set; }
         private ComentarioModel comentario;
 
-        
+        public ICommand ValidateFormCommand { get; set; }
 
         public ValidatableObject<string> CuerpoEntry { get; set; }
         private bool like;
@@ -46,7 +47,7 @@ namespace RedesSociales.ViewModels
 
         #region Request
 
-        public SelectRequest<ComentarioModel> CreateComentario { get; set; }
+        public SelectRequest<PeticionesComentariosPublicacion> CreateComentario { get; set; }
         public SelectRequest<BaseModel> GetComentarios { get; set; }
         public SelectRequest<ComentarioModel> DeleteComentario { get; set; }
         public SelectRequest<PeticionesUsuarioPublicacion> CreateLike { get; set; }
@@ -56,6 +57,8 @@ namespace RedesSociales.ViewModels
         public SelectRequest<BaseModel> GetEtiquetas { get; set; }
         public SelectRequest<PeticionesUsuarioPublicacion> DeleteEtiqueta { get; set; }
         public SelectRequest<PublicacionModel> DeletePublicacion { get; set; }
+
+        private ObservableCollection<PeticionesComentariosPublicacion> comentarios;
         #endregion Request
 
         #region Commands
@@ -78,6 +81,12 @@ namespace RedesSociales.ViewModels
         #endregion Properties
 
         #region Getters/Setters
+
+        public ObservableCollection<PeticionesComentariosPublicacion> Comentarios
+        {
+            get { return comentarios; }
+            set { comentarios = value; OnPropertyChanged(); }
+        }
         public bool Like
         {
             get { return like; }
@@ -143,7 +152,7 @@ namespace RedesSociales.ViewModels
             #endregion Url
 
             #region API
-            CreateComentario = new SelectRequest<ComentarioModel>();
+            CreateComentario = new SelectRequest<PeticionesComentariosPublicacion>();
             CreateComentario.SelectStrategy("POST", urlCreateComentario);
 
             GetComentarios = new SelectRequest<BaseModel>();
@@ -190,6 +199,7 @@ namespace RedesSociales.ViewModels
             DeleteEtiquetaCommand = new Command(async () => await EliminarEtiqueta(), () => IsCreatorEnable);
             DeletePublicacionCommand = new Command(async () => await EliminarPublicacion(), () => IsCreatorEnable);
             RefreshCommand = new Command( () =>  TraerPublicacion(), () => true);
+            ValidateFormCommand = new Command(() => ValidateForm());
 
             #endregion Comandos
         }
@@ -247,19 +257,25 @@ namespace RedesSociales.ViewModels
         {
             try
             {
-                ComentarioModel peticion = new ComentarioModel(Usuario, Publicacion)
+                PeticionesComentariosPublicacion peticion = new PeticionesComentariosPublicacion
                 {
-                    Cuerpo = CuerpoEntry.Value
+                    idUsuario = Usuario.idUsuario,
+                    idPublicacion = Publicacion.idPublicacion,
+                    Cuerpo = CuerpoEntry.Value,
+                    Tiempo = "",
+                    Apodo = Usuario.Apodo
                 };
+                
                 APIResponse response = await CreateComentario.RunStrategy(peticion);
                 if (response.IsSuccess)
                 {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion eliminada exitosamente";
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Comentario creado exitosamente";
                     await PopupNavigation.Instance.PushAsync(PopUp);
+                    await SeleccionarComentarios();
                 }
                 else
                 {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al sequir al usuario";
+                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al crear comentario";
                     await PopupNavigation.Instance.PushAsync(PopUp);
                 }
             }
@@ -282,12 +298,12 @@ namespace RedesSociales.ViewModels
                     {
                         List<PeticionesComentariosPublicacion> comentarios = JsonConvert.DeserializeObject<List<PeticionesComentariosPublicacion>>(response.Response);
                         Publicacion.Comentarios = comentarios;
+                        Comentarios = new ObservableCollection<PeticionesComentariosPublicacion>(comentarios);
                     }
                 }
                 else
                 {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "No se encuentran comentarios de la publicacion";
-                    await PopupNavigation.Instance.PushAsync(PopUp);
+                    Publicacion.Comentarios = new List<PeticionesComentariosPublicacion>();
                 }
             }
             catch (Exception e)
@@ -300,10 +316,7 @@ namespace RedesSociales.ViewModels
         {
             try
             {
-                ComentarioModel peticion = new ComentarioModel(Usuario, Publicacion)
-                {
-                    Cuerpo = CuerpoEntry.Value
-                };
+                ComentarioModel peticion = new ComentarioModel(Usuario.idUsuario, Publicacion.idPublicacion, "");
                 APIResponse response = await DeleteComentario.RunStrategy(peticion);
                 if (response.IsSuccess)
                 {
@@ -363,8 +376,7 @@ namespace RedesSociales.ViewModels
             }
             else
             {
-                ((MessageViewModel)PopUp.BindingContext).Message = "Error encontrar las reacciones de la publicacion";
-                await PopupNavigation.Instance.PushAsync(PopUp);
+                Publicacion.Reacciones = new List<PeticionesSeguidos>();
             }
         }
 
@@ -432,8 +444,7 @@ namespace RedesSociales.ViewModels
             }
             else
             {
-                ((MessageViewModel)PopUp.BindingContext).Message = "Error encontrar las reacciones de la publicacion";
-                await PopupNavigation.Instance.PushAsync(PopUp);
+                Publicacion.Etiquetas = new List<PeticionesSeguidos>();
             }
         }
 

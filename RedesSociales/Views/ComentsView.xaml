@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:behaviors="clr-namespace:RedesSociales.Behaviors"
              mc:Ignorable="d"
              NavigationPage.HasNavigationBar="False"
              BackgroundColor="{StaticResource GeneralBackgroundColor}"
@@ -25,7 +25,7 @@
                                    VerticalOptions="Center"/>
                         </Frame>
 
-                        <Image Source="img_1.jpg" Grid.Row="1" Grid.ColumnSpan="2" Aspect="AspectFill"/>
+                        <Image Source="{Binding Publicacion.Imagen}" Grid.Row="1" Grid.ColumnSpan="2" Aspect="AspectFill"/>
 
                         <Frame>
                             <Grid>
@@ -75,11 +75,10 @@
                                         <ColumnDefinition />
                                     </Grid.ColumnDefinitions>
 
-                                    <Label Text="{Binding Creador}" Grid.Column="0" VerticalOptions="Center"/>
+                                    <Label Text="{Binding Apodo}" Grid.Column="0" VerticalOptions="Center"/>
 
                                     <Label Text="{Binding Cuerpo}" Grid.Column="1" />
 
-                                    <Label Text="{Binding Fecha}" Grid.Column="2"/>
 
                                 </Grid>
                             </DataTemplate>
@@ -90,7 +89,11 @@
                             </StackLayout>
                         </CollectionView.EmptyView>
                     </CollectionView>
-                    <Entry Text="{Binding CuerpoEntry.Value}" Placeholder="Escriba su comentario" Grid.Row="1" Grid.Column="0"/>
+                    <Entry Text="{Binding CuerpoEntry.Value}" Placeholder="Escriba su comentario" Grid.Row="1" Grid.Column="0">
+                        <Entry.Behaviors>
+                            <behaviors:EventToCommandBehavior EventName="TextChanged" Command="{Binding ValidateFormCommand}" />
+                        </Entry.Behaviors>
+                    </Entry>
                     <Button Text="Comentar" Command="{Binding CreateComentarioCommand}" Grid.Row="1" Grid.Column="1"/>
                 </Grid>
 

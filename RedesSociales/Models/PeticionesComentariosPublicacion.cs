@@ -16,6 +16,9 @@ namespace RedesSociales.Models
         [JsonProperty("idComentario")]
         public int idComentario { get; set; }
 
+        [JsonProperty("idPublicacion")]
+        public int idPublicacion { get; set; }
+
         [JsonProperty("Cuerpo")]
         public string Cuerpo { get; set; }
 

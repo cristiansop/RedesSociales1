@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 using RedesSociales.Servicios.Handler;
+using System.IO;
 
 namespace RedesSociales.ViewModels
 {
@@ -32,6 +33,7 @@ namespace RedesSociales.ViewModels
         public UsuarioModel UsuarioMemoria { get; set; }
 
         private string salidaButton;
+        private ObservableCollection<PublicacionUsuarioModel> publicaciones;
 
         #region Enables
 
@@ -64,6 +66,12 @@ namespace RedesSociales.ViewModels
         #endregion Properties
 
         #region Getters/Setters
+
+        public ObservableCollection<PublicacionUsuarioModel> Publicaciones
+        {
+            get { return publicaciones; }
+            set { publicaciones = value; OnPropertyChanged(); }
+        }
 
         public UsuarioModel Usuario
         {
@@ -105,6 +113,8 @@ namespace RedesSociales.ViewModels
             InitializeRequest();
             InitializeCommands();
             ActualizarPerfil();
+            if(IsSeguirEnable) { SalidaButton = "Seguir"; }
+            else { SalidaButton = "Siguiendo"; }
 
         }
 
@@ -161,11 +171,13 @@ namespace RedesSociales.ViewModels
             {
                 await CrearSeguir();
                 SalidaButton = "Siguiendo";
+                IsSeguirEnable = false;
             }
             else
             {
                 await EliminarSeguir();
                 SalidaButton = "Seguir";
+                IsSeguirEnable = true;
             }
 
 
@@ -270,9 +282,24 @@ namespace RedesSociales.ViewModels
                 {
                     if (response.Code == 200)
                     {
-                        List<PublicacionModel> publicaciones = JsonConvert.DeserializeObject<List<PublicacionModel>>(response.Response);
-                        Usuario.Publicaciones = publicaciones;
+                        List<PublicacionUsuarioModel> publicaciones = JsonConvert.DeserializeObject<List<PublicacionUsuarioModel>>(response.Response);
+                        Publicaciones = new ObservableCollection<PublicacionUsuarioModel>(publicaciones);
+                        PublicacionUsuarioModel Publicacion = null;
+                        for (int i = 0; i < Publicaciones.Count; i++)
+                        {
+                            Publicacion = Publicaciones[i];
+                            byte[] imageBytes = Convert.FromBase64String(Publicacion.Archivo);
+                            Publicacion.Imagen = ImageSource.FromStream(() => new MemoryStream(imageBytes));
+                            Publicaciones[i] = Publicacion;
+                        }
                     }
+                }
+                else
+                {
+                    ((MessageViewModel)PopUp.BindingContext).Message = "No se encuentran publicaciones del usuario";
+                    await PopupNavigation.Instance.PushAsync(PopUp);
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    await PopupNavigation.Instance.PopAsync();
                 }
             }
             catch (Exception e)

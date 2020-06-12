@@ -52,7 +52,7 @@
             </StackLayout>
 
             <!-- publicaciones del usuario -->
-            <CollectionView ItemsSource="{Binding Usuario.Publicaciones}">
+            <CollectionView ItemsSource="{Binding Publicaciones}">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical" Span="2" />
                 </CollectionView.ItemsLayout>

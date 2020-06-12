@@ -286,6 +286,7 @@ namespace RedesSociales.ViewModels
                 APIResponse response = await CreateComentario.RunStrategy(peticion);
                 if (response.IsSuccess)
                 {
+                    CuerpoEntry.Value = "";
                     ((MessageViewModel)PopUp.BindingContext).Message = "Comentario creado exitosamente";
                     await PopupNavigation.Instance.PushAsync(PopUp);
                     await SeleccionarComentarios();

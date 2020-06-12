@@ -225,7 +225,6 @@ namespace RedesSociales.ViewModels
         public async void ActualizarPerfil()
         {
             await SeleccionarPublicacionesUsuario();
-            Console.WriteLine(Publicaciones[0].Descripcion);
             await SeleccionarSeguidores();
             await SeleccionarSeguidos();
 
@@ -251,6 +250,7 @@ namespace RedesSociales.ViewModels
                     Usuario.NombreP = usuario.NombreP;
                     Usuario.ApellidoP = usuario.ApellidoP;
                     Usuario.EstadoP = usuario.EstadoP;
+                    StorageUser(Usuario);
                     ((MessageViewModel)PopUp.BindingContext).Message = "Usuario actualizado exitosamente";
                     await PopupNavigation.Instance.PushAsync(PopUp);
                     await Task.Delay(TimeSpan.FromSeconds(2));
@@ -269,6 +269,15 @@ namespace RedesSociales.ViewModels
             {
 
             }
+        }
+        public async void StorageUser(UsuarioModel user)
+        {
+            await loadDataHandler.PersistenceDataAsync("Usuario.idUsuario", user.idUsuario);
+            await loadDataHandler.PersistenceDataAsync("Usuario.Apodo", user.Apodo);
+            await loadDataHandler.PersistenceDataAsync("Usuario.Estado", user.EstadoP);
+            await loadDataHandler.PersistenceDataAsync("Usuario.Nombre", user.NombreP);
+            await loadDataHandler.PersistenceDataAsync("Usuario.Apellido", user.ApellidoP);
+            await loadDataHandler.PersistenceDataAsync("Usuario.FotoPerfil", user.FotoPerfilP);
         }
 
         public async Task EliminarUsuario()

@@ -28,6 +28,7 @@ namespace RedesSociales.ViewModels
         public MessagePopupView PopUp { get; set; }
 
         private UsuarioModel usuario;
+
         public UsuarioModel UsuarioMemoria { get; set; }
 
         #region Enables
@@ -53,6 +54,8 @@ namespace RedesSociales.ViewModels
         public ICommand GetSeguidoresCommand { get; set; }
         public ICommand DeleteSeguirCommand { get; set; }
         public ICommand GetPublicacionesUsuarioCommand { get; set; }
+        public ICommand FollowCommand { get; set; }
+        
 
         #endregion Commands
 
@@ -64,7 +67,6 @@ namespace RedesSociales.ViewModels
         {
             get { return usuario; }
             set { usuario = value;
-                //ActualizarPerfil();
                 OnPropertyChanged(); }
         }
         public bool IsSeguirEnable
@@ -79,16 +81,16 @@ namespace RedesSociales.ViewModels
         #endregion Getters/Setters
 
         #region Initialize
-        public UsuarioViewModel()
+        public UsuarioViewModel(UsuarioModel usuario)
         {
             PopUp = new MessagePopupView();
-            Usuario = new UsuarioModel();
+            loadDataHandler = new LoadDataHandler();
+            Usuario = usuario;
             UsuarioMemoria = (UsuarioModel)Application.Current.Properties["Usuario"];
             IsSeguirEnable =true;
-            loadDataHandler = new LoadDataHandler();
             InitializeRequest();
             InitializeCommands();
-            //ActualizarPerfil();
+            ActualizarPerfil();
 
         }
         public void InitializeRequest()
@@ -127,6 +129,7 @@ namespace RedesSociales.ViewModels
             GetSeguidosCommand = new Command(async () => await SeleccionarSeguidos(), () => true);
             GetSeguidoresCommand = new Command(async () => await SeleccionarSeguidores(), () => true);
             DeleteSeguirCommand = new Command(async () => await EliminarSeguir(), () => true);
+            FollowCommand = new Command(async ()=>await Seguir(),()=>true);
             GetPublicacionesUsuarioCommand = new Command(async () => await SeleccionarPublicacionesUsuario(), () => true);
             RefreshCommand = new Command(() => ActualizarPerfil(), () => true);
 
@@ -135,7 +138,19 @@ namespace RedesSociales.ViewModels
         #endregion Initialize
 
         #region Methods
+        public async Task Seguir()
+        {
+            if (IsSeguirEnable)
+            {
+                await CrearSeguir();
+            }
+            else
+            {
+                await EliminarSeguir();
+            }
+            
 
+        }
         public async void ActualizarPerfil()
         {
             await SeleccionarPublicacionesUsuario();
@@ -163,13 +178,7 @@ namespace RedesSociales.ViewModels
                 APIResponse response = await CreateSeguir.RunStrategy(peticion);
                 if (response.IsSuccess)
                 {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion eliminada exitosamente";
-                    await PopupNavigation.Instance.PushAsync(PopUp);
-                }
-                else
-                {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al sequir al usuario";
-                    await PopupNavigation.Instance.PushAsync(PopUp);
+                    ActualizarPerfil();
                 }
             }
             catch (Exception e)
@@ -191,13 +200,6 @@ namespace RedesSociales.ViewModels
                     Usuario.Seguidos = usuarios;
                 }
             }
-            else
-            {
-                ((MessageViewModel)PopUp.BindingContext).Message = "Error encontrar los seguidos del usuario";
-                await PopupNavigation.Instance.PushAsync(PopUp);
-                await Task.Delay(TimeSpan.FromSeconds(1));
-                await PopupNavigation.Instance.PopAsync();
-            }
         }
 
         public async Task SeleccionarSeguidores()
@@ -213,13 +215,6 @@ namespace RedesSociales.ViewModels
                     Usuario.Seguidores = usuarios;
                 }
             }
-            else
-            {
-                ((MessageViewModel)PopUp.BindingContext).Message = "Error encontrar los seguidores del usuario";
-                await PopupNavigation.Instance.PushAsync(PopUp);
-                await Task.Delay(TimeSpan.FromSeconds(1));
-                await PopupNavigation.Instance.PopAsync();
-            }
         }
 
         public async Task EliminarSeguir()
@@ -234,17 +229,7 @@ namespace RedesSociales.ViewModels
                 APIResponse response = await DeleteSeguir.RunStrategy(peticion);
                 if (response.IsSuccess)
                 {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion eliminada exitosamente";
-                    await PopupNavigation.Instance.PushAsync(PopUp);
-                    await Task.Delay(TimeSpan.FromSeconds(1));
-                    await PopupNavigation.Instance.PopAsync();
-                }
-                else
-                {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al dejar de sequir al usuario";
-                    await PopupNavigation.Instance.PushAsync(PopUp);
-                    await Task.Delay(TimeSpan.FromSeconds(1));
-                    await PopupNavigation.Instance.PopAsync();
+                    ActualizarPerfil();
                 }
             }
             catch (Exception e)
@@ -266,21 +251,18 @@ namespace RedesSociales.ViewModels
                     {
                         List<PublicacionModel> publicaciones = JsonConvert.DeserializeObject<List<PublicacionModel>>(response.Response);
                         Usuario.Publicaciones = publicaciones;
-                    }
-                    
-                }
-                else
-                {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "No se encuentran publicaciones del usuario";
-                    await PopupNavigation.Instance.PushAsync(PopUp);
-                    await Task.Delay(TimeSpan.FromSeconds(1));
-                    await PopupNavigation.Instance.PopAsync();
+                    } 
                 }
             }
             catch (Exception e)
             {
 
             }
+        }
+
+        public async void TraerPublicacionDetalle(PublicacionModel publicacion)
+        {
+            await NavigationService.PushPage(new ComentsView(publicacion));
         }
 
         #endregion Methods

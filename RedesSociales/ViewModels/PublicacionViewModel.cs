@@ -46,7 +46,6 @@ namespace RedesSociales.ViewModels
 
         #region Request
         public SelectRequest<UsuarioModel> GetUsuario { get; set; }
-        public SelectRequest<PublicacionModel> CreatePublicacion { get; set; }
         public SelectRequest<BaseModel> GetPublicacionesSeguidos { get; set; }
         public SelectRequest<BaseModel> GetLikes { get; set; }
         public SelectRequest<BaseModel> GetPublicacionesUsuario { get; set; }
@@ -58,7 +57,6 @@ namespace RedesSociales.ViewModels
         public ICommand GetLikesCommand { get; set; }
         public ICommand GetUsuarioCommand { get; set; }
         public ICommand GetPublicacionesUsuarioCommand { get; set; }
-        public ICommand CreatePublicacionCommand { get; set; }
         public ICommand GetPublicacionesSeguidosCommand { get; set; }
         public ICommand DeletePublicacionCommand { get; set; }
 
@@ -117,7 +115,6 @@ namespace RedesSociales.ViewModels
         {
             #region Url
             string urlGetUsuario = Endpoints.URL_SERVIDOR + Endpoints.GET_USUARIO;
-            string urlCreatePublicacion = Endpoints.URL_SERVIDOR + Endpoints.CREATE_PUBLICACION;
             string urlGetLikes = Endpoints.URL_SERVIDOR + Endpoints.GET_LIKES;
             string urlGetPublicacionesSeguidos = Endpoints.URL_SERVIDOR + Endpoints.GET_PUBLICACIONES_SEGUIDOS;
             string urlGetPublicacionesUsuario = Endpoints.URL_SERVIDOR + Endpoints.GET_PUBLICACIONES_USUARIO;
@@ -131,9 +128,6 @@ namespace RedesSociales.ViewModels
 
             DeletePublicacion = new SelectRequest<PublicacionModel>();
             DeletePublicacion.SelectStrategy("POST", urlDeletePublicacion);
-
-            CreatePublicacion = new SelectRequest<PublicacionModel>();
-            CreatePublicacion.SelectStrategy("POST", urlCreatePublicacion);
 
             GetPublicacionesSeguidos = new SelectRequest<BaseModel>();
             GetPublicacionesSeguidos.SelectStrategy("GET", urlGetPublicacionesSeguidos);
@@ -151,7 +145,6 @@ namespace RedesSociales.ViewModels
         {
             GetUsuarioCommand = new Command(async () => await SeleccionarUsuario(), () => true);
             GetLikesCommand = new Command(async () => await SeleccionarLikes(), () => true);
-            CreatePublicacionCommand = new Command(async () => await CrearPublicacion(), () => true);
             GetPublicacionesSeguidosCommand = new Command(async () => await SeleccionarPublicacionesSeguidos(), () => true);
             GetPublicacionesUsuarioCommand = new Command(async () => await SeleccionarPublicacionesUsuario(), () => true);
             DeletePublicacionCommand = new Command(async () => await EliminarPublicacion(), () => true);
@@ -194,40 +187,6 @@ namespace RedesSociales.ViewModels
                 {
                     ((MessageViewModel)PopUp.BindingContext).Message = "No se encuentra el usuario";
                     await PopupNavigation.Instance.PushAsync(PopUp);
-                }
-            }
-            catch (Exception e)
-            {
-
-            }
-        }
-        public async Task CrearPublicacion()
-        {
-            try
-            {
-                UsuarioModel Creador = (UsuarioModel)Application.Current.Properties["Usuario"];
-                PublicacionModel publicacion = new PublicacionModel(Creador)
-                {
-                    Archivo = FotoPublicacion.Value,
-                    Tipo = TipoPublicacion.Value,
-                    Descripcion = DescripcionPublicacion.Value
-                };
-                APIResponse response = await CreatePublicacion.RunStrategy(publicacion);
-                if (response.IsSuccess)
-                {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion creada exitosamente";
-                    await PopupNavigation.Instance.PushAsync(PopUp);
-                    await Task.Delay(TimeSpan.FromSeconds(1));
-                    await PopupNavigation.Instance.PopAsync();
-                    //await PopupNavigation.Instance.PopAsync();
-                }
-                else
-                {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al crear publicacion";
-                    await PopupNavigation.Instance.PushAsync(PopUp);
-                    await Task.Delay(TimeSpan.FromSeconds(1));
-                    await PopupNavigation.Instance.PopAsync();
-                    //await PopupNavigation.Instance.PopAsync();
                 }
             }
             catch (Exception e)

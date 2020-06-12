@@ -123,8 +123,9 @@ namespace RedesSociales.ViewModels
                     else
                     {
                         ((MessageViewModel)PopUp.BindingContext).Message = "Error al conectar con el servidor";
-                        await Task.Delay(1500);
                         await PopupNavigation.Instance.PushAsync(PopUp);
+                        await Task.Delay(1500);
+
                     }
                 }
             };

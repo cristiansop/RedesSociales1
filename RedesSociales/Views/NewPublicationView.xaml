@@ -11,8 +11,9 @@
     <ContentPage.Content>
         <StackLayout>
             <Image Source="{Binding Imagen}" />
-            <Button Command="{Binding TomarFoto}" Text="Tomar Foto" />
             <Button Command="{Binding SeleccionarFoto}" Text="Seleccionar foto" />
+            <Label Text="Descripcion:"></Label>
+            <Entry Text="{Binding Descripcion}" Placeholder="Ingrese una descripcion"></Entry>
             <Button Command="{Binding Enviar}" Text="Subir" />
         </StackLayout>
     </ContentPage.Content>

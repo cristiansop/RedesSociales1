@@ -27,7 +27,7 @@ namespace RedesSociales.Models
 
 
         [JsonProperty("Tipo")]
-        public string Tipo { get; set; }
+        public int Tipo { get; set; }
 
 
         [JsonProperty("Descripcion")]

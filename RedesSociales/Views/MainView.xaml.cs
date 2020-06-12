@@ -1,4 +1,5 @@
-﻿using RedesSociales.ViewModels;
+﻿using RedesSociales.Models;
+using RedesSociales.ViewModels;
 using Rg.Plugins.Popup.Services;
 using System;
 using System.Collections.Generic;
@@ -26,13 +27,15 @@ namespace RedesSociales.Views
             await PopupNavigation.Instance.PushAsync(new EditarPerfilView());
         }
 
-        private void Seleccionar_Usuario(object sender, SelectionChangedEventArgs e)
+        private void Seleccionar_Publicacion(object sender, SelectionChangedEventArgs e)
         {
-            var us = e.CurrentSelection.FirstOrDefault(); // as UsuarioModel
-            if (us == null)
+            var publicacion = e.CurrentSelection.FirstOrDefault() as PublicacionModel;
+
+            if (publicacion == null)
                 return;
 
-            Navigation.PushAsync(new PerfilView());
+            //Navigation.PushAsync(new PerfilView());
+            context.TraerPublicacionDetalle(publicacion);
 
             ((CollectionView)sender).SelectedItem = null;
         }

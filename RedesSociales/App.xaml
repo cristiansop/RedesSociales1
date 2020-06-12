@@ -30,6 +30,12 @@
                 <Setter Property="Padding" Value="0,0,0,-1" />
                 <Setter Property="Margin" Value="30, 10" />
             </Style>
+
+            <Style TargetType="Frame" x:Key="publicationFrame">
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+                <Setter Property="Padding" Value="0,10,0,10" />
+            </Style>
+            
         </ResourceDictionary>
     </Application.Resources>
 </Application>

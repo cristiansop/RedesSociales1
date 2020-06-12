@@ -1,4 +1,5 @@
-﻿using RedesSociales.ViewModels;
+﻿using RedesSociales.Models;
+using RedesSociales.ViewModels;
 using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using System;
@@ -15,10 +16,11 @@ namespace RedesSociales.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ComentsView : ContentPage
     {
-        ComentarioViewModel context = new ComentarioViewModel();
-        public ComentsView()
+        ComentarioViewModel context = null;
+        public ComentsView(PublicacionModel publicacion)
         {
             InitializeComponent();
+            context= new ComentarioViewModel(publicacion);
             BindingContext = context;
         }
 

@@ -27,6 +27,8 @@ namespace RedesSociales.ViewModels
 
         #region Atributes
 
+        private bool estaActualizando;
+
         private LoadDataHandler loadDataHandler;
 
         private ObservableCollection<PublicacionModel> publicaciones;
@@ -66,6 +68,11 @@ namespace RedesSociales.ViewModels
         #endregion Properties
 
         #region Getters/Setters
+        public bool EstaActualizando
+        {
+            get { return estaActualizando; }
+            set { estaActualizando = value; OnPropertyChanged(); }
+        }
         public PublicacionModel Publicacion
         {
             get { return publicacion; }
@@ -90,6 +97,7 @@ namespace RedesSociales.ViewModels
             UsuarioMemoria = (UsuarioModel)Application.Current.Properties["Usuario"];
             Publicaciones = new ObservableCollection<PublicacionModel>();
             Usuario = new UsuarioModel();
+            EstaActualizando = false;
             InitializeRequest();
             InitializeCommands();
             InitializeFields();
@@ -150,6 +158,7 @@ namespace RedesSociales.ViewModels
         #region Methods
         public async void TraerPublicaciones()
         {
+            EstaActualizando = true;
             await SeleccionarPublicacionesSeguidos();
         }
 
@@ -236,6 +245,7 @@ namespace RedesSociales.ViewModels
             {
 
             }
+            EstaActualizando = false;
         }
 
         public async Task SeleccionarPublicacionesUsuario()

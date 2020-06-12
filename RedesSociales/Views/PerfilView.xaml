@@ -46,7 +46,7 @@
                     </StackLayout>
                 </FlexLayout>
 
-                <Button Text="Seguir" 
+                <Button Text="{Binding SalidaButton}" 
                         CornerRadius="20" BackgroundColor="Transparent" BorderColor="Black" BorderWidth="1" Command="{Binding FollowCommand}" />
 
             </StackLayout>
@@ -54,18 +54,18 @@
             <!-- publicaciones del usuario -->
             <CollectionView ItemsSource="{Binding Usuario.Publicaciones}">
                 <CollectionView.ItemsLayout>
-                    <GridItemsLayout Orientation="Vertical" Span="3" />
+                    <GridItemsLayout Orientation="Vertical" Span="2" />
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Grid Padding="0">
+                        <Grid Padding="1">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="50" />
+                                <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="50" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <Image Grid.Row="0" Grid.Column="0" Source="img_1.jpg" />
+                            <Image Grid.Row="0" Grid.Column="0" Source="{Binding Imagen}" />
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

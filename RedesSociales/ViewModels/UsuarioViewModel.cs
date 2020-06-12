@@ -31,6 +31,8 @@ namespace RedesSociales.ViewModels
 
         public UsuarioModel UsuarioMemoria { get; set; }
 
+        private string salidaButton;
+
         #region Enables
 
         private bool isSeguirEnable;
@@ -78,6 +80,15 @@ namespace RedesSociales.ViewModels
             set
             {
                 isSeguirEnable = value;
+                OnPropertyChanged();
+            }
+        }
+        public string SalidaButton
+        {
+            get { return salidaButton; }
+            set
+            {
+                salidaButton = value;
                 OnPropertyChanged();
             }
         }
@@ -149,10 +160,12 @@ namespace RedesSociales.ViewModels
             if (IsSeguirEnable)
             {
                 await CrearSeguir();
+                SalidaButton = "Siguiendo";
             }
             else
             {
                 await EliminarSeguir();
+                SalidaButton = "Seguir";
             }
 
 

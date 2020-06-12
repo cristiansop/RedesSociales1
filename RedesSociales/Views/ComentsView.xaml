@@ -40,7 +40,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackLayout Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
-                                    <Button x:Name="like_button" Clicked="OnButtonClicked" />
+                                    <Button x:Name="like_button" BackgroundColor="{Binding SalidaButton}" Command="{Binding LikeCommand}" />
                                     <Label Text="{Binding Reacciones.Count}" />
                                     <Label Text="Me gusta" />
                                 </StackLayout>
@@ -53,7 +53,8 @@
                         <!--<BoxView BackgroundColor="{StaticResource BGInput}"  HeightRequest="1"  />-->
                     </StackLayout>
                 </Frame>
-
+                
+                <!-- Comentarios -->
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -65,31 +66,38 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
-                    <CollectionView ItemsSource="{Binding Publicacion.Comentarios}" Grid.Row="0" Grid.ColumnSpan="2">
+                    <CollectionView ItemsSource="{Binding Comentarios}" Grid.Row="0" Grid.ColumnSpan="2">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
 
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition />
-                                        <ColumnDefinition />
-                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
 
-                                    <Label Text="{Binding Apodo}" Grid.Column="0" VerticalOptions="Center"/>
+                                    <StackLayout Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
+                                        <Label Text="{Binding Apodo}" FontSize="Subtitle" VerticalOptions="Center"/>
+                                        <Label Text=":" />
+                                    </StackLayout>
 
-                                    <Label Text="{Binding Cuerpo}" Grid.Column="1" />
-
+                                    <Label Text="{Binding Cuerpo}" Grid.Row="0" Grid.Column="1" />
 
                                 </Grid>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
+                        
                         <CollectionView.EmptyView>
                             <StackLayout>
                                 <Label Text="No tienes comentarios" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" />
                             </StackLayout>
                         </CollectionView.EmptyView>
+                        
                     </CollectionView>
+                    
                     <Entry Text="{Binding CuerpoEntry.Value}" Placeholder="Escriba su comentario" Grid.Row="1" Grid.Column="0">
                         <Entry.Behaviors>
                             <behaviors:EventToCommandBehavior EventName="TextChanged" Command="{Binding ValidateFormCommand}" />
@@ -97,7 +105,7 @@
                     </Entry>
                     <Button Text="Comentar" Command="{Binding CreateComentarioCommand}" Grid.Row="1" Grid.Column="1"/>
                 </Grid>
-
+                <Button Text="Eliminar publicacion" Command="{Binding DeletePublicacionCommand}" />
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

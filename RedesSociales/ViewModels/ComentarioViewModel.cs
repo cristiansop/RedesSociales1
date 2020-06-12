@@ -27,13 +27,15 @@ namespace RedesSociales.ViewModels
 
         public MessagePopupView PopUp { get; set; }
         public UsuarioModel Usuario { get; set; }
-        public PublicacionModel Publicacion { get; set; }
+        public ValidatableObject<string> CuerpoEntry { get; set; }
+
+        private bool like;
+
+        private PublicacionModel publicacion;
+
         private ComentarioModel comentario;
 
-        public ICommand ValidateFormCommand { get; set; }
-
-        public ValidatableObject<string> CuerpoEntry { get; set; }
-        private bool like;
+        private string salidaButton;
 
         #region Enables
 
@@ -62,6 +64,7 @@ namespace RedesSociales.ViewModels
         #endregion Request
 
         #region Commands
+        public ICommand ValidateFormCommand { get; set; }
         public ICommand CreateComentarioCommand { get; set; }
         public ICommand GetComentariosCommand { get; set; }
         public ICommand DeleteComentarioCommand { get; set; }
@@ -118,6 +121,16 @@ namespace RedesSociales.ViewModels
                 OnPropertyChanged();
             }
         }
+        public PublicacionModel Publicacion
+        {
+            get { return publicacion; }
+            set { publicacion = value; OnPropertyChanged(); }
+        }
+        public string SalidaButton
+        {
+            get { return salidaButton; }
+            set { salidaButton = value; OnPropertyChanged(); }
+        }
         #endregion Getters/Setters
 
         #region Initialize
@@ -128,6 +141,7 @@ namespace RedesSociales.ViewModels
             Usuario = (UsuarioModel)Application.Current.Properties["Usuario"];
             Publicacion = (PublicacionModel)Application.Current.Properties["Publicacion"];
             Like = false;
+            SalidaButton = "Gray";
             IsCommentEnable = false;
             IsCreatorEnable = Publicacion.Apodo.Equals(Usuario.Apodo);
             IsCommentCreatorEnable = false;
@@ -231,11 +245,13 @@ namespace RedesSociales.ViewModels
             if (Like)
             {
                 await EliminarLike();
+                SalidaButton = "Gray";
                 Like = false;
             }
             else
             {
                 await CrearLike();
+                SalidaButton = "Green";
                 Like = true;
             }
         }

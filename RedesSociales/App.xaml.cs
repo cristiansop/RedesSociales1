@@ -34,9 +34,6 @@ namespace RedesSociales
         {
             InitializeComponent();
             LoadData = new LoadDataHandler();
-            // -- test 
-            Test();
-            // --
             MainPage = new NavigationPage(new MainPage());
         }
 

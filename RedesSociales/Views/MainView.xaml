@@ -11,19 +11,17 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <Style TargetType="Frame" x:Key="publicationFrame">
-                <Setter Property="BackgroundColor" Value="Transparent"/>
-                <Setter Property="Padding" Value="0,10,0,10" />
-            </Style>
             <Style TargetType="Label" x:Key="dateLabel"></Style>
         </ResourceDictionary>
     </ContentPage.Resources>
 
     <ContentPage.Content>
 
-        <StackLayout>
-            <Grid>
+        <StackLayout Spacing="0">
+            <!-- Encabezado - Barra de busqueda -->
+            <Grid Padding="0" BackgroundColor="{StaticResource SecondaryBackgroundColor}">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -35,14 +33,15 @@
                 <Frame Style="{StaticResource FrameInput}" Grid.Row="0" Grid.Column="1">
                     <SearchBar Placeholder="Buscar usuario"  SearchCommand="{Binding GetUsuarioCommand}" />
                 </Frame>
+                <BoxView BackgroundColor="{StaticResource BGInput}" HeightRequest="1" Grid.Row="1" Grid.ColumnSpan="2" />
             </Grid>
 
-            <BoxView BackgroundColor="{StaticResource BGInput}" HeightRequest="1" />
-
-            <RefreshView>
+            <!-- Publicaiones -->
+            <RefreshView Command="{Binding RefreshPublicacionCommand}">
                 <CollectionView ItemsSource="{Binding Publicaciones}" 
-                            EmptyView="No tienes publicaciones"
-                            SelectionMode="Single">
+                                EmptyView="No tienes publicaciones"
+                                SelectionChanged="Seleccionar_Publicacion"
+                                SelectionMode="Single">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Frame Style="{StaticResource publicationFrame}">

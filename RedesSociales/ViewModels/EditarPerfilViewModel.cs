@@ -20,7 +20,7 @@ using System.IO;
 
 namespace RedesSociales.ViewModels
 { 
-    public class PerfilViewModel : ViewModelBase
+    public class EditarPerfilViewModel : ViewModelBase
     {
         #region Properties
 
@@ -127,7 +127,7 @@ namespace RedesSociales.ViewModels
         #endregion Getters/Setters
 
         #region Initialize
-        public PerfilViewModel()
+        public EditarPerfilViewModel()
         {
             loadDataHandler = new LoadDataHandler();
             PopUp = new MessagePopupView();
@@ -136,7 +136,6 @@ namespace RedesSociales.ViewModels
             InitializeRequest();
             InitializeCommands();
             InitializeFields();
-            ActualizarPerfil();
             AddValidations();
         }
         public void InitializeRequest()

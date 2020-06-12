@@ -81,11 +81,11 @@ namespace RedesSociales.ViewModels
         #endregion Getters/Setters
 
         #region Initialize
-        public UsuarioViewModel(UsuarioModel usuario)
+        public UsuarioViewModel()
         {
             PopUp = new MessagePopupView();
             loadDataHandler = new LoadDataHandler();
-            Usuario = usuario;
+            Usuario = (UsuarioModel)Application.Current.Properties["UsuarioBusqueda"];
             UsuarioMemoria = (UsuarioModel)Application.Current.Properties["Usuario"];
             IsSeguirEnable =true;
             InitializeRequest();

@@ -164,7 +164,8 @@ namespace RedesSociales.ViewModels
                 {
                     if (response.Code == 200)
                     {
-                        Usuario = JsonConvert.DeserializeObject<UsuarioModel>(response.Response);
+                        UsuarioModel UsuarioBusqueda = JsonConvert.DeserializeObject<UsuarioModel>(response.Response);
+                        Application.Current.Properties["UsuarioBusqueda"] = UsuarioBusqueda;
                     }
                 }
                 else

@@ -3,6 +3,7 @@ using RedesSociales.Servicios.Propagacion;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Xamarin.Forms;
 
 namespace RedesSociales.Models
 {
@@ -35,6 +36,9 @@ namespace RedesSociales.Models
 
         [JsonProperty("Tiempo")]
         public string Tiempo { get; set; }
+
+        [JsonIgnore]
+        private ImageSource imagen;
 
 
         [JsonIgnore]
@@ -76,6 +80,16 @@ namespace RedesSociales.Models
             set { creador = value;
                 idUsuario = value.idUsuario;
                 OnPropertyChanged(); }
+        }
+
+        public ImageSource Imagen
+        {
+            get { return imagen; }
+            set
+            {
+                imagen = value;
+                OnPropertyChanged();
+            }
         }
 
         public List<PeticionesSeguidos> Etiquetas

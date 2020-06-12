@@ -52,8 +52,8 @@
                                            FontAttributes="Bold"
                                            VerticalOptions="Center"/>
                                     </Frame>
-                                    
-                                    <Image Source="img_1.jpg" Grid.Row="1" Grid.ColumnSpan="2" Aspect="AspectFill"/>
+
+                                    <Image Source="{Binding Imagen}" Grid.Row="1" Grid.ColumnSpan="2" Aspect="AspectFill"/>
 
                                     <Frame>
                                         <Grid>

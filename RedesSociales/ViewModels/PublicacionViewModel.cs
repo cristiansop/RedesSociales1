@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 using RedesSociales.Validations.Rules;
 using RedesSociales.Servicios.Handler;
 using System.Linq;
+using System.IO;
 
 namespace RedesSociales.ViewModels
 {
@@ -92,7 +93,7 @@ namespace RedesSociales.ViewModels
             InitializeRequest();
             InitializeCommands();
             InitializeFields();
-            //TraerPublicaciones();
+            TraerPublicaciones();
         }
 
         public void InitializeRequest()
@@ -149,8 +150,7 @@ namespace RedesSociales.ViewModels
         #region Methods
         public async void TraerPublicaciones()
         {
-            await SeleccionarPublicacionesSeguidos();            
-
+            await SeleccionarPublicacionesSeguidos();
         }
 
         public async Task SeleccionarUsuario()
@@ -193,8 +193,7 @@ namespace RedesSociales.ViewModels
             }
             else
             {
-                ((MessageViewModel)PopUp.BindingContext).Message = "Error encontrar las reacciones de la publicacion";
-                await PopupNavigation.Instance.PushAsync(PopUp);
+                Publicacion.Reacciones = new List<PeticionesSeguidos>();
             }
         }
 
@@ -204,7 +203,7 @@ namespace RedesSociales.ViewModels
             {
                 ParametersRequest parametros = new ParametersRequest();
                 parametros.Parameters.Add(UsuarioMemoria.idUsuario.ToString());
-                APIResponse response = await GetPublicacionesUsuario.RunStrategy(null, parametros);
+                APIResponse response = await GetPublicacionesSeguidos.RunStrategy(null, parametros);
                 if (response.IsSuccess)
                 {
                     if (response.Code == 200)
@@ -212,10 +211,14 @@ namespace RedesSociales.ViewModels
                         List<PublicacionModel> publicaciones = JsonConvert.DeserializeObject<List<PublicacionModel>>(response.Response);
                         ObservableCollection<PublicacionModel> publicaciones1 = new ObservableCollection<PublicacionModel>(publicaciones);
                         Publicaciones = new ObservableCollection<PublicacionModel>(Publicaciones.Union(publicaciones1).ToList());
-                        foreach (PublicacionModel item in Publicaciones)
+                        for(int i = 0; i<Publicaciones.Count; i++)
                         {
-                            Publicacion = item;
+                            Publicacion = Publicaciones[i];
                             await SeleccionarLikes();
+                            Publicacion.Reacciones = Publicacion.Reacciones;
+                            byte[] imageBytes = Convert.FromBase64String(Publicacion.Archivo);
+                            Publicacion.Imagen = ImageSource.FromStream(() => new MemoryStream(imageBytes));
+                            Publicaciones[i] = Publicacion;
                         }
                     }
                 }

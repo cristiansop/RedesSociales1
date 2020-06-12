@@ -14,11 +14,9 @@ namespace RedesSociales
     [DesignTimeVisible(false)]
     public partial class MainPage : TabbedPage
     {
-        PublicacionViewModel context = new PublicacionViewModel();
         public MainPage()
         {
             InitializeComponent();
-            BindingContext = context;
         }
     }
 }

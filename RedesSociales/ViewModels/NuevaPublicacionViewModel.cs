@@ -152,15 +152,11 @@ namespace RedesSociales.ViewModels
             {
                 ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion creada exitosamente";
                 await PopupNavigation.Instance.PushAsync(PopUp);
-                await Task.Delay(TimeSpan.FromSeconds(1.5));
-                await PopupNavigation.Instance.PopAsync();
             }
             else
             {
                 ((MessageViewModel)PopUp.BindingContext).Message = "Error al crear publicacion";
                 await PopupNavigation.Instance.PushAsync(PopUp);
-                await Task.Delay(TimeSpan.FromSeconds(1.5));
-                await PopupNavigation.Instance.PopAsync();
             }
             Imagen = null;
             Descripcion = "";

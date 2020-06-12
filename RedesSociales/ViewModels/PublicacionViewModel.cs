@@ -27,8 +27,11 @@ namespace RedesSociales.ViewModels
         #region Atributes
 
         private LoadDataHandler loadDataHandler;
+
         private ObservableCollection<PublicacionModel> publicaciones;
+
         private PublicacionModel publicacion;
+
         private UsuarioModel usuario;
 
         public MessagePopupView PopUp { get; set; }
@@ -87,11 +90,27 @@ namespace RedesSociales.ViewModels
             loadDataHandler = new LoadDataHandler();
             UsuarioMemoria = (UsuarioModel)Application.Current.Properties["Usuario"];
             Publicaciones = new ObservableCollection<PublicacionModel>();
+
+            ///
+            UsuarioModel us = new UsuarioModel();
+            us.Apodo = "la_loca";
+            us.EstadoP = "Activo";
+            us.NombreP = "Cristina";
+            PublicacionModel pb = new PublicacionModel();
+            pb.Creador = us;
+            pb.Tiempo = "2020-05-25T04:50:14.148000000Z";
+            pb.Descripcion = "Esta es la descripción de mi grandiosa publicación, \n Gracias!";
+            Publicaciones.Add(pb);
+            Publicaciones.Add(pb);
+            ///
+
             Usuario = new UsuarioModel();
             InitializeRequest();
             InitializeCommands();
             InitializeFields();
             //TraerPublicaciones();
+
+
         }
 
         public void InitializeRequest()

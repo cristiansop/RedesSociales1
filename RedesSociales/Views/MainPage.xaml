@@ -14,8 +14,8 @@
 
     <TabbedPage.Children>
         <views:MainView />
-        <views:MiPerfilView />
         <views:NewPublicationView />
+        <views:MiPerfilView />
     </TabbedPage.Children>
 
 </TabbedPage>

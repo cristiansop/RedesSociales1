@@ -4,6 +4,8 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
+             IconImageSource="plus.png"
+             BackgroundColor="{StaticResource GeneralBackgroundColor}"
              x:Class="RedesSociales.Views.NewPublicationView">
     
     <ContentPage.Content>

@@ -11,11 +11,24 @@
             <Color x:Key="NavigationPrimary">#F1F2F3</Color>
             <Color x:Key="GeneralBackgroundColor">#F1F2F3</Color>
             <Color x:Key="SecondaryBackgroundColor">#457B9D</Color>
+            <Color x:Key="BGInput">#DDD</Color>
             
             <!-- Estilos globales -->
             <Style TargetType="NavigationPage">
                 <Setter Property="BarBackgroundColor" Value="{StaticResource NavigationPrimary}" />
                 <Setter Property="BarTextColor" Value="White" />
+            </Style>
+            
+            <Style TargetType="Button">
+                <Setter Property="BackgroundColor" Value="{StaticResource BGInput}" />
+            </Style>
+
+            <Style TargetType="Frame" x:Key="FrameInput">
+                <Setter Property="BackgroundColor" Value="{StaticResource BGInput}" />
+                <Setter Property="HasShadow" Value="False" />
+                <Setter Property="CornerRadius" Value="20" />
+                <Setter Property="Padding" Value="0,0,0,-1" />
+                <Setter Property="Margin" Value="30, 10" />
             </Style>
         </ResourceDictionary>
     </Application.Resources>

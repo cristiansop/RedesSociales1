@@ -40,6 +40,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <StackLayout Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
+                                    <Button x:Name="like_button" Clicked="OnButtonClicked" />
                                     <Label Text="{Binding Reacciones.Count}" />
                                     <Label Text="Me gusta" />
                                 </StackLayout>

@@ -43,7 +43,7 @@
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="40" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
@@ -71,9 +71,7 @@
                 </Entry.Behaviors>
             </Entry>
 
-            <Button Text="Guardar Cambios" Command="{Binding UpdateUsuarioCommand}" Grid.Row="4" Grid.Column="0" />
-
-            <Button Text="Borrar cuenta" Command="{Binding DeleteUsuarioCommand}" Grid.Row="4" Grid.Column="1" />
+            <Button Text="Guardar Cambios" Command="{Binding UpdateUsuarioCommand}" Grid.Row="4" Grid.ColumnSpan="2" />
         </Grid>
  
     </StackLayout>

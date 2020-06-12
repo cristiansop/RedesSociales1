@@ -29,7 +29,7 @@ namespace RedesSociales.ViewModels
         public PublicacionModel Publicacion { get; set; }
         private ComentarioModel comentario;
 
-        
+
 
         public ValidatableObject<string> CuerpoEntry { get; set; }
         private bool like;
@@ -38,7 +38,7 @@ namespace RedesSociales.ViewModels
 
         private bool isCommentEnable;
         private bool isCreatorEnable;
-        private bool isCommentCreatorEnable; 
+        private bool isCommentCreatorEnable;
 
         #endregion Enables
 
@@ -112,14 +112,14 @@ namespace RedesSociales.ViewModels
         #endregion Getters/Setters
 
         #region Initialize
-        public ComentarioViewModel(PublicacionModel publicacion)
+        public ComentarioViewModel()
         {
             PopUp = new MessagePopupView();
             Usuario = (UsuarioModel)Application.Current.Properties["Usuario"];
-            Publicacion = publicacion;
+            Publicacion = (PublicacionModel)Application.Current.Properties["Publicacion"];
             Like = false;
             IsCommentEnable = false;
-            IsCreatorEnable = publicacion.Apodo.Equals(Usuario.Apodo);
+            IsCreatorEnable = Publicacion.Apodo.Equals(Usuario.Apodo);
             IsCommentCreatorEnable = false;
             InitializeRequest();
             InitializeCommands();
@@ -181,7 +181,7 @@ namespace RedesSociales.ViewModels
             CreateComentarioCommand = new Command(async () => await CrearComentario(), () => IsCommentEnable);
             GetComentariosCommand = new Command(async () => await SeleccionarComentarios(), () => true);
             DeleteComentarioCommand = new Command(async () => await EliminarComentario(), () => IsCommentCreatorEnable);
-            LikeCommand=new Command(async () => await DarLike(), () => true);
+            LikeCommand = new Command(async () => await DarLike(), () => true);
             CreateLikeCommand = new Command(async () => await CrearLike(), () => true);
             GetLikesCommand = new Command(async () => await SeleccionarLikes(), () => true);
             DeleteLikeCommand = new Command(async () => await EliminarLike(), () => true);
@@ -189,7 +189,7 @@ namespace RedesSociales.ViewModels
             GetEtiquetasCommand = new Command(async () => await SeleccionarEtiquetas(), () => true);
             DeleteEtiquetaCommand = new Command(async () => await EliminarEtiqueta(), () => IsCreatorEnable);
             DeletePublicacionCommand = new Command(async () => await EliminarPublicacion(), () => IsCreatorEnable);
-            RefreshCommand = new Command( () =>  TraerPublicacion(), () => true);
+            RefreshCommand = new Command(() => TraerPublicacion(), () => true);
 
             #endregion Comandos
         }
@@ -254,13 +254,7 @@ namespace RedesSociales.ViewModels
                 APIResponse response = await CreateComentario.RunStrategy(peticion);
                 if (response.IsSuccess)
                 {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion eliminada exitosamente";
-                    await PopupNavigation.Instance.PushAsync(PopUp);
-                }
-                else
-                {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al sequir al usuario";
-                    await PopupNavigation.Instance.PushAsync(PopUp);
+                    TraerPublicacion();
                 }
             }
             catch (Exception e)
@@ -307,13 +301,7 @@ namespace RedesSociales.ViewModels
                 APIResponse response = await DeleteComentario.RunStrategy(peticion);
                 if (response.IsSuccess)
                 {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Comentario eliminada exitosamente";
-                    await PopupNavigation.Instance.PushAsync(PopUp);
-                }
-                else
-                {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al eliminar el comentario";
-                    await PopupNavigation.Instance.PushAsync(PopUp);
+                    TraerPublicacion();
                 }
             }
             catch (Exception e)
@@ -328,8 +316,8 @@ namespace RedesSociales.ViewModels
             {
                 PeticionesUsuarioPublicacion peticion = new PeticionesUsuarioPublicacion()
                 {
-                    idUsuario=Usuario.idUsuario,
-                    idPublicacion=Publicacion.idPublicacion
+                    idUsuario = Usuario.idUsuario,
+                    idPublicacion = Publicacion.idPublicacion
                 };
                 APIResponse response = await CreateLike.RunStrategy(peticion);
                 if (response.IsSuccess)
@@ -360,11 +348,6 @@ namespace RedesSociales.ViewModels
                     List<PeticionesSeguidos> likes = JsonConvert.DeserializeObject<List<PeticionesSeguidos>>(response.Response);
                     Publicacion.Reacciones = likes;
                 }
-            }
-            else
-            {
-                ((MessageViewModel)PopUp.BindingContext).Message = "Error encontrar las reacciones de la publicacion";
-                await PopupNavigation.Instance.PushAsync(PopUp);
             }
         }
 
@@ -405,10 +388,9 @@ namespace RedesSociales.ViewModels
                     idPublicacion = Publicacion.idPublicacion
                 };
                 APIResponse response = await CreateEtiqueta.RunStrategy(peticion);
-                if (!(response.IsSuccess))
+                if (response.IsSuccess)
                 {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al reaccionar publicacion";
-                    await PopupNavigation.Instance.PushAsync(PopUp);
+                    TraerPublicacion();
                 }
             }
             catch (Exception e)
@@ -429,11 +411,6 @@ namespace RedesSociales.ViewModels
                     List<PeticionesSeguidos> usuarios = JsonConvert.DeserializeObject<List<PeticionesSeguidos>>(response.Response);
                     Publicacion.Etiquetas = usuarios;
                 }
-            }
-            else
-            {
-                ((MessageViewModel)PopUp.BindingContext).Message = "Error encontrar las reacciones de la publicacion";
-                await PopupNavigation.Instance.PushAsync(PopUp);
             }
         }
 
@@ -476,13 +453,7 @@ namespace RedesSociales.ViewModels
                 APIResponse response = await DeletePublicacion.RunStrategy(publicacion);
                 if (response.IsSuccess)
                 {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Publicacion eliminada exitosamente";
-                    await PopupNavigation.Instance.PushAsync(PopUp);
-                }
-                else
-                {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al eliminar la publicacion";
-                    await PopupNavigation.Instance.PushAsync(PopUp);
+
                 }
             }
             catch (Exception e)

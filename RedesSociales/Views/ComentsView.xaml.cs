@@ -16,11 +16,10 @@ namespace RedesSociales.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ComentsView : ContentPage
     {
-        ComentarioViewModel context = null;
-        public ComentsView(PublicacionModel publicacion)
+        ComentarioViewModel context = new ComentarioViewModel();
+        public ComentsView()
         {
             InitializeComponent();
-            context= new ComentarioViewModel(publicacion);
             BindingContext = context;
         }
 

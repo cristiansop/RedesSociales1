@@ -165,6 +165,8 @@ namespace RedesSociales.ViewModels
                     if (response.Code == 200)
                     {
                         Usuario = JsonConvert.DeserializeObject<UsuarioModel>(response.Response);
+                        Application.Current.Properties["UsuarioBusqueda"] = Usuario;
+                        await NavigationService.PushPage(new PerfilView());
                     }
                 }
                 else
@@ -298,7 +300,8 @@ namespace RedesSociales.ViewModels
 
         public async void TraerPublicacionDetalle(PublicacionModel publicacion)
         {
-            await NavigationService.PushPage(new ComentsView(publicacion));
+            Application.Current.Properties["Publicacion"] = publicacion;
+            await NavigationService.PushPage(new ComentsView());
         }
 
         #endregion Methods

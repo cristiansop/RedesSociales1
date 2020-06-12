@@ -18,7 +18,7 @@ using RedesSociales.Servicios.Handler;
 
 namespace RedesSociales.ViewModels
 {
-    public class UsuarioViewModel: ViewModelBase
+    public class UsuarioViewModel : ViewModelBase
     {
         #region Properties
 
@@ -33,7 +33,7 @@ namespace RedesSociales.ViewModels
 
         #region Enables
 
-        private bool isSeguirEnable;    
+        private bool isSeguirEnable;
 
         #endregion Enables
 
@@ -55,7 +55,7 @@ namespace RedesSociales.ViewModels
         public ICommand DeleteSeguirCommand { get; set; }
         public ICommand GetPublicacionesUsuarioCommand { get; set; }
         public ICommand FollowCommand { get; set; }
-        
+
 
         #endregion Commands
 
@@ -66,8 +66,11 @@ namespace RedesSociales.ViewModels
         public UsuarioModel Usuario
         {
             get { return usuario; }
-            set { usuario = value;
-                OnPropertyChanged(); }
+            set
+            {
+                usuario = value;
+                OnPropertyChanged();
+            }
         }
         public bool IsSeguirEnable
         {
@@ -81,18 +84,19 @@ namespace RedesSociales.ViewModels
         #endregion Getters/Setters
 
         #region Initialize
-        public UsuarioViewModel(UsuarioModel usuario)
+        public UsuarioViewModel()
         {
             PopUp = new MessagePopupView();
             loadDataHandler = new LoadDataHandler();
-            Usuario = usuario;
+            Usuario = (UsuarioModel)Application.Current.Properties["UsuarioBusqueda"];
             UsuarioMemoria = (UsuarioModel)Application.Current.Properties["Usuario"];
-            IsSeguirEnable =true;
+            IsSeguirEnable = true;
             InitializeRequest();
             InitializeCommands();
             ActualizarPerfil();
 
         }
+
         public void InitializeRequest()
         {
             #region Url
@@ -122,6 +126,7 @@ namespace RedesSociales.ViewModels
 
             #endregion API
         }
+
         public void InitializeCommands()
         {
             #region Comandos
@@ -129,15 +134,16 @@ namespace RedesSociales.ViewModels
             GetSeguidosCommand = new Command(async () => await SeleccionarSeguidos(), () => true);
             GetSeguidoresCommand = new Command(async () => await SeleccionarSeguidores(), () => true);
             DeleteSeguirCommand = new Command(async () => await EliminarSeguir(), () => true);
-            FollowCommand = new Command(async ()=>await Seguir(),()=>true);
+            FollowCommand = new Command(async () => await Seguir(), () => true);
             GetPublicacionesUsuarioCommand = new Command(async () => await SeleccionarPublicacionesUsuario(), () => true);
             RefreshCommand = new Command(() => ActualizarPerfil(), () => true);
-
             #endregion Comandos
         }
+
         #endregion Initialize
 
         #region Methods
+
         public async Task Seguir()
         {
             if (IsSeguirEnable)
@@ -148,9 +154,10 @@ namespace RedesSociales.ViewModels
             {
                 await EliminarSeguir();
             }
-            
+
 
         }
+
         public async void ActualizarPerfil()
         {
             await SeleccionarPublicacionesUsuario();
@@ -166,6 +173,7 @@ namespace RedesSociales.ViewModels
             }
 
         }
+
         public async Task CrearSeguir()
         {
             try
@@ -251,7 +259,7 @@ namespace RedesSociales.ViewModels
                     {
                         List<PublicacionModel> publicaciones = JsonConvert.DeserializeObject<List<PublicacionModel>>(response.Response);
                         Usuario.Publicaciones = publicaciones;
-                    } 
+                    }
                 }
             }
             catch (Exception e)

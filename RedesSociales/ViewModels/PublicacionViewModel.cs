@@ -27,6 +27,8 @@ namespace RedesSociales.ViewModels
 
         #region Atributes
 
+        private bool estaActualizando;
+
         private LoadDataHandler loadDataHandler;
 
         private ObservableCollection<PublicacionModel> publicaciones;
@@ -66,6 +68,11 @@ namespace RedesSociales.ViewModels
         #endregion Properties
 
         #region Getters/Setters
+        public bool EstaActualizando
+        {
+            get { return estaActualizando; }
+            set { estaActualizando = value; OnPropertyChanged(); }
+        }
         public PublicacionModel Publicacion
         {
             get { return publicacion; }
@@ -90,6 +97,7 @@ namespace RedesSociales.ViewModels
             UsuarioMemoria = (UsuarioModel)Application.Current.Properties["Usuario"];
             Publicaciones = new ObservableCollection<PublicacionModel>();
             Usuario = new UsuarioModel();
+            EstaActualizando = false;
             InitializeRequest();
             InitializeCommands();
             InitializeFields();
@@ -150,6 +158,7 @@ namespace RedesSociales.ViewModels
         #region Methods
         public async void TraerPublicaciones()
         {
+            EstaActualizando = true;
             await SeleccionarPublicacionesSeguidos();
         }
 
@@ -164,8 +173,9 @@ namespace RedesSociales.ViewModels
                 {
                     if (response.Code == 200)
                     {
-                        UsuarioModel UsuarioBusqueda = JsonConvert.DeserializeObject<UsuarioModel>(response.Response);
-                        Application.Current.Properties["UsuarioBusqueda"] = UsuarioBusqueda;
+                        Usuario = JsonConvert.DeserializeObject<UsuarioModel>(response.Response);
+                        Application.Current.Properties["UsuarioBusqueda"] = Usuario;
+                        await NavigationService.PushPage(new PerfilView());
                     }
                 }
                 else
@@ -235,6 +245,7 @@ namespace RedesSociales.ViewModels
             {
 
             }
+            EstaActualizando = false;
         }
 
         public async Task SeleccionarPublicacionesUsuario()
@@ -299,7 +310,8 @@ namespace RedesSociales.ViewModels
 
         public async void TraerPublicacionDetalle(PublicacionModel publicacion)
         {
-            await NavigationService.PushPage(new ComentsView(publicacion));
+            Application.Current.Properties["Publicacion"] = publicacion;
+            await NavigationService.PushPage(new ComentsView());
         }
 
         #endregion Methods

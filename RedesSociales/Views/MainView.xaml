@@ -37,7 +37,7 @@
             </Grid>
 
             <!-- Publicaiones -->
-            <RefreshView Command="{Binding RefreshPublicacionCommand}">
+            <RefreshView IsRefreshing="{Binding EstaActualizando}" Command="{Binding RefreshPublicacionCommand}">
                 <CollectionView ItemsSource="{Binding Publicaciones}" 
                                 EmptyView="No tienes publicaciones"
                                 SelectionChanged="Seleccionar_Publicacion"

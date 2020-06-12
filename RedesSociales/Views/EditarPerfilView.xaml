@@ -29,45 +29,53 @@
                  Margin="20"
                  BackgroundColor="{StaticResource GeneralBackgroundColor}">
         
-        <Image Source="social_media.jpg" />
+        <Image Source="social_media.jpg" HeightRequest="100" WidthRequest="100" />
         
         <Button Text="Cambiar foto de perfil" />
-        
-        <StackLayout Orientation="Horizontal">
-            <Label Text="Apodo" />
-            <Label Text="{Binding ApodoUsuario.Value}" />
-        </StackLayout>
-        
-        <StackLayout Orientation="Horizontal">
-            <Label Text="Estado" />
-            <Entry Text="{Binding EstadoUsuario.Value}" Placeholder="{Binding EstadoInicial}">
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Label Text="Apodo" Grid.Row="0" Grid.Column="0"/>
+            <Label Text="{Binding ApodoUsuario.Value}" Grid.Row="0" Grid.Column="1" />
+
+            <Label Text="Estado" Grid.Row="1" Grid.Column="0" />
+            <Entry Text="{Binding EstadoUsuario.Value}" Placeholder="{Binding EstadoInicial}" Grid.Row="1" Grid.Column="1">
                 <Entry.Behaviors>
                     <behaviors:EventToCommandBehavior EventName="TextChanged" Command="{Binding ValidateFormCommand}" />
                 </Entry.Behaviors>
             </Entry>
-        </StackLayout>
-        
-        <StackLayout Orientation="Horizontal">
-            <Label Text="Nombre" />
-            <Entry Text="{Binding NombreUsuario.Value}" Placeholder="{Binding NombreInicial}">
+
+            <Label Text="Nombre" Grid.Row="2" Grid.Column="0" />
+            <Entry Text="{Binding NombreUsuario.Value}" Placeholder="{Binding NombreInicial}" Grid.Row="2" Grid.Column="1">
                 <Entry.Behaviors>
                     <behaviors:EventToCommandBehavior EventName="TextChanged" Command="{Binding ValidateFormCommand}" />
                 </Entry.Behaviors>
             </Entry>
-        </StackLayout>
-        
-        <StackLayout Orientation="Horizontal">
-            <Label Text="Apellido" />
-            <Entry Text="{Binding ApellidosUsuario.Value}" Placeholder="{Binding ApellidoInicial}">
+
+            <Label Text="Apellido" Grid.Row="3" Grid.Column="0" />
+            <Entry Text="{Binding ApellidosUsuario.Value}" Placeholder="{Binding ApellidoInicial}" Grid.Row="3" Grid.Column="1">
                 <Entry.Behaviors>
                     <behaviors:EventToCommandBehavior EventName="TextChanged" Command="{Binding ValidateFormCommand}" />
                 </Entry.Behaviors>
             </Entry>
-        </StackLayout>
-        
-        <Button Text="Guardar Cambios" Command="{Binding UpdateUsuarioCommand}" />
-        
-        <Button Text="Borrar cuenta" Command="{Binding DeleteUsuarioCommand}" />
+
+            <Button Text="Guardar Cambios" Command="{Binding UpdateUsuarioCommand}" Grid.Row="4" Grid.Column="0" />
+
+            <Button Text="Borrar cuenta" Command="{Binding DeleteUsuarioCommand}" Grid.Row="4" Grid.Column="1" />
+        </Grid>
+ 
     </StackLayout>
     
 </pages:PopupPage>

@@ -46,11 +46,6 @@ namespace RedesSociales.ViewModels
                     EstadoP = Usuario.EstadoP
                 };
                 APIResponse response = await CreateUsuario.RunStrategy(Usuario);
-                if (!(response.IsSuccess))
-                {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "Error al crear usuario";
-                    await PopupNavigation.Instance.PushAsync(PopUp);
-                }
             }
             catch (Exception e)
             {
@@ -73,12 +68,6 @@ namespace RedesSociales.ViewModels
                     {
                         Usuario = usuario;
                     }
-                }
-                else
-                {
-
-                    ((MessageViewModel)PopUp.BindingContext).Message = "No se encuentra el usuario";
-                    await PopupNavigation.Instance.PushAsync(PopUp);
                 }
             }
             catch (Exception e)
@@ -125,8 +114,18 @@ namespace RedesSociales.ViewModels
                         await CrearUsuario();
                         await SeleccionarUsuario();
                     }
-                    await loadDataHandler.PersistenceDataAsync("Usuario", Usuario);
-                    await NavigationService.PushPage(new MainPage());
+                    if(Usuario.idUsuario != 0)
+                    {
+                        StorageUser(Usuario);
+                        await loadDataHandler.PersistenceDataAsync("Usuario", Usuario);
+                        await NavigationService.PushPage(new MainPage());
+                    }
+                    else
+                    {
+                        ((MessageViewModel)PopUp.BindingContext).Message = "Error al conectar con el servidor";
+                        await Task.Delay(1500);
+                        await PopupNavigation.Instance.PushAsync(PopUp);
+                    }
                 }
             };
             googleClientManager.OnLogin += userLoginDelegate;
@@ -138,6 +137,15 @@ namespace RedesSociales.ViewModels
             {
                 await Application.Current.MainPage.DisplayAlert("Error", e.ToString(), "OK");
             }
+        }
+        public async void StorageUser(UsuarioModel user)
+        {
+            await loadDataHandler.PersistenceDataAsync("Usuario.idUsuario", Usuario.idUsuario);
+            await loadDataHandler.PersistenceDataAsync("Usuario.Apodo", Usuario.Apodo);
+            await loadDataHandler.PersistenceDataAsync("Usuario.Estado", Usuario.EstadoP);
+            await loadDataHandler.PersistenceDataAsync("Usuario.Nombre", Usuario.NombreP);
+            await loadDataHandler.PersistenceDataAsync("Usuario.Apellido", Usuario.ApellidoP);
+            await loadDataHandler.PersistenceDataAsync("Usuario.FotoPerfil", Usuario.FotoPerfilP);
         }
     }
 }

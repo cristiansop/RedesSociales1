@@ -9,7 +9,7 @@ namespace RedesSociales.Servicios.Handler
 {
     public class LoadDataHandler
     {
-        public async Task LoadData(string key)
+        public async Task<bool> LoadData(string key)
         {
             try
             {
@@ -17,11 +17,13 @@ namespace RedesSociales.Servicios.Handler
                 if (secureValue != null)
                 {
                     Application.Current.Properties[key] = secureValue;
+                    return true;
                 }
+                return false;
             }
             catch (Exception e)
             {
-                throw e;
+                return false;
             }
         }
 

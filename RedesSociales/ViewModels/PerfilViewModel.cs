@@ -300,13 +300,6 @@ namespace RedesSociales.ViewModels
                     Seguidos = Usuario.Seguidos.Count;
                 }
             }
-            else
-            {
-                ((MessageViewModel)PopUp.BindingContext).Message = "Error encontrar los seguidos del usuario";
-                await PopupNavigation.Instance.PushAsync(PopUp);
-                await Task.Delay(TimeSpan.FromSeconds(1));
-                await PopupNavigation.Instance.PopAsync();
-            }
         }
 
         public async Task SeleccionarSeguidores()
@@ -322,16 +315,8 @@ namespace RedesSociales.ViewModels
                     Usuario.Seguidores = usuarios;
                     Seguidores = Usuario.Seguidores.Count;
                 }
-                
+            }
 
-            }
-            else
-            {
-                ((MessageViewModel)PopUp.BindingContext).Message = "Error encontrar los seguidores del usuario";
-                await PopupNavigation.Instance.PushAsync(PopUp);
-                await Task.Delay(TimeSpan.FromSeconds(1));
-                await PopupNavigation.Instance.PopAsync();
-            }
         }
 
         public async Task SeleccionarPublicacionesUsuario()
@@ -349,13 +334,6 @@ namespace RedesSociales.ViewModels
                         Usuario.Publicaciones = publicaciones;
                     }
                     
-                }
-                else
-                {
-                    ((MessageViewModel)PopUp.BindingContext).Message = "No se encuentran publicaciones del usuario";
-                    await PopupNavigation.Instance.PushAsync(PopUp);
-                    await Task.Delay(TimeSpan.FromSeconds(1));
-                    await PopupNavigation.Instance.PopAsync();
                 }
             }
             catch (Exception e)

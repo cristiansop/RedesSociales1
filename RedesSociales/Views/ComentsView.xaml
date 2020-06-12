@@ -5,7 +5,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              NavigationPage.HasNavigationBar="False"
-             NavigationPage.BarBackgroundColor ="White"
              BackgroundColor="{StaticResource GeneralBackgroundColor}"
              x:Class="RedesSociales.Views.ComentsView">
 

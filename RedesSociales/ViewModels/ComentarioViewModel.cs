@@ -27,16 +27,18 @@ namespace RedesSociales.ViewModels
         public MessagePopupView PopUp { get; set; }
         public UsuarioModel Usuario { get; set; }
         public PublicacionModel Publicacion { get; set; }
+        private ComentarioModel comentario;
+
+        
+
         public ValidatableObject<string> CuerpoEntry { get; set; }
         private bool like;
 
         #region Enables
 
         private bool isCommentEnable;
-        private bool isTagEnable;
-
-        
-
+        private bool isCreatorEnable;
+        private bool isCommentCreatorEnable; 
 
         #endregion Enables
 
@@ -89,25 +91,41 @@ namespace RedesSociales.ViewModels
         }
         public bool IsCreatorEnable
         {
-            get { return isTagEnable; }
-            set { isTagEnable = value; OnPropertyChanged(); }
+            get { return isCreatorEnable; }
+            set { isCreatorEnable = value; OnPropertyChanged(); }
+        }
+        public bool IsCommentCreatorEnable
+        {
+            get { return isCommentCreatorEnable; }
+            set { isCommentCreatorEnable = value; OnPropertyChanged(); }
+        }
+        public ComentarioModel Comentario
+        {
+            get { return comentario; }
+            set
+            {
+                comentario = value;
+                IsCommentCreatorEnable = IsCreatorEnable || comentario.idUsuario == Usuario.idUsuario;
+                OnPropertyChanged();
+            }
         }
         #endregion Getters/Setters
 
         #region Initialize
-        public ComentarioViewModel()
+        public ComentarioViewModel(PublicacionModel publicacion)
         {
             PopUp = new MessagePopupView();
             Usuario = (UsuarioModel)Application.Current.Properties["Usuario"];
-            Publicacion = new PublicacionModel();
+            Publicacion = publicacion;
             Like = false;
             IsCommentEnable = false;
-            IsCreatorEnable = false;
+            IsCreatorEnable = publicacion.Apodo.Equals(Usuario.Apodo);
+            IsCommentCreatorEnable = false;
             InitializeRequest();
             InitializeCommands();
             InitializeFields();
             AddValidations();
-            //TraerPublicacion();
+            TraerPublicacion();
         }
         public void InitializeRequest()
         {
@@ -162,7 +180,7 @@ namespace RedesSociales.ViewModels
 
             CreateComentarioCommand = new Command(async () => await CrearComentario(), () => IsCommentEnable);
             GetComentariosCommand = new Command(async () => await SeleccionarComentarios(), () => true);
-            DeleteComentarioCommand = new Command(async () => await EliminarComentario(), () => true);
+            DeleteComentarioCommand = new Command(async () => await EliminarComentario(), () => IsCommentCreatorEnable);
             LikeCommand=new Command(async () => await DarLike(), () => true);
             CreateLikeCommand = new Command(async () => await CrearLike(), () => true);
             GetLikesCommand = new Command(async () => await SeleccionarLikes(), () => true);
@@ -170,7 +188,7 @@ namespace RedesSociales.ViewModels
             CreateEtiquetaCommand = new Command(async () => await CrearEtiqueta(), () => IsCreatorEnable);
             GetEtiquetasCommand = new Command(async () => await SeleccionarEtiquetas(), () => true);
             DeleteEtiquetaCommand = new Command(async () => await EliminarEtiqueta(), () => IsCreatorEnable);
-            DeletePublicacionCommand = new Command(async () => await EliminarPublicacion(), () => true);
+            DeletePublicacionCommand = new Command(async () => await EliminarPublicacion(), () => IsCreatorEnable);
             RefreshCommand = new Command( () =>  TraerPublicacion(), () => true);
 
             #endregion Comandos
@@ -215,6 +233,15 @@ namespace RedesSociales.ViewModels
             await SeleccionarComentarios();
             await SeleccionarEtiquetas();
             await SeleccionarLikes();
+            foreach (PeticionesSeguidos item in Publicacion.Reacciones)
+            {
+                if (item.Apodo.Equals(Usuario.Apodo))
+                {
+                    Like = true;
+                    break;
+                }
+            }
+
         }
         public async Task CrearComentario()
         {

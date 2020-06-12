@@ -135,6 +135,7 @@ namespace RedesSociales.ViewModels
         #endregion Initialize
 
         #region Methods
+
         public async void ActualizarPerfil()
         {
             await SeleccionarPublicacionesUsuario();

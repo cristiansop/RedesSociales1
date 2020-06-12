@@ -121,14 +121,15 @@ namespace RedesSociales.ViewModels
         #endregion Getters/Setters
 
         #region Initialize
-        public ComentarioViewModel(PublicacionModel publicacion)
+        public ComentarioViewModel()
         {
+
             PopUp = new MessagePopupView();
             Usuario = (UsuarioModel)Application.Current.Properties["Usuario"];
-            Publicacion = publicacion;
+            Publicacion = (PublicacionModel)Application.Current.Properties["Publicacion"];
             Like = false;
             IsCommentEnable = false;
-            IsCreatorEnable = publicacion.Apodo.Equals(Usuario.Apodo);
+            IsCreatorEnable = Publicacion.Apodo.Equals(Usuario.Apodo);
             IsCommentCreatorEnable = false;
             InitializeRequest();
             InitializeCommands();

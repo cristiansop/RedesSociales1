@@ -16,7 +16,7 @@ namespace RedesSociales.Configuracion
         public static readonly string CREATE_SEGUIR = "/usuario/createSeguir";
         public static readonly string GET_SEGUIDOS = "/usuario/getSeguidos/";//$idUsuario<\d+>;
         public static readonly string GET_SEGUIDORES = "/usuario/getSeguidores/";//$idUsuario<\d+>;
-        public static readonly string DELETE_SEGUIR = "/usuario/getSeguidores/";
+        public static readonly string DELETE_SEGUIR = "/usuario/deleteSeguir";
         #endregion Usuario
         #region Publicacion
         public static readonly string CREATE_PUBLICACION = "/publicacion/create";

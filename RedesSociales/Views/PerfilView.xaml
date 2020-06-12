@@ -47,7 +47,7 @@
                 </FlexLayout>
 
                 <Button Text="Seguir" 
-                        CornerRadius="20" BackgroundColor="Transparent" BorderColor="Black" BorderWidth="1" />
+                        CornerRadius="20" BackgroundColor="Transparent" BorderColor="Black" BorderWidth="1" Command="{Binding FollowCommand}" />
 
             </StackLayout>
 

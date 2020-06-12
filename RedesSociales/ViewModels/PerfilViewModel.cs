@@ -203,6 +203,7 @@ namespace RedesSociales.ViewModels
             NombreInicial = Usuario.NombreP;
             ApellidoInicial = Usuario.ApellidoP;
             EstadoInicial = Usuario.EstadoP;
+            Publicaciones = new ObservableCollection<PublicacionUsuarioModel>();
         }
         public void AddValidations()
         {
@@ -226,7 +227,6 @@ namespace RedesSociales.ViewModels
         public async void ActualizarPerfil()
         {
             await SeleccionarPublicacionesUsuario();
-            Console.WriteLine(Publicaciones[0].Descripcion);
             await SeleccionarSeguidores();
             await SeleccionarSeguidos();
 
@@ -313,6 +313,11 @@ namespace RedesSociales.ViewModels
                     Usuario.Seguidos = usuarios;
                     Seguidos = Usuario.Seguidos.Count;
                 }
+                else
+                {
+                    Usuario.Seguidos = new List<PeticionesSeguidos>();
+                    Seguidos = 0;
+                }
             }
         }
 
@@ -328,6 +333,11 @@ namespace RedesSociales.ViewModels
                     List<PeticionesSeguidos> usuarios = JsonConvert.DeserializeObject<List<PeticionesSeguidos>>(response.Response);
                     Usuario.Seguidores = usuarios;
                     Seguidores = Usuario.Seguidores.Count;
+                }
+                else
+                {
+                    Usuario.Seguidores = new List<PeticionesSeguidos>();
+                    Seguidores = 0;
                 }
             }
 

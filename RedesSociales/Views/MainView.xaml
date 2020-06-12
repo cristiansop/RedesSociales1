@@ -31,7 +31,7 @@
                 <Image Source="Logo.png" Grid.Row="0" Grid.Column="0"
                        HeightRequest="50" WidthRequest="50" VerticalOptions="Center" HorizontalOptions="Center"/>
                 <Frame Style="{StaticResource FrameInput}" Grid.Row="0" Grid.Column="1">
-                    <SearchBar Placeholder="Buscar usuario"  SearchCommand="{Binding GetUsuarioCommand}" />
+                    <SearchBar Placeholder="Buscar usuario"  SearchCommand="{Binding GetUsuarioCommand}" Text="{Binding BusquedaUsuario.Value}"/>
                 </Frame>
                 <BoxView BackgroundColor="{StaticResource BGInput}" HeightRequest="1" Grid.Row="1" Grid.ColumnSpan="2" />
             </Grid>

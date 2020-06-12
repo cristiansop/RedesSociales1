@@ -67,7 +67,7 @@ namespace RedesSociales
                 string FotoPerfil = (string)Current.Properties["Usuario.FotoPerfil"];
                 UsuarioModel Usuario = new UsuarioModel()
                 {
-                    idUsuario = 2,//Int32.Parse(idUsuarioT),
+                    idUsuario = Int32.Parse(idUsuarioT),
                     Apodo = Apodo,
                     NombreP = Nombre,
                     ApellidoP = Apellido,
